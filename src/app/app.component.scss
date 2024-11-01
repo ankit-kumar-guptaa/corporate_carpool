@@ -1,0 +1,95 @@
+/* Container Styling */
+.container {
+    margin-top: 50px;
+}
+
+/* Search Carpool Card Styling */
+.search-carpool-card {
+    border-radius: 16px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #e3f2fd, #ffffff);
+    border: none;
+}
+
+/* Card Title Styling */
+.card-title {
+    font-weight: 700;
+    font-size: 2rem;
+    color: #003366;
+    font-family: 'Merriweather', serif;
+}
+
+/* Form Input Styling */
+.form-input {
+    border-radius: 12px;
+    padding: 0.9rem;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+    border-color: #42a5f5;
+    box-shadow: 0 0 10px rgba(66, 165, 245, 0.5);
+}
+
+/* Search Button Styling */
+.search-button {
+    background: linear-gradient(90deg, #42a5f5, #007bff);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 0.75rem 2rem;
+    font-weight: 700;
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.search-button:hover {
+    background: linear-gradient(90deg, #007bff, #42a5f5);
+    box-shadow: 0 10px 25px rgba(0, 123, 255, 0.5);
+    transform: translateY(-3px);
+}
+
+/* Carpool List Styling */
+.carpool-list {
+    list-style: none;
+    padding: 0;
+}
+
+.list-group-item {
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    padding: 20px;
+    border: none;
+}
+
+.carpool-info {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.carpool-info .badge {
+    font-size: 0.9rem;
+    margin-left: 10px;
+}
+
+/* Connect Button Styling */
+.btn-connect {
+    border-radius: 20px;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-connect:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+    transform: translateY(-2px);
+}
+
+/* Import Custom Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400&display=swap');

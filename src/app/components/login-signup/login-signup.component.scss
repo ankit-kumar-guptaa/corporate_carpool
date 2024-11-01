@@ -1,0 +1,103 @@
+.container {
+    margin-top: 50px;
+}
+
+.login-signup-card {
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+.chairman-message-card {
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #f0f4f8, #ffffff);
+}
+
+.card-body {
+    padding: 2rem 3rem;
+}
+
+.card-title {
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.card-title.text-primary {
+    color: #003366;
+    font-family: 'Merriweather', serif; /* Adds a distinct professional font */
+}
+
+.card-text {
+    color: #6c757d;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-family: 'Open Sans', sans-serif; /* A clean, easy-to-read font */
+}
+
+.btn-link-toggle {
+    background-color: transparent;
+    color: #6c757d;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: none;
+    margin: 0 15px;
+    padding-bottom: 5px;
+    transition: color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
+}
+
+.btn-link-toggle.active {
+    color: #003366;
+    border-bottom: 3px solid #003366;
+}
+
+.btn-link-toggle:hover {
+    color: #003366;
+    text-decoration: none;
+}
+
+.form-section {
+    margin-top: 20px;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    border-radius: 8px;
+    padding: 0.9rem;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+    border-color: #4c88d6;
+    box-shadow: 0 0 8px rgba(76, 136, 214, 0.2);
+}
+
+.btn-primary, .btn-success, .btn-warning {
+    background-color: #003366;
+    border: none;
+    color: #ffffff;
+    padding: 0.8rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover, .btn-success:hover, .btn-warning:hover {
+    background-color: #001f4d;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+

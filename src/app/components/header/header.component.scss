@@ -1,0 +1,88 @@
+/* Header Styling */
+.header {
+    background-color: #003366;
+    color: #ffffff;
+    padding: 10px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .header h1 {
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  
+  .logo {
+    width: 50px;
+  }
+  
+  .profile-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  /* Dropdown Button */
+  .dropdown-toggle-animated {
+    background: transparent;
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+    transition: color 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .dropdown-toggle-animated:hover {
+    color: #ffd700;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Dropdown Menu Styling */
+  .dropdown-menu {
+    min-width: 12rem;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+    padding: 10px 15px;
+    transform-origin: top center;
+    animation: dropdown-slide-fade 0.4s ease forwards;
+    transform: translateY(15px); /* Adjusted to start below the button */
+    opacity: 0;
+  }
+  
+  /* Dropdown Animation */
+  @keyframes dropdown-slide-fade {
+    0% {
+      transform: translateY(-10px); /* Starts just a little above, to create a smooth drop-down effect */
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(15px); /* Ends slightly below, to look like it's coming out of the button */
+      opacity: 1;
+    }
+  }
+  
+  .dropdown-menu.show {
+    animation: dropdown-slide-fade 0.4s ease forwards;
+    opacity: 1;
+  }
+  
+  /* Dropdown Item Styling */
+  .dropdown-item {
+    font-weight: 500;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #003366;
+    color: #ffffff;
+  }
+  
+  /* Import Google Fonts */
+  @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400&display=swap');
+  
