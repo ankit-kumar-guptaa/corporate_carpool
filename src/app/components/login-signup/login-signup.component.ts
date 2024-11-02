@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-signup',
@@ -11,8 +12,10 @@ export class LoginSignupComponent {
   isOtpSectionVisible: boolean = false;
   isPasswordSectionVisible: boolean = false;
   otpValue: string = '';
-  
+
   @Output() loginEvent = new EventEmitter<string>();
+
+  constructor(private router: Router) {}  
 
   toggleForm(isLogin: boolean): void {
     this.isLoginActive = isLogin;
@@ -40,12 +43,15 @@ export class LoginSignupComponent {
   }
 
   login(): void {
-    // Dummy credentials
     const email = (document.getElementById('login-email') as HTMLInputElement).value;
     const password = (document.getElementById('login-password') as HTMLInputElement).value;
 
     if (email === 'ankit@elitecorporate.com' && password === 'password123') {
       this.loginEvent.emit('Ankit'); 
+      console.log("Log in successful");
+
+      // Navigate to carpool search after successful login
+      this.router.navigate(['/carpool-search']);
     } else {
       alert('Invalid credentials. Please try again.');
     }
@@ -54,7 +60,7 @@ export class LoginSignupComponent {
   signup(): void {
     if (this.otpValue === '123456') {
       alert('Signup successful! You can now login with your credentials.');
-      this.toggleForm(true); // Switch to login after successful signup
+      this.toggleForm(true); 
     }
   }
 }

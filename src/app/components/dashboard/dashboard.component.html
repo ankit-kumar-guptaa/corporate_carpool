@@ -1,0 +1,84 @@
+
+
+<div class="container my-5">
+  <h2 class="text-center mb-4">👤 Welcome to Your Dashboard, {{ loggedInUserName }}!</h2>
+
+  <!-- Dashboard Tabs -->
+  <ul class="nav nav-tabs mb-4" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="true">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="myRides-tab" data-bs-toggle="tab" href="#myRides" role="tab" aria-controls="myRides" aria-selected="false">My Rides</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="myConnections-tab" data-bs-toggle="tab" href="#myConnections" role="tab" aria-controls="myConnections" aria-selected="false">My Connections</a>
+    </li>
+  </ul>
+
+  <!-- Tab Contents -->
+  <div class="tab-content">
+    <!-- Dashboard Overview Tab -->
+    <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+      <div class="card shadow-sm p-4">
+        <h4 class="text-primary">📊 Dashboard Overview</h4>
+        <p>Welcome back! Here you can check the status of your current rides, see statistics, and manage your connections.</p>
+        <div class="stats-container row mt-4">
+          <div class="col-md-4">
+            <div class="stat-box bg-light p-3 rounded shadow-sm">
+              <h5>🛣️ Total Rides</h5>
+              <p class="stat-number">{{ totalRides }}</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="stat-box bg-light p-3 rounded shadow-sm">
+              <h5>👥 Total Connections</h5>
+              <p class="stat-number">{{ totalConnections }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Rides Tab -->
+    <div class="tab-pane fade" id="myRides" role="tabpanel" aria-labelledby="myRides-tab">
+      <div class="card shadow-sm p-4">
+        <h4 class="text-primary">🚗 My Rides</h4>
+        <table class="table mt-3">
+          <thead class="table-primary">
+            <tr>
+              <th>#</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ride of myRides; index as i">
+              <td>{{ i + 1 }}</td>
+              <td>{{ ride.from }}</td>
+              <td>{{ ride.to }}</td>
+              <td>{{ ride.date }}</td>
+              <td>{{ ride.status }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- My Connections Tab -->
+    <div class="tab-pane fade" id="myConnections" role="tabpanel" aria-labelledby="myConnections-tab">
+      <div class="card shadow-sm p-4">
+        <h4 class="text-primary">🤝 My Connections</h4>
+        <ul class="list-group mt-3">
+          <li class="list-group-item" *ngFor="let connection of myConnections">
+            {{ connection.name }} ({{ connection.type }})
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+

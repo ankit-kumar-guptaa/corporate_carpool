@@ -40,12 +40,12 @@ export class LoginSignupComponent {
   }
 
   login(): void {
-    // Dummy credentials
+    
     const email = (document.getElementById('login-email') as HTMLInputElement).value;
     const password = (document.getElementById('login-password') as HTMLInputElement).value;
 
     if (email === 'ankit@elitecorporate.com' && password === 'password123') {
-      this.loginEvent.emit('John Doe'); // Emit login event with user name when credentials match
+      this.loginEvent.emit('Ankit'); 
     } else {
       alert('Invalid credentials. Please try again.');
     }
@@ -54,7 +54,7 @@ export class LoginSignupComponent {
   signup(): void {
     if (this.otpValue === '123456') {
       alert('Signup successful! You can now login with your credentials.');
-      this.toggleForm(true); // Switch to login after successful signup
+      this.toggleForm(true); 
     }
   }
 }

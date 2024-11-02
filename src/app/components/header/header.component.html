@@ -11,7 +11,8 @@
           {{ userName }}
         </button>
         <ul class="dropdown-menu mt-4 dropdown-menu-end animate-dropdown" aria-labelledby="dropdownMenuButton">
-          <li><a class="dropdown-item" href="#">Dashboard</a></li>
+          <li><a class="dropdown-item" routerLink="/dashboard">Dashboard</a></li>
+          <li><a class="dropdown-item" routerLink="/carpool-search">Carpool Search</a></li>
           <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
         </ul>
       </div>

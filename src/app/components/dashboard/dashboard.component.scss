@@ -1,0 +1,64 @@
+.container {
+    margin-top: 50px;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    border: none;
+}
+
+.stats-container {
+    margin-top: 30px;
+}
+
+.stat-box {
+    text-align: center;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #e3f2fd, #ffffff);
+    padding: 30px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
+    font-size: 2rem;
+    color: #003366;
+    font-weight: 700;
+}
+
+.nav-tabs .nav-link {
+    color: #2c3e50;
+    font-weight: 600;
+    border-radius: 12px 12px 0 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-tabs .nav-link.active {
+    color: #ffffff;
+    background-color: #003366;
+    border: none;
+}
+
+.table {
+    margin-top: 20px;
+    font-size: 0.95rem;
+    border-radius: 12px;
+}
+
+.table-primary {
+    background-color: #003366;
+    color: white;
+}
+
+.list-group-item {
+    font-weight: 500;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+/* Import Custom Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400&display=swap');
