@@ -11,7 +11,12 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CarpoolSearchComponent } from './components/carpool-search/carpool-search.component';
-
+import { ENVIRONMENTER } from '../environments/environmenter.token';
+import { environment } from '../environments/environment';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { LoadingInterceptor } from './Interceptor/loading.interceptor';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,14 +26,22 @@ import { CarpoolSearchComponent } from './components/carpool-search/carpool-sear
     FooterComponent,
     DashboardComponent,
     CarpoolSearchComponent
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule 
+    FormsModule ,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      preventDuplicates: true
+    })
   ],
   providers: [
-    provideClientHydration()
+    { provide: ENVIRONMENTER, useValue: environment },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
+    
   ],
   bootstrap: [AppComponent]
 })

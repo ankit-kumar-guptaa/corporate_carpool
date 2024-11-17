@@ -22,6 +22,7 @@
       "prefix": "app",
       "architect": {
         "build": {
+        
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/corporate_carpool",
@@ -39,7 +40,8 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
@@ -50,6 +52,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
