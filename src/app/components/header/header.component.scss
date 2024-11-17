@@ -1,81 +1,85 @@
 .header {
-    background-color: #003366;
-    color: #ffffff;
-    padding: 10px 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.header h1 {
-    font-weight: 800;
-    letter-spacing: 1px;
-}
-
-.logo {
-    width: 50px;
-}
-
-.profile-section {
-    display: flex;
-    align-items: center;
-}
-
-.profile-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-
-.dropdown-toggle-animated {
-    background: transparent;
-    color: #ffffff;
-    border: none;
-    font-weight: 600;
-    transition: color 0.3s ease, background-color 0.3s ease;
-}
-
-.dropdown-toggle-animated:hover {
-    color: #ffd700;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.dropdown-menu {
-    min-width: 12rem;
-    border-radius: 12px;
-    border: none;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
-    padding: 10px 15px;
-    transform-origin: top center;
-    animation: dropdown-slide-fade 0.4s ease forwards;
-    transform: translateY(15px);
-    opacity: 0;
-}
-
-@keyframes dropdown-slide-fade {
-    0% {
-        transform: translateY(-10px);
-        opacity: 0;
+    background: #ffffff; /* White Background */
+    color: #002147; /* Navy Blue Text for Contrast */
+    padding: 20px 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light Shadow for Elevation */
+    font-family: 'Merriweather', serif;
+  
+    /* Left Section */
+    .header-left h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #002147; /* Navy Blue */
+      margin: 0;
+      padding: 0;
+      text-transform: uppercase;
     }
-    100% {
-        transform: translateY(15px);
-        opacity: 1;
+  
+    /* Center Logo Section */
+    .header-logo {
+      text-align: center;
+  
+      .center-logo {
+        width: 100px;
+        height: auto;
+        border: 2px solid #ffd700; /* Gold Border */
+        border-radius: 10%; /* Circular Logo */
+        padding: 10px;
+        background-color: #ffffff; /* White Background for Elegance */
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft Shadow for Depth */
+      }
     }
-}
-
-.dropdown-menu.show {
-    animation: dropdown-slide-fade 0.4s ease forwards;
-    opacity: 1;
-}
-
-.dropdown-item {
-    font-weight: 500;
-    padding: 10px 15px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.dropdown-item:hover {
-    background-color: #003366;
-    color: #ffffff;
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400&display=swap');
+  
+    /* Right Section: Profile */
+    .profile-section {
+      display: flex;
+      align-items: center;
+  
+      /* Profile Image */
+      .profile-img {
+        width: 50px;
+        height: 50px;
+        border: 2px solid #ffd700; /* Gold Border */
+        border-radius: 50%;
+        background-color: #ffffff; /* Matches Background */
+      }
+  
+      /* Dropdown Button */
+      .dropdown-toggle-animated {
+        background: #002147; /* Navy Blue Button */
+        color: #ffffff; /* White Text */
+        font-weight: 600;
+        border-radius: 25px;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+  
+        &:hover {
+          background: #ffd700; /* Gold on Hover */
+          color: #002147; /* Navy Blue Text */
+          box-shadow: 0px 4px 10px rgba(255, 215, 0, 0.3); /* Soft Shadow */
+        }
+      }
+  
+      /* Dropdown Menu */
+      .dropdown-menu {
+        background: #ffffff; /* White Dropdown */
+        color: #002147; /* Navy Blue Text */
+        border-radius: 12px;
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1); /* Light Shadow */
+  
+        .dropdown-item {
+          font-weight: 500;
+          color: #002147;
+          padding: 10px 15px;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+  
+          &:hover {
+            background: #ffd700; /* Gold Background on Hover */
+            color: #ffffff; /* White Text */
+          }
+        }
+      }
+    }
+  }
+  

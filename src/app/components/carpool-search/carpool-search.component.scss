@@ -114,3 +114,31 @@
     }
   }
   
+
+
+  @keyframes zoomFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.list-group-item {
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    padding: 20px;
+    border: none;
+    transition: all 0.4s ease;
+    opacity: 0;
+    animation: zoomFadeIn 0.8s ease forwards;
+    animation-delay: calc(var(--order) * 0.1s);
+}
+
+.list-group-item:nth-child(n) {
+    --order: n;
+}
