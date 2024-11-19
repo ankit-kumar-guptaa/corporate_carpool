@@ -27,17 +27,18 @@
 
           <div *ngIf="isLoginActive" class="form-section">
             <!-- Login Form -->
-           
-              <div class="mb-4">
-                <label for="login-email" class="form-label">Email Address</label>
-                <input type="email" id="login-email"  [(ngModel)]="_user.email" class="form-control form-input" placeholder="name@company.com" required>
-              </div>
-              <div class="mb-4">
-                <label for="login-password" class="form-label">Password</label>
-                <input type="password" id="login-password" [(ngModel)]="_user.Password" class="form-control form-input" placeholder="Your password" required>
-              </div>
-              <button type="button" class="btn btn-primary btn-lg w-100" (click)="login()">Login</button>
-           
+            <div class="mb-4">
+              <label for="login-email" class="form-label">Email Address</label>
+              <input type="email" id="login-email" [(ngModel)]="_user.email" class="form-control form-input" placeholder="name@company.com" required>
+            </div>
+            <div class="mb-4">
+              <label for="login-password" class="form-label">Password</label>
+              <input type="password" id="login-password" [(ngModel)]="_user.Password" class="form-control form-input" placeholder="Your password" required>
+            </div>
+            <div class="d-flex justify-content-between mb-4">
+              <button type="button" class="btn btn-link forget-password-btn" (click)="forgotPassword()">Forgot Password?</button>
+            </div>
+            <button type="button" class="btn btn-primary btn-lg w-100" (click)="login()">Login</button>
           </div>
 
           <div *ngIf="!isLoginActive" class="form-section">
@@ -59,6 +60,9 @@
                 <input type="password" id="signup-password" class="form-control form-input" placeholder="Create a password" required>
               </div>
               <button type="button" class="btn btn-success btn-lg w-100" *ngIf="isPasswordSectionVisible" (click)="signup()">Sign Up</button>
+              <div class="text-center mt-4">
+                <button type="button" class="btn btn-link already-registered-btn" (click)="toggleForm(true)">Already Registered? Login here</button>
+              </div>
             </form>
           </div>
         </div>

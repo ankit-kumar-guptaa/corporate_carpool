@@ -112,4 +112,9 @@ export class LoginSignupComponent {
       this.toggleForm(true);
     }
   }
+
+  forgotPassword(): void {
+    // Implement your "Forgot Password" logic here
+    this._globalService.utilities.notify.info('Forgot Password feature is not yet implemented.');
+  }
 }
