@@ -18,7 +18,7 @@
   
   .form-input {
     border-radius: 12px;
-    padding: 0.9rem;
+    padding: 0.6rem;
     font-size: 1rem;
     border: 1px solid #ced4da;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -141,4 +141,59 @@
 
 .list-group-item:nth-child(n) {
     --order: n;
+}
+
+
+
+
+
+/* Styling for the Add Via Button */
+.add-via-button {
+  background-color: #ff8c00;
+  color: white;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 14px;  /* Smaller font size for the button */
+  transition: background-color 0.3s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.add-via-button:hover {
+  background-color: #e07b00;
+  cursor: pointer;
+}
+
+/* Styling for the search button and loading state */
+.search-button {
+  display: inline-flex;
+  align-items: center;
+}
+
+.search-button i {
+  margin-right: 8px;
+}
+
+.search-button span {
+  font-size: 16px;
+}
+
+/* Input styling for the Via fields */
+.via-inputs input {
+  margin-bottom: 10px;
+}
+
+.via-inputs .form-input {
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+/* Adjusting the layout of the Add Via button */
+.row .col-md-1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
