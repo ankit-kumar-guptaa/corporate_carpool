@@ -37,15 +37,17 @@ export class LoginSignupComponent implements AfterViewInit {
 
   // Handle scroll event and add 'visible' class to elements in view
   onScroll = (): void => {
-    const elements = document.querySelectorAll('.fade-in, .slide-left, .slide-right, .zoom-in, .rotate');
-    
+    const elements = document.querySelectorAll(
+      '.fade-in, .slide-left, .slide-right, .zoom-in, .rotate, .flip-up, .fade-in-scale, .bounce-in'
+    );
+  
     elements.forEach((element: Element) => {
-      const htmlElement = element as HTMLElement;  // Explicit cast to HTMLElement
+      const htmlElement = element as HTMLElement;
       if (this.isElementInView(htmlElement)) {
         htmlElement.classList.add('visible');
       }
     });
-  }
+  };
 
   toggleForm(isLogin: boolean): void {
     this.isLoginActive = isLogin;
