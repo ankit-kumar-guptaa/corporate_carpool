@@ -17,6 +17,9 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoadingInterceptor } from './Interceptor/loading.interceptor';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from './Shared/shared.module';
+import { LoaderComponent } from './Shared/loader/loader.component';
+import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +28,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HeaderComponent,
     FooterComponent,
     DashboardComponent,
-    CarpoolSearchComponent
+    CarpoolSearchComponent,
+    LoaderComponent,
+    AutocompleteComponent
     
   ],
   imports: [
@@ -33,6 +38,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     FormsModule ,
     HttpClientModule,
+    SharedModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       preventDuplicates: true

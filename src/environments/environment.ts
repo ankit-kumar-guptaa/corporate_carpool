@@ -11,7 +11,7 @@ export const environment = {
   bannerclass: 'topbanner_dev1',
   appinsightkey: '',
   base: 'https://api.carpoolindia.com/api',
-  base____:'http://localhost:5000/api',
+  base__:'http://localhost:5000/api',
   lang: 'en-us',
   salt: '@exam@',
   con:'',

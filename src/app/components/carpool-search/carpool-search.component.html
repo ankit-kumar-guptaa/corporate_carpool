@@ -17,7 +17,11 @@
               </div>
               <div class="col-md-3">
                 <label for="from" class="form-label">From</label>
-                <input type="text" id="from" name="from" class="form-control form-input" placeholder="Enter starting location" [(ngModel)]="fromLocation">
+                <AutocompleteComponent (setAddress)="handleDropAddress($event, 'From')" [autocompleteInput]="postRide.To_Address" ></AutocompleteComponent>
+              
+           
+              
+                <!-- <input type="text" id="from" name="from" class="form-control form-input" placeholder="Enter starting location" [(ngModel)]="fromLocation"> -->
               </div>
       
               <!-- Add Via Button between From and To -->
@@ -28,9 +32,9 @@
                 </button>
               </div>
       
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <label for="to" class="form-label">To (Office Address)</label>
-                <input type="text" id="to" name="to" class="form-control form-input" value="A-83, Okhla Phase II, New Delhi" readonly>
+                <input type="text" id="to" name="to" class="form-control form-input"  value="B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida, Uttar Pradesh 201309" readonly>
               </div>
             </div>
       
@@ -39,7 +43,8 @@
               <div class="row">
                 <!-- Dynamically show input fields based on viaLocations array -->
                 <div class="col-md-4" *ngFor="let location of viaLocations; let i = index">
-                  <input type="text" class="form-control form-input" placeholder="Enter Via {{i + 1}}" [(ngModel)]="viaLocations[i]">
+                  <AutocompleteComponent></AutocompleteComponent>
+                  <!-- <input type="text" class="form-control form-input" placeholder="Enter Via {{i + 1}}" [(ngModel)]="viaLocations[i]"> -->
                 </div>
               </div>
             </div>
@@ -71,19 +76,27 @@
           </ul>
         </div> -->
 
-        <div *ngIf="carpoolResults.length > 0" class="results mt-5 carpool-results-container">
+        <div *ngIf="RideList.length > 0" class="results mt-5 carpool-results-container">
           <h4 class="mb-4 text-secondary">Available Carpools:</h4>
           <ul class="list-group carpool-list">
-            <li class="list-group-item mb-3 animate-fade-in" *ngFor="let carpool of carpoolResults">
+            <li class="list-group-item mb-3 animate-fade-in" *ngFor="let carpool of RideList">
               <div class="d-flex justify-content-between align-items-center">
+                <!-- {{carpool|json}} -->
                 <div class="carpool-info">
-                  <strong>{{ carpool.type }}</strong> - {{ carpool.name }} <span class="badge rounded-pill bg-light text-muted">{{ carpool.from }}</span>
+                  <strong>{{ carpool.userType }}</strong> - {{ carpool.userName }} <span class="badge rounded-pill bg-light text-muted">{{ carpool.from_Address }}</span>
                 </div>
                 <button class="btn btn-connect btn-outline-primary btn-sm" (click)="connectCarpool()">Connect</button>
               </div>
             </li>
           </ul>
         </div>
+
+
+        <div *ngIf="RideList.length <1" class="results mt-5 carpool-results-container">
+          <h4 class="mb-4 text-secondary">No Record Found</h4>
+          
+        </div>
+
       </div>
       
     </section>
