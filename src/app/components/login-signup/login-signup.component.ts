@@ -209,7 +209,7 @@ if(this._user.email == '' || this._user.email == undefined){
 
         var userdetails = JSON.parse(res.data.dataset.table1[0].userdetails)[0];
         this.loginEvent.emit(userdetails.name);
-        this._globalService.utilities.storage.set('UserDetails', JSON.stringify(userdetails));
+        this._globalService.utilities.storage.set('UserProfile', JSON.stringify(userdetails));
         this.router.navigate(['/carpool-search']);
 
 

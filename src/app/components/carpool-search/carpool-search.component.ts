@@ -37,6 +37,11 @@ export class CarpoolSearchComponent {
 
   // Method to search carpool based on the selected role and location
   searchCarpool(): void {
+
+    this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida'
+    this.postRide.To_Latitude ='28.560965';
+    this.postRide.To_Longitude ='77.370719';
+
     this.ursrProfile = JSON.parse(this._globalService.utilities.storage.get('UserProfile')) || undefined;
 
     // Validate 'From' and 'To' addresses
@@ -102,6 +107,10 @@ export class CarpoolSearchComponent {
   // Method to handle form submission
   submitRequest(): void {
 
+    this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida'
+    this.postRide.To_Latitude ='28.560965';
+    this.postRide.To_Longitude ='77.370719';
+
     this.ursrProfile = JSON.parse(this._globalService.utilities.storage.get('UserProfile')) || undefined;
 
     // Validate 'From' and 'To' addresses
@@ -163,9 +172,6 @@ export class CarpoolSearchComponent {
       this.postRide.Form_Longitude = place.geometry.location.lng().toString();
 
 
-      this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida'
-      this.postRide.To_Latitude ='28.560965';
-      this.postRide.To_Longitude ='77.370719';
 
     } else {
       this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida'
