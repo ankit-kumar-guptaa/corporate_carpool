@@ -178,6 +178,16 @@ if(this._user.email == '' || this._user.email == undefined){
     });
   }
 
+
+  // Redirect if the user is logged in
+ngOnInit(): void {
+  const userProfile = this._globalService.utilities.storage.get('UserProfile');
+  if (userProfile) {
+    this.router.navigate(['/carpool-search']);
+  }
+}
+
+
   signup(): void {
 
     if (this._user.email == '' || this._user.email == undefined) {
