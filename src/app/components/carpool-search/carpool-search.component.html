@@ -80,16 +80,24 @@
           <h4 class="mb-4 text-secondary">Available Carpools:</h4>
           <ul class="list-group carpool-list">
             <li class="list-group-item mb-3 animate-fade-in" *ngFor="let carpool of RideList">
-              <div class="d-flex justify-content-between align-items-center">
-                <!-- {{carpool|json}} -->
-                <div class="carpool-info">
-                  <strong>{{ carpool.userType }}</strong> - {{ carpool.userName }} <span class="badge rounded-pill bg-light text-muted">{{ carpool.from_Address }}</span>
+              <div class="row align-items-center">
+                <!-- Carpool Info -->
+                <div class="col-12 col-md-9 mb-2 mb-md-0">
+                  <div class="carpool-info">
+                    <strong>{{ carpool.userType }}</strong> - {{ carpool.userName }}
+                    <span class="badge rounded-pill bg-light text-muted">{{ carpool.from_Address }}</span>
+                  </div>
                 </div>
-                <button class="btn btn-connect btn-outline-primary btn-sm" (click)="connectCarpool()">Connect</button>
+        
+                <!-- Connect Button -->
+                <div class="col-12 col-md-3 text-center text-md-end">
+                  <button class="btn btn-connect btn-outline-primary btn-sm w-100 w-md-auto" (click)="connectCarpool()">Connect</button>
+                </div>
               </div>
             </li>
           </ul>
         </div>
+        
 
 
         <div *ngIf="RideList.length <1" class="results mt-5 carpool-results-container">
