@@ -1,85 +1,127 @@
 .header {
-    background: #ffffff; /* White Background */
-    color: #002147; /* Navy Blue Text for Contrast */
-    padding: 20px 40px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light Shadow for Elevation */
-    font-family: 'Merriweather', serif;
-  
-    /* Left Section */
-    .header-left h1 {
+  background: #ffffff;
+  color: #002147;
+  padding: 20px 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Merriweather', serif;
+
+  .header-left {
+    h1 {
       font-size: 18px;
       font-weight: 700;
-      color: #002147; /* Navy Blue */
+      color: #002147;
       margin: 0;
       padding: 0;
       text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-  
-    /* Center Logo Section */
-    .header-logo {
-      text-align: center;
-  
-      .center-logo {
-        width: 100px;
-        height: auto;
-        border: 2px solid #ffd700; /* Gold Border */
-        border-radius: 10%; /* Circular Logo */
-        padding: 10px;
-        background-color: #ffffff; /* White Background for Elegance */
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft Shadow for Depth */
+  }
+
+  .header-logo {
+    text-align: center;
+
+    .center-logo {
+      width: 80px;
+      height: auto;
+      border: 2px solid #e61c76;
+      border-radius:10%;
+      padding: 5px;
+      background-color: #ffffff;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .profile-section {
+    display: flex;
+    align-items: center;
+
+    .profile-img {
+      width: 40px;
+      height: 40px;
+      border: 2px solid #e61c76;
+      border-radius: 50%;
+    }
+
+    .dropdown-toggle-animated {
+      background: #002147;
+      color: #ffffff;
+      font-weight: 600;
+      border-radius: 20px;
+      padding: 8px 16px;
+      max-width: 200px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #e61c76;
+        color: #002147;
+        box-shadow: 0px 4px 10px rgba(255, 215, 0, 0.3);
       }
     }
-  
-    /* Right Section: Profile */
-    .profile-section {
-      display: flex;
-      align-items: center;
-  
-      /* Profile Image */
-      .profile-img {
-        width: 50px;
-        height: 50px;
-        border: 2px solid #ffd700; /* Gold Border */
-        border-radius: 50%;
-        background-color: #ffffff; /* Matches Background */
-      }
-  
-      /* Dropdown Button */
-      .dropdown-toggle-animated {
-        background: #002147; /* Navy Blue Button */
-        color: #ffffff; /* White Text */
-        font-weight: 600;
-        border-radius: 25px;
-        padding: 10px 20px;
+
+    .dropdown-menu {
+      background: #ffffff;
+      color: #002147;
+      border-radius: 12px;
+      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+
+      .dropdown-item {
+        font-weight: 500;
+        color: #002147;
+        padding: 10px 15px;
+        border-radius: 8px;
         transition: all 0.3s ease;
-  
+
         &:hover {
-          background: #ffd700; /* Gold on Hover */
-          color: #002147; /* Navy Blue Text */
-          box-shadow: 0px 4px 10px rgba(255, 215, 0, 0.3); /* Soft Shadow */
-        }
-      }
-  
-      /* Dropdown Menu */
-      .dropdown-menu {
-        background: #ffffff; /* White Dropdown */
-        color: #002147; /* Navy Blue Text */
-        border-radius: 12px;
-        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1); /* Light Shadow */
-  
-        .dropdown-item {
-          font-weight: 500;
-          color: #002147;
-          padding: 10px 15px;
-          border-radius: 8px;
-          transition: all 0.3s ease;
-  
-          &:hover {
-            background: #ffd700; /* Gold Background on Hover */
-            color: #ffffff; /* White Text */
-          }
+          background: #e61c76;
+          color: #ffffff;
         }
       }
     }
   }
-  
+
+  // Responsive Design
+  @media (max-width: 992px) {
+    .header {
+      padding: 10px 20px;
+
+      .header-left {
+        display: none; // Hides the "Corporate Carpool Program" text
+      }
+
+      .header-logo .center-logo {
+        width: 60px;
+      }
+
+      .profile-section {
+        .profile-img {
+          width: 35px;
+          height: 35px;
+        }
+
+        .dropdown-toggle-animated {
+          padding: 6px 12px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .header {
+      flex-wrap: wrap;
+      justify-content: center;
+
+      .header-logo,
+      .profile-section {
+        flex: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

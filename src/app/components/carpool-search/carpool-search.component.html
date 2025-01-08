@@ -17,7 +17,7 @@
               </div>
               <div class="col-md-3">
                 <label for="from" class="form-label">From</label>
-                <AutocompleteComponent (setAddress)="handleDropAddress($event, 'From')" [autocompleteInput]="postRide.To_Address" ></AutocompleteComponent>
+                <AutocompleteComponent (setAddress)="handleDropAddress($event, 'From')" [autocompleteInput]="postRide.From_Address" ></AutocompleteComponent>
               
            
               
@@ -50,13 +50,13 @@
             </div>
       
             <div class="text-center mt-5">
-              <button type="button" class="btn btn-gradient-primary btn-lg search-button" (click)="searchCarpool()">
+              <button type="button" class="btn btn-gradient-primary mb-3 btn-lg search-button" (click)="searchCarpool()">
                 <span *ngIf="!isLoadingSearch">🔍 Search</span>
                 <span *ngIf="isLoadingSearch">
                   <i class="fas fa-spinner fa-spin"></i> Searching...
                 </span>
               </button>
-              <button type="button" class="btn btn-success btn-lg submit-button ms-3" (click)="submitRequest()" [disabled]="isLoadingSubmit">
+              <button type="button" class="btn btn-success mb-3 btn-lg submit-button ms-3" (click)="submitRequest()" [disabled]="isLoadingSubmit">
                 <span *ngIf="!isLoadingSubmit">Submit</span>
                 <span *ngIf="isLoadingSubmit">
                   <i class="fas fa-spinner fa-spin"></i> Submitting...
