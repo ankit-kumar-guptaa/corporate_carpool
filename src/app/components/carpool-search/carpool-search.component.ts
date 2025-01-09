@@ -104,6 +104,30 @@ export class CarpoolSearchComponent {
     // }, 2000); // Simulating async process (2 seconds delay)
   }
 
+
+  connectCarpool(item: any) {
+  
+
+    const param: any = {
+      UserId: this.ursrProfile.id,
+      RideId: item.rideID
+    };
+
+    this._globalService.ServiceManager.request.post('Ride/CORP_SendRideRequest', param).subscribe({
+      next: (resp) => {
+        if (resp.status === 1) {
+          item.IsSendRequest = true;
+          this._globalService.utilities.notify.success('Request sent successfully.');
+        } else {
+          this._globalService.utilities.notify.error('Error sending request.');
+        }
+      },
+      error: () => {
+        this._globalService.utilities.notify.error('Failed to send the request.');
+      }
+    });
+  }
+
   // Method to handle form submission
   submitRequest(): void {
 
@@ -162,9 +186,7 @@ export class CarpoolSearchComponent {
   }
 
   // Method to handle connecting with the carpool partner
-  connectCarpool(): void {
-    alert('Connecting with the carpool partner...');
-  }
+
   handleDropAddress(place: any, Control: string) {
     if (Control === 'From') {
       this.postRide.From_Address = place.formatted_address;

@@ -91,7 +91,7 @@
         
                 <!-- Connect Button -->
                 <div class="col-12 col-md-3 text-center text-md-end">
-                  <button class="btn btn-connect btn-outline-primary btn-sm w-100 w-md-auto" (click)="connectCarpool()">Connect</button>
+                  <button  [disabled]="carpool.isSendRequest" class="btn btn-connect btn-outline-primary btn-sm w-100 w-md-auto" (click)="connectCarpool(carpool)">Connect</button>
                 </div>
               </div>
             </li>
