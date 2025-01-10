@@ -9,6 +9,8 @@ import { helper } from '../../models/helper';
 })
 export class DashboardComponent implements OnInit {
   loggedInUserName: string = '';
+  isModalVisible: boolean = false; // Tracks modal visibility
+  selectedUser: { name: string; email: string } | null = null; 
   loggedInUserEmail: string = '';
   totalRidesCount: number = 0;
   totalConnections: number = 0;
@@ -38,9 +40,8 @@ export class DashboardComponent implements OnInit {
     localStorage.removeItem('loggedInUserName');
     // Redirect to login page or any other action on logout
   }
-  openModal(item: any) {
+  
 
-  }
   loadData() {
 
     const userProfile = this._globalService.utilities.storage.get('UserProfile') || '{}';
@@ -113,4 +114,31 @@ export class DashboardComponent implements OnInit {
       }
     })
   }
+
+
+
+
+   
+
+
+
+// Function to open the modal
+openModal(user: { name: string; email: string }): void {
+  this.selectedUser = user;
+  this.isModalVisible = true;
+}
+
+// Function to close the modal
+closeModal(event?: MouseEvent): void {
+  if (event) {
+    event.stopPropagation(); // Prevent click propagation from closing the modal
+  }
+  this.isModalVisible = false;
+}
+
+// Prevent modal content from closing when clicked inside
+stopPropagation(event: MouseEvent): void {
+  event.stopPropagation();
+}
+  
 }

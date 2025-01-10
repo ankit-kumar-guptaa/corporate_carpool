@@ -129,61 +129,138 @@ export class CarpoolSearchComponent {
   }
 
   // Method to handle form submission
-  submitRequest(): void {
+  // submitRequest(): void {
 
-    this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida'
-    this.postRide.To_Latitude ='28.560965';
-    this.postRide.To_Longitude ='77.370719';
+  //   this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida'
+  //   this.postRide.To_Latitude ='28.560965';
+  //   this.postRide.To_Longitude ='77.370719';
 
-    this.ursrProfile = JSON.parse(this._globalService.utilities.storage.get('UserProfile')) || undefined;
+  //   this.ursrProfile = JSON.parse(this._globalService.utilities.storage.get('UserProfile')) || undefined;
 
-    // Validate 'From' and 'To' addresses
-   if (!this.postRide.From_Address) {
-     this._globalService.utilities.notify.error('Please enter the "From" location.');
-     return;
-   }
-
-  //  if (!this.postRide.To_Address) {
-  //    this._globalService.utilities.notify.error('Please enter the "To" location.');
+  //   // Validate 'From' and 'To' addresses
+  //  if (!this.postRide.From_Address) {
+  //    this._globalService.utilities.notify.error('Please enter the "From" location.');
   //    return;
   //  }
 
-   this.noRidesAvailable = false;
+  // //  if (!this.postRide.To_Address) {
+  // //    this._globalService.utilities.notify.error('Please enter the "To" location.');
+  // //    return;
+  // //  }
 
-   this.postRide.UserId = this.ursrProfile.id;
-   this.postRide.UserName = this.ursrProfile.name;
-   this.postRide.IsSearch = 1;
+  //  this.noRidesAvailable = false;
+
+  //  this.postRide.UserId = this.ursrProfile.id;
+  //  this.postRide.UserName = this.ursrProfile.name;
+  //  this.postRide.IsSearch = 1;
 
 
 
-    this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(resp => {
-      this.isLoadingSearch = false;
+  //   this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(resp => {
+  //     this.isLoadingSearch = false;
 
-      if (resp.status === 1) {
-        this.RideList = resp.data;
-        this.showData = true;
+  //     if (resp.status === 1) {
+  //       this.RideList = resp.data;
+  //       this.showData = true;
 
-        if (this.RideList.length === 0) {
-          this.noRidesAvailable = true;
-          this._globalService.utilities.notify.warning('No ride found on this route');
+  //       if (this.RideList.length === 0) {
+  //         this.noRidesAvailable = true;
+  //         this._globalService.utilities.notify.warning('No ride found on this route');
+  //       }else {
+  //       // Success message after submitting ride
+  //       this._globalService.utilities.notify.success('Ride submitted successfully!');
+  //     }
+  //     } else {
+  //       this.showData = false;
+  //       this._globalService.utilities.notify.error('Error on Search Page.');
+  //     }
+  //   }, error => {
+  //     this.isLoadingSearch = false;
+  //     this._globalService.utilities.notify.error('Failed to search rides.');
+  //   });
+
+
+
+  //   // this.isLoadingSubmit = true; 
+  //   // this._globalService.utilities.notify.info(`Role: ${this.selectedRole}, From: ${this.fromLocation}, To: A-83, Okhla Phase II, New Delhi`);
+  //   // setTimeout(() => {
+  //   //   this.isLoadingSubmit = false; 
+  //   // }, 1500); 
+  // }
+
+
+
+
+
+
+  submitRequest(): void {
+    // Set default destination for "To" address
+    this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida';
+    this.postRide.To_Latitude = '28.560965';
+    this.postRide.To_Longitude = '77.370719';
+  
+    
+    this.ursrProfile = JSON.parse(this._globalService.utilities.storage.get('UserProfile')) || undefined;
+  
+    // Validate "From" address
+    if (!this.postRide.From_Address) {
+      this._globalService.utilities.notify.error('Please enter the "From" location.');
+      return;
+    }
+  
+    // Check if a ride has already been submitted today for the same "From" and "To" address
+    const today = new Date().toISOString().slice(0, 10);
+    const lastSubmittedDate = localStorage.getItem('lastSubmittedDate') || '';
+    const lastSubmittedFrom = localStorage.getItem('lastSubmittedFrom') || '';
+    const lastSubmittedTo = localStorage.getItem('lastSubmittedTo') || '';
+  
+    if (lastSubmittedDate === today && lastSubmittedFrom === this.postRide.From_Address && lastSubmittedTo === this.postRide.To_Address) {
+      this._globalService.utilities.notify.warning('You have already submitted a ride for today on this route.');
+      return;
+    }
+  
+    // Disable the submit button immediately when the request starts
+    this.isLoadingSubmit = true;
+    
+    // Prepare ride submission data
+    this.postRide.UserId = this.ursrProfile.id;
+    this.postRide.UserName = this.ursrProfile.name;
+    this.postRide.IsSearch = 1; // Just setting this flag for now, can be used if needed
+  
+    // Make API request to submit the ride
+    this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(
+      resp => {
+        // Disable submit button after submission is complete
+        this.isLoadingSubmit = false;
+  
+        if (resp.status === 1) {
+          this.RideList = resp.data;
+          this.showData = true;
+  
+          // Success: Show success notification
+          this._globalService.utilities.notify.success('Ride submitted successfully!');
+  
+          // Store the current "From" and "To" address and today's date in localStorage
+          localStorage.setItem('lastSubmittedDate', today);
+          localStorage.setItem('lastSubmittedFrom', this.postRide.From_Address);
+          localStorage.setItem('lastSubmittedTo', this.postRide.To_Address);
+        } else {
+          this.showData = false;
+          this._globalService.utilities.notify.error('Error while submitting the ride.');
         }
-      } else {
-        this.showData = false;
-        this._globalService.utilities.notify.error('Error on Search Page.');
+      },
+      error => {
+        // Re-enable the button in case of failure
+        this.isLoadingSubmit = false;
+        this._globalService.utilities.notify.error('Failed to submit the ride. Please try again.');
       }
-    }, error => {
-      this.isLoadingSearch = false;
-      this._globalService.utilities.notify.error('Failed to search rides.');
-    });
-
-
-
-    // this.isLoadingSubmit = true; 
-    // this._globalService.utilities.notify.info(`Role: ${this.selectedRole}, From: ${this.fromLocation}, To: A-83, Okhla Phase II, New Delhi`);
-    // setTimeout(() => {
-    //   this.isLoadingSubmit = false; 
-    // }, 1500); 
+    );
   }
+  
+  
+
+
+
 
   // Method to handle connecting with the carpool partner
 

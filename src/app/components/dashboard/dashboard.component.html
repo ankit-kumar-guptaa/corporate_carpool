@@ -86,6 +86,7 @@
                   <i class="fas fa-eye"></i> View
                 </button>
               </td>
+              
             </tr>
           </tbody>
         </table>
@@ -128,12 +129,35 @@
                     <i class="fas fa-eye"></i> View
                   </button>
                 </td>
+                
               </tr>
             </tbody>
           </table>
         </div>
       
       </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- Custom Modal -->
+<div id="customModal" class="modal-container" [ngClass]="{'show': isModalVisible}" (click)="closeModal($event)">
+  <div class="modal-content" (click)="stopPropagation($event)">
+    <div class="modal-header">
+      <h5 class="modal-title">👤 User Details</h5>
+      <button class="close-btn" (click)="closeModal()">✖</button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Name:</strong> {{ selectedUser?.name }}</p>
+      <p><strong>Email:</strong> {{ selectedUser?.email || 'N/A' }}</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" (click)="closeModal()">Close</button>
     </div>
   </div>
 </div>
