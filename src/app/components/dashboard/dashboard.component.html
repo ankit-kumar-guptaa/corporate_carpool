@@ -2,6 +2,7 @@
 
 <div class="container my-5">
   <h2 class="text-center mb-4">👤 Welcome to Your Dashboard, {{ loggedInUserName }}!</h2>
+ 
 
   <!-- Dashboard Tabs -->
   <ul class="nav nav-tabs mb-4" role="tablist">
@@ -22,7 +23,12 @@
     <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
       <div class="card shadow-sm p-4">
         <h4 class="text-primary">📊 Dashboard Overview</h4>
-        <p>Welcome back! Here you can check the status of your current rides, see statistics, and manage your connections.</p>
+        <!-- <p>Welcome back! Here you can check the status of your current rides, see statistics, and manage your connections.</p> -->
+        <p>
+          Welcome back, <strong>{{ loggedInUserName }}</strong>!<br>
+          <small class="text-muted">📧 Email: {{ loggedInUserEmail }}</small>
+        </p>
+        
         <div class="stats-container row mt-4">
           <div class="col-md-4">
             <div class="stat-box bg-light p-3 rounded shadow-sm">

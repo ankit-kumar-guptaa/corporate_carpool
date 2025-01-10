@@ -9,6 +9,7 @@ import { helper } from '../../models/helper';
 })
 export class DashboardComponent implements OnInit {
   loggedInUserName: string = '';
+  loggedInUserEmail: string = '';
   totalRidesCount: number = 0;
   totalConnections: number = 0;
   connections: any = [];
@@ -46,6 +47,7 @@ export class DashboardComponent implements OnInit {
     try {
       const parsedProfile = JSON.parse(userProfile);
       this.userId = parsedProfile?.id;
+      this.loggedInUserEmail = parsedProfile?.email || ''; 
     } catch {
 
     }
