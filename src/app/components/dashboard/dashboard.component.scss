@@ -1,186 +1,295 @@
+/* Container Styling */
 .container {
-    margin-top: 50px;
+  margin-top: 50px;
+  font-family: 'Open Sans', sans-serif;
 }
 
+/* Card Styling */
 .card {
-    border-radius: 12px;
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
-    background: #ffffff;
-    border: none;
+  border-radius: 12px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border: none;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+  }
 }
 
+/* Stats Container */
 .stats-container {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 
+/* Stat Box */
 .stat-box {
-    text-align: center;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #e3f2fd, #ffffff);
-    padding: 30px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: scale(1.05);
+  }
+  &.bg-primary {
+    background: linear-gradient(135deg, #007bff, #003366);
+  }
+  &.bg-success {
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+  }
+  &.bg-info {
+    background: linear-gradient(135deg, #17a2b8, #117a8b);
+  }
 }
 
 .stat-number {
-    font-size: 2rem;
-    color: #003366;
-    font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
 }
 
+/* Navigation Tabs */
 .nav-tabs .nav-link {
-    color: #2c3e50;
-    font-weight: 600;
-    border-radius: 12px 12px 0 0;
-    transition: background-color 0.3s, color 0.3s;
+  color: #2c3e50;
+  font-weight: 600;
+  border-radius: 12px 12px 0 0;
+  transition: background-color 0.3s, color 0.3s;
+  padding: 10px 20px;
+  &:hover {
+    background-color: #e9ecef;
+  }
 }
 
 .nav-tabs .nav-link.active {
-    color: #ffffff;
-    background-color: #003366;
-    border: none;
+  color: #ffffff;
+  background-color: #003366;
+  border: none;
 }
 
+/* Table Styling */
 .table {
-    margin-top: 20px;
-    font-size: 0.95rem;
-    border-radius: 12px;
+  margin-top: 20px;
+  font-size: 0.95rem;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .table-primary {
-    background-color: #003366;
-    color: white;
+  background-color: #003366;
+  color: white;
 }
 
-.list-group-item {
-    font-weight: 500;
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    margin-bottom: 10px;
+.table-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.table-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+/* Activity Container */
+.activity-container {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* Activity Card */
+.activity-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.activity-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  margin-right: 15px;
+  &.bg-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+  }
+  &.bg-success {
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+  }
+  &.bg-info {
+    background: linear-gradient(135deg, #17a2b8, #117a8b);
+  }
+  &.bg-secondary {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+  }
+}
+
+.activity-content {
+  flex: 1;
+}
+
+.activity-content p {
+  font-weight: 500;
+  color: #333;
+}
+
+.activity-content small {
+  font-size: 0.85rem;
+}
+
+/* Scrollbar Styling */
+.activity-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.activity-container::-webkit-scrollbar-thumb {
+  background: #003366;
+  border-radius: 4px;
+}
+
+.activity-container::-webkit-scrollbar-track {
+  background: #f1f3f5;
 }
 
 /* Import Custom Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400&display=swap');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Modal Container */
 .modal-container {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8); /* Dark translucent overlay */
-    justify-content: center;
-    align-items: center;
-    opacity: 0; /* Fully transparent initially */
-    transition: opacity 0.5s ease; /* Smooth fade-in/out */
-    z-index: 1050; /* Ensure it appears on top of other content */
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1050;
+}
+
+.modal-container.show {
+  display: flex;
+  opacity: 1;
+}
+
+/* Modal Content */
+.modal-content {
+  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+  border-radius: 15px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  max-width: 450px;
+  width: 90%;
+  padding: 20px 25px;
+  position: relative;
+  animation: zoomIn 0.4s ease-out;
+}
+
+/* Close Button */
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  transition: color 0.3s ease;
+  &:hover {
+    color: #e74c3c;
   }
-  
-  /* Modal Visibility */
-  .modal-container.show {
-    display: flex; /* Flex display to center content */
-    opacity: 1; /* Fully visible */
-  }
-  
-  /* Modal Content */
-  .modal-content {
-    background: linear-gradient(135deg, #ffffff, #f9f9f9); /* Subtle gradient for modern look */
-    border-radius: 15px;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-    max-width: 450px; /* Slightly larger for better readability */
-    width: 90%;
-    padding: 20px 25px;
-    position: relative;
-    animation: zoomIn 0.4s ease-out; /* Attractive zoom-in animation */
-  }
-  
-  /* Close Button */
-  .close-btn {
-    background: none;
-    border: none;
-    font-size: 22px;
-    font-weight: bold;
-    color: #555; /* Neutral color for better accessibility */
-    cursor: pointer;
-    position: absolute;
-    top: 12px;
-    right: 15px;
-    transition: color 0.3s ease;
-  }
-  
-  .close-btn:hover {
-    color: #e74c3c; /* Red hover effect for close button */
-  }
-  
-  /* Modal Header */
-  .modal-header {
-    text-align: center;
-    margin-bottom: 15px;
-  }
-  
-  .modal-header h5 {
-    font-size: 22px;
-    font-weight: 600;
-    color: #333; /* Darker text for better contrast */
-  }
-  
-  /* Modal Body */
-  .modal-body {
-    font-size: 16px;
-    color: #555;
-    line-height: 1.6;
-  }
-  
-  /* Modal Footer */
-  .modal-footer {
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .modal-footer .btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    transition: background 0.3s ease, transform 0.2s ease;
-  }
-  
-  /* Close Button in Footer */
-  .modal-footer .btn-primary {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-  }
-  
-  .modal-footer .btn-primary:hover {
+}
+
+/* Modal Header */
+.modal-header {
+  text-align: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
+}
+
+.modal-header h5 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+/* Modal Body */
+.modal-body {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Modal Footer */
+.modal-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.modal-footer .btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.modal-footer .btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  &:hover {
     background-color: #0056b3;
-    transform: scale(1.05); /* Subtle hover effect */
+    transform: scale(1.05);
   }
-  
-  /* Keyframe Animations */
-  @keyframes zoomIn {
-    from {
-      transform: scale(0.8);
-      opacity: 0;
-    }
-    to {
-      transform: scale(1);
-      opacity: 1;
-    }
+}
+
+.modal-footer .btn-success {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  &:hover {
+    background-color: #1e7e34;
+    transform: scale(1.05);
   }
-  
+}
+
+.modal-footer .btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+  &:hover {
+    background-color: #5a6268;
+    transform: scale(1.05);
+  }
+}
+
+/* Keyframe Animations */
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
