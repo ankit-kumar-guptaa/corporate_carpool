@@ -1,17 +1,138 @@
-.input-with-icon {
-    position: relative;
-  
-    .icon {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      
-      font-size: 16px;
-    }
-  
-    input, select, textarea {
-      padding-left: 50px;
-    }
-  }
- 
+/* Enhanced Input Field Styling */
+.form-input {
+  width: 100%;
+  padding: 14px 20px;
+  font-size: 1rem;
+  color: #2c3e50;
+  background-color: #ffffff;
+  border: 2px solid #e1e5eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Focus state with animated border gradient */
+.form-input:focus {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+  background-image: linear-gradient(#fff, #fff), 
+                    linear-gradient(90deg, #003366 0%, #00a86b 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* Add a subtle animation when typing */
+.form-input:not(:placeholder-shown) {
+  transform: translateY(-2px);
+}
+
+/* Create a wrapper div for the input to add decorative elements */
+.input-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* Add decorative icon */
+.input-wrapper::before {
+  content: '\f002'; /* Search icon - replace with appropriate icon from Font Awesome */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 15px;
+  top: 100%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  z-index: 2;
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+
+/* Move the input padding when using an icon */
+.input-wrapper .form-input {
+  padding-left: 45px;
+}
+
+/* Change icon color on focus */
+.input-wrapper:focus-within::before {
+  color: #003366;
+}
+
+/* Add a subtle hover effect */
+.form-input:hover {
+  border-color: #cfd6e1;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Add loading indicator for autocomplete functionality */
+.input-wrapper.loading::after {
+  content: '';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e1e5eb;
+  border-top: 2px solid #003366;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* Autocomplete dropdown styling enhancements */
+.pac-container {
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.pac-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pac-item:hover {
+  background-color: #f8f9fa;
+}
+
+.pac-item-selected {
+  background-color: #e9f2ff;
+}
+
+.pac-matched {
+  font-weight: 600;
+  color: #003366;
+}
+
+/* Custom placeholder styling */
+.form-input::placeholder {
+  color: #adb5bd;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.form-input:focus::placeholder {
+  opacity: 0.5;
+}
+
+/* Focus ring animation */
+@keyframes focusRing {
+  0% { box-shadow: 0 0 0 0 rgba(0, 51, 102, 0.4); }
+  50% { box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.2); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 51, 102, 0); }
+}
+
+.form-input:focus {
+  animation: focusRing 0.8s ease-out;
+}

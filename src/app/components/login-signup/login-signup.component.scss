@@ -1,421 +1,558 @@
-.container {
-    margin-top: 50px;
-}
-
-.login-signup-card {
-    border-radius: 16px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
-}
-
-.chairman-message-card {
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    background: linear-gradient(135deg, #f0f4f8, #ffffff);
-}
-
-.card-body {
-    padding: 2rem 3rem;
-}
-
-.card-title {
-    font-weight: 700;
-    font-size: 1.6rem;
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-}
-
-.card-title.text-primary {
-    color: #003366;
-    font-family: 'Merriweather', serif; 
-}
-
-.card-text {
-    color: #6c757d;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    font-family: 'Open Sans', sans-serif; 
-}
-
-.btn-link-toggle {
-    background-color: transparent;
-    color: #6c757d;
-    font-weight: bold;
-    font-size: 1.2rem;
-    border: none;
-    margin: 0 15px;
-    padding-bottom: 5px;
-    transition: color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
-}
-
-.btn-link-toggle.active {
-    color: #003366;
-    border-bottom: 3px solid #003366;
-}
-
-.btn-link-toggle:hover {
-    color: #003366;
-    text-decoration: none;
-}
-
-.form-section {
-    margin-top: 20px;
-}
-
-.form-label {
-    font-weight: 600;
-    color: #2c3e50;
-    font-size: 1.1rem;
-    margin-bottom: 8px;
-}
-
-.form-input {
-    border-radius: 8px;
-    padding: 0.9rem;
-    font-size: 1rem;
-    border: 1px solid #ced4da;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.form-input:focus {
-    border-color: #4c88d6;
-    box-shadow: 0 0 8px rgba(76, 136, 214, 0.2);
-}
-
-.btn-primary, .btn-success, .btn-warning {
-    background-color: #003366;
-    border: none;
-    color: #ffffff;
-    padding: 0.8rem;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-}
-
-.btn-primary:hover, .btn-success:hover, .btn-warning:hover {
-    background-color: #001f4d;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-
-
-
-.btn-link {
-    background-color: transparent;
-    color: #6c757d;
-    font-weight: 600;
-    font-size: 1rem;
-    border: none;
-    position: relative;
-    cursor: pointer;
-    padding: 0.4rem 0;
-    text-decoration: none;
-    transition: color 0.3s ease, border-bottom 0.3s ease;
-  }
-  
-  .btn-link::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: 100%;
-    height: 2px;
-    background-color: #6c757d;
-    transition: transform 0.3s ease-in-out;
-    transform: scaleX(0);
-    transform-origin: right;
-  }
-  
-  .btn-link:hover {
-    color: #003366;
-  }
-  
-  .btn-link:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
-    background-color: #003366;
-  }
-  
-
-
- 
-
-
-
-
-
-
-
-
-
-/* General Section Title */
-.section-title {
-  text-align: center;
-  font-size: 2.5rem;
-  font-weight: bold;
+/* Base Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f5f7fa;
   color: #333;
+}
+
+.container-fluid {
+  padding: 0 50px;
+}
+
+/* Chairman Message Card */
+.chairman-message-card {
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(145deg, #ffffff, #f5f7fa);
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chairman-message-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.chairman-img-container {
+  position: relative;
+  margin: 0 auto;
+  width: 180px;
+  height: 180px;
+}
+
+.chairman-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #ffffff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.quote-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  font-style: italic;
+  color: #555;
+  position: relative;
+  padding: 20px 10px;
+}
+
+.quote-text::before, .quote-text::after {
+  content: '"';
+  font-size: 2.5rem;
+  color: #003366;
+  opacity: 0.3;
+  position: absolute;
+}
+
+.quote-text::before {
+  top: -10px;
+  left: -10px;
+}
+
+.quote-text::after {
+  bottom: -30px;
+  right: -10px;
+}
+
+/* Login/Signup Card */
+.login-signup-card {
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-signup-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  position: relative;
   margin-bottom: 30px;
 }
 
-/* List Layout (Why Carpool?) */
-.list-layout {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.btn-toggle {
+  background-color: transparent;
+  color: #6c757d;
+  font-weight: 600;
+  font-size: 1.3rem;
+  border: none;
+  padding: 10px 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.btn-toggle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.btn-toggle.active {
+  color: #003366;
+}
+
+.btn-toggle.active::after {
+  background-color: #003366;
+}
+
+.input-group-custom {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.form-input {
+  border-radius: 12px;
+  padding: 14px 14px 14px 45px;
+  font-size: 1rem;
+  border: 1px solid #e1e5eb;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.form-input:focus {
+  border-color: #003366;
+  box-shadow: 0 0 10px rgba(0, 51, 102, 0.15);
+  outline: none;
+}
+
+.forget-password-btn {
+  color: #6c757d;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.forget-password-btn:hover {
+  color: #003366;
+  text-decoration: underline;
+}
+
+.btn-primary, .btn-success, .btn-warning {
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
+}
+
+.btn-primary {
+  background-color: #003366;
+  border: none;
+}
+
+.btn-success {
+  background-color: #00a86b;
+  border: none;
+}
+
+.btn-warning {
+  background-color: #f59f00;
+  border: none;
+  color: #fff;
+}
+
+.btn-primary:hover, .btn-success:hover, .btn-warning:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary::after, .btn-success::after, .btn-warning::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+  z-index: -1;
+}
+
+.btn-primary:hover::after, .btn-success:hover::after, .btn-warning:hover::after {
+  width: 300px;
+  height: 300px;
+}
+
+.already-registered-btn {
+  color: #6c757d;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.already-registered-btn:hover {
+  color: #003366;
+  text-decoration: underline;
+}
+
+/* Section Styles */
+.section-container {
+  padding: 40px 0;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #003366 0%, #00a86b 100%);
+  border-radius: 2px;
+}
+
+.highlight-text {
+  color: #003366;
+  position: relative;
+  z-index: 1;
+}
+
+.highlight-text::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background-color: rgba(0, 51, 102, 0.1);
+  z-index: -1;
+}
+
+/* Why Carpool Section */
+.why-carpool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.benefit-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.benefit-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #003366 0%, #00a86b 100%);
+}
+
+.benefit-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-icon {
+  margin-bottom: 20px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: rgba(0, 51, 102, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.benefit-icon i {
+  font-size: 30px;
+  color: #003366;
+}
+
+.benefit-card h5 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.benefit-card p {
+  font-size: 1rem;
+  color: #6c757d;
+  line-height: 1.6;
+}
+
+/* Steps Section */
+.steps-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-.list-layout li {
-  display: flex;
-  align-items: flex-start;
   gap: 15px;
-  padding: 15px 20px;
-  background-color: #f4f4f4;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.list-layout .icon {
-  font-size: 2.5rem;
-  color: #333;
-  flex-shrink: 0;
-}
-
-.list-layout .list-content h5 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-  margin: 0 0 5px;
-}
-
-.list-layout .list-content p {
-  font-size: 1rem;
-  color: #555;
-  margin: 0;
-}
-
-/* Step Cards (How to Get Started) */
 .step-card {
-  background-color: #f4f4f4;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  margin-bottom: 20px;
-  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .step-card:hover {
-  transform: translateY(-5px);
+  transform: translateX(10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
-.step-card .step-number {
-  display: inline-block;
-  font-size: 2rem;
-  font-weight: bold;
-  color: #fff;
-  background-color: #333;
-  width: 50px;
-  height: 50px;
+.step-number {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  line-height: 50px;
-  margin-bottom: 15px;
-}
-
-.step-card h5 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-}
-
-.step-card p {
-  font-size: 1rem;
-  color: #555;
-}
-
-/* Badge Layout (Carpool Tips) */
-.badge-layout {
+  background: linear-gradient(135deg, #003366 0%, #00a86b 100%);
+  color: white;
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  align-items: center;
   justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
 }
 
-.badge-item {
-  width: 220px;
-  text-align: center;
-  background-color: #f4f4f4;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+.step-content {
+  flex-grow: 1;
 }
 
-.badge-item:hover {
-  transform: translateY(-5px);
+.step-content h5 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #2c3e50;
 }
 
-.badge-item i {
-  font-size: 3rem;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.badge-item h5 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-}
-
-.badge-item p {
+.step-content p {
   font-size: 1rem;
-  color: #555;
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+.step-connector {
+  width: 3px;
+  height: 30px;
+  background-color: #e1e5eb;
+  margin-left: 28px;
+}
+
+/* Tips Section */
+.tips-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.tip-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tip-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.tip-icon {
+  margin-bottom: 20px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: rgba(0, 51, 102, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  transition: all 0.3s ease;
+}
+
+.tip-card:hover .tip-icon {
+  background-color: #003366;
+}
+
+.tip-icon i {
+  font-size: 30px;
+  color: #003366;
+  transition: all 0.3s ease;
+}
+
+.tip-card:hover .tip-icon i {
+  color: #ffffff;
+}
+
+.tip-card h5 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.tip-card p {
+  font-size: 1rem;
+  color: #6c757d;
 }
 
 /* Animations */
 .fade-in {
   opacity: 0;
-  animation: fadeIn 1s ease-in-out forwards;
+  animation: fadeIn 1s forwards;
 }
 
-.slide-left {
-  transform: translateX(-100%);
-  animation: slideInLeft 1s ease-in-out forwards;
-}
-
-.slide-right {
-  transform: translateX(100%);
-  animation: slideInRight 1s ease-in-out forwards;
-}
-
-.zoom-in {
-  transform: scale(0.8);
-  animation: zoomIn 1s ease-in-out forwards;
-}
-
-.rotate {
-  transform: rotate(-15deg);
-  animation: rotateIn 1s ease-in-out forwards;
-}
-
-/* Keyframes */
 @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
   to {
     opacity: 1;
-  }
-}
-
-@keyframes slideInLeft {
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes zoomIn {
-  to {
-    transform: scale(1);
-  }
-}
-
-@keyframes rotateIn {
-  to {
-    transform: rotate(0);
-  }
-}
-
-
-
-
-
-/* Base Styles for Animations */
-.fade-in, .slide-left, .slide-right, .zoom-in, .rotate, .flip-up, .fade-in-scale, .bounce-in {
-  opacity: 0;
-  transition: all 0.6s ease-in-out;
-}
-
-/* Section 1: Fade-in Animation */
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Section 2: Slide-left Animation */
-.slide-left.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Section 3: Slide-right Animation */
-.slide-right.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Section 4: Zoom-in Animation */
-.zoom-in.visible {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Section 5: Rotate Animation */
-.rotate.visible {
-  opacity: 1;
-  transform: rotate(0deg);
-}
-
-/* Section 6: Flip-up Animation */
-.flip-up {
-  transform: rotateX(-90deg);
-  transform-origin: bottom;
-}
-
-.flip-up.visible {
-  opacity: 1;
-  transform: rotateX(0);
-}
-
-/* Section 7: Fade-in Scale Animation */
-.fade-in-scale {
-  transform: scale(0.8);
-}
-
-.fade-in-scale.visible {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Section 8: Bounce-in Animation */
-.bounce-in {
-  transform: translateY(100px);
-}
-
-.bounce-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-  animation: bounce 0.5s ease-in-out;
-}
-
-/* Keyframe for Bounce Animation */
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
     transform: translateY(0);
   }
-  40% {
-    transform: translateY(-20px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 0 20px;
   }
-  60% {
-    transform: translateY(-10px);
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .why-carpool-grid, .tips-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .step-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .step-connector {
+    width: 30px;
+    height: 3px;
+    margin-left: 0;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+
+
+/* Why Carpool Section - Fixed to ensure 4 cards in one row */
+.why-carpool-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 30px;
+  overflow-x: auto; /* In case screen is too small, allows horizontal scrolling */
+}
+
+.benefit-card {
+  flex: 0 0 23%; /* Each card takes approximately 23% width with space for gaps */
+  min-width: 220px; /* Minimum width to ensure readability */
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add responsive adjustments */
+@media (max-width: 992px) {
+  .why-carpool-grid {
+    flex-wrap: wrap;
+  }
+  
+  .benefit-card {
+    flex: 0 0 48%; /* On medium screens, 2 cards per row */
+  }
+}
+
+@media (max-width: 576px) {
+  .benefit-card {
+    flex: 0 0 100%; /* On small screens, 1 card per row */
   }
 }

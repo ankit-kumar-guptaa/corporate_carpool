@@ -9,11 +9,19 @@ import { FormGroup, FormBuilder } from '@angular/forms';
     template: `
      
        
-      <input #inputElement
-        type="text" 
-        [(ngModel)]="autocompleteInput"  class="form-control form-input"
-        #addresstext
-        >
+     <div class="input-wrapper">
+  <input #inputElement
+    type="text" 
+    [(ngModel)]="autocompleteInput"  
+    class="form-input"
+    #addresstext
+    placeholder="Enter location"
+    style="
+    position: relative;
+    top: 25px;
+"
+  >
+</div>
              
     `
     

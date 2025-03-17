@@ -1,20 +1,15 @@
-<div class="container mt-5">
-  <div class="row justify-content-center align-items-start">
+<div class="container-fluid py-5">
+  <div class="row justify-content-center align-items-stretch">
     <!-- Chairman Message -->
     <div class="col-md-5 mb-4">
       <div class="card h-100 shadow-sm border-0 chairman-message-card">
-        <div class="card-body p-4">
-          <h2 class="card-title text-primary">A Message from Our Director People Development</h2>
-          <img
-            src="chairman.jpg"
-            alt="Chairman Photo" style="
-    border-radius: 50%;
-    width: 250px;
-    height: 250px;
-    margin-bottom: 10px;
-">
-          <p class="card-text text-secondary">
-            "At Business Next., we are committed to shaping a greener future. Our Corporate Carpool Program
+        <div class="card-body p-4 text-center">
+          <h2 class="card-title text-primary mb-4">A Message from Our Director</h2>
+          <div class="chairman-img-container mb-4">
+            <img src="chairman.jpg" alt="Director Photo" class="chairman-img">
+          </div>
+          <p class="card-text text-secondary quote-text">
+            "At Business Next, we are committed to shaping a greener future. Our Corporate Carpool Program
             is a bold step towards reducing our carbon footprint, easing commutes, and fostering a sense of community
             among our employees. Together, we can drive change!"
           </p>
@@ -26,70 +21,94 @@
     <div class="col-md-5 mb-4">
       <div class="card h-100 shadow-lg border-0 login-signup-card">
         <div class="card-body p-5">
-          <div class="d-flex justify-content-center mb-4">
-            <button type="button" class="btn btn-link-toggle" [class.active]="isLoginActive" (click)="toggleForm(true)">
+          <div class="toggle-container mb-4">
+            <button type="button" class="btn btn-toggle" [class.active]="isLoginActive" (click)="toggleForm(true)">
               Login
             </button>
-            <button type="button" class="btn btn-link-toggle" [class.active]="!isLoginActive"
-              (click)="toggleForm(false)">
+            <button type="button" class="btn btn-toggle" [class.active]="!isLoginActive" (click)="toggleForm(false)">
               Sign Up
             </button>
           </div>
 
           <div *ngIf="isLoginActive" class="form-section">
             <!-- Login Form -->
-            <div class="mb-4">
+            <div class="mb-4 input-group-custom">
               <label for="login-email" class="form-label">Email Address</label>
-              <input type="email" id="login-email" [(ngModel)]="_user.email" class="form-control form-input"
-                placeholder="name@businessnext.com" required>
+              <div class="input-with-icon">
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" id="login-email" [(ngModel)]="_user.email" class="form-control form-input"
+                  placeholder="name@businessnext.com" required>
+              </div>
             </div>
-            <div class="mb-4">
+            <div class="mb-4 input-group-custom">
               <label for="login-password" class="form-label">Password</label>
-              <input type="password" id="login-password" [(ngModel)]="_user.Password" class="form-control form-input"
-                placeholder="Your password" required>
+              <div class="input-with-icon">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="login-password" [(ngModel)]="_user.Password" class="form-control form-input"
+                  placeholder="Your password" required>
+              </div>
             </div>
-            <div class="d-flex justify-content-between mb-4">
-              <button type="button" class="btn btn-link forget-password-btn" (click)="forgotPassword()">Forgot
-                Password?</button>
+            <div class="d-flex justify-content-end mb-4">
+              <button type="button" class="btn btn-link forget-password-btn" (click)="forgotPassword()">Forgot Password?</button>
             </div>
-            <button type="button" class="btn btn-primary btn-lg w-100" (click)="login()">Login</button>
+            <button type="button" class="btn btn-primary btn-lg w-100 login-btn" (click)="login()">
+              <i class="fas fa-sign-in-alt me-2"></i> Login
+            </button>
           </div>
 
           <div *ngIf="!isLoginActive" class="form-section">
             <!-- Sign Up Form -->
             <form (ngSubmit)="signup()">
-              <div class="mb-4">
+              <div class="mb-4 input-group-custom">
                 <label for="signup-email" class="form-label">Email Address</label>
-                <input type="email" id="signup-email" class="form-control form-input"
-                  placeholder="name@businessnext.com" name="Email" [(ngModel)]="_user.email" required (input)="onEmailInput($event)">
+                <div class="input-with-icon">
+                  <i class="fas fa-envelope input-icon"></i>
+                  <input type="email" id="signup-email" class="form-control form-input"
+                    placeholder="name@businessnext.com" name="Email" [(ngModel)]="_user.email" required (input)="onEmailInput($event)">
+                </div>
               </div>
               <div class="mb-4" *ngIf="isOtpButtonVisible">
-                <button type="button" class="btn btn-warning btn-lg w-100" (click)="sendOtp()">Send OTP</button>
+                <button type="button" class="btn btn-warning btn-lg w-100" (click)="sendOtp()">
+                  <i class="fas fa-paper-plane me-2"></i> Send OTP
+                </button>
               </div>
-              <div class="mb-4" *ngIf="isOtpSectionVisible">
+              <div class="mb-4 input-group-custom" *ngIf="isOtpSectionVisible">
                 <label for="otp" class="form-label">Enter OTP</label>
-                <input type="text" id="otp" name="OTP" class="form-control form-input" placeholder="Enter OTP" required
-                  maxlength="6"  [(ngModel)]="_user.Otp">
+                <div class="input-with-icon">
+                  <i class="fas fa-key input-icon"></i>
+                  <input type="text" id="otp" name="OTP" class="form-control form-input" placeholder="Enter OTP" required
+                    maxlength="6" [(ngModel)]="_user.Otp">
+                </div>
               </div>
-              <div  *ngIf="isOtpSectionVisible" class="text-center mt-4">
-                <button type="button" class="btn btn-link already-registered-btn" (click)="verifyOTP()">Verify OTP
-                  </button>
+              <div *ngIf="isOtpSectionVisible" class="text-center mt-4">
+                <button type="button" class="btn btn-primary btn-lg w-100" (click)="verifyOTP()">
+                  <i class="fas fa-check-circle me-2"></i> Verify OTP
+                </button>
               </div>
-              <div class="mb-4" *ngIf="isPasswordSectionVisible">
-                <label for="signup-password" class="form-label">Name</label>
-                <input type="text" id="signup-password" name="Name" [(ngModel)]="_user.name" class="form-control form-input"
-                  placeholder="Name" required>
+              <div class="mb-4 input-group-custom" *ngIf="isPasswordSectionVisible">
+                <label for="signup-name" class="form-label">Name</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-user input-icon"></i>
+                  <input type="text" id="signup-name" name="Name" [(ngModel)]="_user.name" class="form-control form-input"
+                    placeholder="Your full name" required>
+                </div>
               </div>
-              <div class="mb-4" *ngIf="isPasswordSectionVisible">
+              <div class="mb-4 input-group-custom" *ngIf="isPasswordSectionVisible">
                 <label for="signup-password" class="form-label">Password</label>
-                <input type="password" id="signup-password" class="form-control form-input"
-                  placeholder="Create a password"  name="Password" [(ngModel)]="_user.Password" required>
+                <div class="input-with-icon">
+                  <i class="fas fa-lock input-icon"></i>
+                  <input type="password" id="signup-password" class="form-control form-input"
+                    placeholder="Create a password" name="Password" [(ngModel)]="_user.Password" required>
+                </div>
               </div>
               <button type="button" class="btn btn-success btn-lg w-100" *ngIf="isPasswordSectionVisible"
-                (click)="signup()">Sign Up</button>
-              <div class="text-center mt-4">
-                <button type="button" class="btn btn-link already-registered-btn" (click)="toggleForm(true)">Already
-                  Registered? Login here</button>
+                (click)="signup()">
+                <i class="fas fa-user-plus me-2"></i> Sign Up
+              </button>
+              <div class="text-center mt-4" *ngIf="!isPasswordSectionVisible">
+                <button type="button" class="btn btn-link already-registered-btn" (click)="toggleForm(true)">
+                  Already Registered? Login here
+                </button>
               </div>
             </form>
           </div>
@@ -98,108 +117,123 @@
     </div>
   </div>
 
-
-
-
-
-
-
-
-
-
-  <div class="container">
-    <!-- Section 1: Why Carpool? (List Layout) -->
-    <h1 class="section-title fade-in">Why Carpool?</h1>
-    <ul class="list-layout fade-in slide-left">
-      <li>
-        <i class="fas fa-money-bill-wave icon"></i>
-        <div class="list-content">
-          <h5>Save Money</h5>
-          <p>Share fuel costs and parking fees with travellers.</p>
+  <!-- Why Carpool Section -->
+  <div class="section-container mt-5">
+    <h1 class="section-title">Why <span class="highlight-text">Carpool</span> With Us?</h1>
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="why-carpool-grid">
+          <div class="benefit-card fade-in">
+            <div class="benefit-icon">
+              <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <h5>Save Money</h5>
+            <p>Share fuel costs and parking fees with travelers.</p>
+          </div>
+          <div class="benefit-card fade-in">
+            <div class="benefit-icon">
+              <i class="fas fa-smile-beam"></i>
+            </div>
+            <h5>Reduce Stress</h5>
+            <p>Enjoy a more relaxed commute with someone you can trust.</p>
+          </div>
+          <div class="benefit-card fade-in">
+            <div class="benefit-icon">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <h5>Go Green</h5>
+            <p>Lower your carbon footprint and help the environment.</p>
+          </div>
+          <div class="benefit-card fade-in">
+            <div class="benefit-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h5>Build Community</h5>
+            <p>Connect with colleagues and make new friends.</p>
+          </div>
         </div>
-      </li>
-      <li>
-        <i class="fas fa-smile-beam icon"></i>
-        <div class="list-content">
-          <h5>Reduce Stress</h5>
-          <p>Enjoy a more relaxed commute with someone you can trust.</p>
-        </div>
-      </li>
-      <li>
-        <i class="fas fa-leaf icon"></i>
-        <div class="list-content">
-          <h5>Go Green</h5>
-          <p>Lower your carbon footprint and help the environment.</p>
-        </div>
-      </li>
-      <li>
-        <i class="fas fa-users icon"></i>
-        <div class="list-content">
-          <h5>Build Community</h5>
-          <p>Connect with colleagues and make new friends.</p>
-        </div>
-      </li>
-    </ul>
-
-    <!-- Section 2: How to Get Started (Step-by-Step Cards Layout) -->
-    <h2 class="section-title fade-in mt-4">How to Get Started</h2>
-    <div class="row">
-      <div class="col-md-6 fade-in slide-left">
-        <div class="step-card">
-          <span class="step-number">1</span>
-          <h5>Create a Profile</h5>
-          <p>Sign up on our internal carpooling platform.</p>
-        </div>
-      </div>
-      <div class="col-md-6 fade-in slide-right">
-        <div class="step-card">
-          <span class="step-number">2</span>
-          <h5>Find Your Match</h5>
-          <p>Search for carpools based on your location, schedule, and preferences.</p>
-        </div>
-      </div>
-      <div class="col-md-6 fade-in zoom-in">
-        <div class="step-card">
-          <span class="step-number">3</span>
-          <h5>Connect and Coordinate</h5>
-          <p>Contact potential carpool partners to arrange schedules and routes.</p>
-        </div>
-      </div>
-      <div class="col-md-6 fade-in rotate">
-        <div class="step-card">
-          <span class="step-number">4</span>
-          <h5>Commute Together</h5>
-          <p>Enjoy the ride!</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 3: Carpool Tips (Creative Badge Layout) -->
-    <h2 class="section-title fade-in">Carpool Tips</h2>
-    <div class="badge-layout fade-in mb-5">
-      <div class="badge-item">
-        <i class="fas fa-clock"></i>
-        <h5>Be Punctual</h5>
-        <p>Respect your carpool partners' time.</p>
-      </div>
-      <div class="badge-item">
-        <i class="fas fa-comments"></i>
-        <h5>Communicate Clearly</h5>
-        <p>Keep everyone informed of any changes to your schedule.</p>
-      </div>
-      <div class="badge-item">
-        <i class="fas fa-handshake"></i>
-        <h5>Be Considerate</h5>
-        <p>Offer to share driving duties and expenses.</p>
-      </div>
-      <div class="badge-item">
-        <i class="fas fa-smile"></i>
-        <h5>Have Fun!</h5>
-        <p>Use the commute as an opportunity to socialize and network.</p>
       </div>
     </div>
   </div>
 
+  <!-- Getting Started Section -->
+  <div class="section-container mt-5">
+    <h2 class="section-title">How to <span class="highlight-text">Get Started</span></h2>
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="steps-container">
+          <div class="step-card fade-in">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h5>Create a Profile</h5>
+              <p>Sign up on our internal carpooling platform.</p>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="step-card fade-in">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h5>Find Your Match</h5>
+              <p>Search for carpools based on your location, schedule, and preferences.</p>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="step-card fade-in">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h5>Connect and Coordinate</h5>
+              <p>Contact potential carpool partners to arrange schedules and routes.</p>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="step-card fade-in">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h5>Commute Together</h5>
+              <p>Enjoy the ride!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-
+  <!-- Carpool Tips Section -->
+  <div class="section-container mt-5 mb-5">
+    <h2 class="section-title">Carpool <span class="highlight-text">Tips</span></h2>
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="tips-container">
+          <div class="tip-card fade-in">
+            <div class="tip-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h5>Be Punctual</h5>
+            <p>Respect your carpool partners' time.</p>
+          </div>
+          <div class="tip-card fade-in">
+            <div class="tip-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h5>Communicate Clearly</h5>
+            <p>Keep everyone informed of any changes to your schedule.</p>
+          </div>
+          <div class="tip-card fade-in">
+            <div class="tip-icon">
+              <i class="fas fa-handshake"></i>
+            </div>
+            <h5>Be Considerate</h5>
+            <p>Offer to share driving duties and expenses.</p>
+          </div>
+          <div class="tip-card fade-in">
+            <div class="tip-icon">
+              <i class="fas fa-smile"></i>
+            </div>
+            <h5>Have Fun!</h5>
+            <p>Use the commute as an opportunity to socialize and network.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

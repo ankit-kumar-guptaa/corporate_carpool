@@ -143,6 +143,7 @@ export class DashboardComponent implements OnInit {
     localStorage.removeItem('loggedInUserName');
     this._globalService.utilities.notify.success('Logged Out Successfully');
     // Add navigation to login page if needed
+    
   }
 
   // Load dynamic notifications with timestamps
