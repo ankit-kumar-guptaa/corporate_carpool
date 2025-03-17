@@ -16,10 +16,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
     class="form-input"
     #addresstext
     placeholder="Enter location"
-    style="
-    position: relative;
-    top: 25px;
-"
+   
   >
 </div>
              

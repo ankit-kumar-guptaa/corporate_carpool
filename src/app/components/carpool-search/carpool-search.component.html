@@ -14,7 +14,10 @@
           </select>
         </div>
         
-        <div class="col-md-3">
+        <div class="col-md-3" style="
+        position: relative;
+        top: 25px;
+    ">
           <label for="from" class="form-label fw-bold text-muted">From</label>
           <AutocompleteComponent (setAddress)="handleDropAddress($event, 'From')" [autocompleteInput]="postRide.From_Address" ></AutocompleteComponent>
         </div>
@@ -42,6 +45,20 @@
           </div>
         </div>
       </div>
+
+      <!-- Remark and Contact Section -->
+<div class="remark-contact-section mt-5">
+  <h4 class="mb-3 text-muted">Additional Details</h4>
+  <div class="row g-4">
+    <!-- Remark Input (Combined with Manual Phone) -->
+    <div class="col-12">
+      <label for="remark" class="form-label fw-bold text-muted">Remark</label>
+      <input type="text" id="remark" class="form-control form-input shadow-sm" 
+             [(ngModel)]="userRemark" placeholder="Update remarks with additional instructions if any." 
+             (input)="updateRemarkManually($event)">
+    </div>
+  </div>
+</div>
 
       <!-- Buttons -->
       <div class="text-center mt-5 d-flex justify-content-center gap-3">

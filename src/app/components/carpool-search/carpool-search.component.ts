@@ -18,10 +18,26 @@ export class CarpoolSearchComponent {
   isLoadingSearch: boolean = false; // Only for search button loading state
   isLoadingSubmit: boolean = false; // Only for submit button loading state
   postRide: PostRide = new PostRide();
-  noRidesAvailable:boolean=false;
-  RideList:any=[];
-  showData:boolean=false;
-  constructor(private _globalService: GlobalService){}
+  noRidesAvailable: boolean = false;
+  RideList: any[] = [];
+  showData: boolean = false;
+  userRemark: string = ''; // For remark
+
+  constructor(private _globalService: GlobalService) {
+    // Fetch user profile and email on component initialization
+    this.loadUserProfile();
+  }
+
+  // Fetch user profile and email
+  loadUserProfile() {
+    const userProfile = this._globalService.utilities.storage.get('UserProfile') || '{}';
+    try {
+      this.ursrProfile = JSON.parse(userProfile);
+    } catch (error) {
+      console.error('Error parsing user profile:', error);
+      this._globalService.utilities.notify.error('Failed to load user profile.');
+    }
+  }
 
   // Method to handle the Add Via button click
   addVia(): void {
@@ -37,31 +53,31 @@ export class CarpoolSearchComponent {
 
   // Method to search carpool based on the selected role and location
   searchCarpool(): void {
-
-    this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida'
-    this.postRide.To_Latitude ='28.560965';
-    this.postRide.To_Longitude ='77.370719';
+    this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida';
+    this.postRide.To_Latitude = '28.560965';
+    this.postRide.To_Longitude = '77.370719';
 
     this.ursrProfile = JSON.parse(this._globalService.utilities.storage.get('UserProfile')) || undefined;
 
     // Validate 'From' and 'To' addresses
-   if (!this.postRide.From_Address) {
-     this._globalService.utilities.notify.error('Please enter the "From" location.');
-     return;
-   }
+    if (!this.postRide.From_Address) {
+      this._globalService.utilities.notify.error('Please enter the "From" location.');
+      return;
+    }
 
-   if (!this.postRide.To_Address) {
-     this._globalService.utilities.notify.error('Please enter the "To" location.');
-     return;
-   }
+    if (!this.postRide.To_Address) {
+      this._globalService.utilities.notify.error('Please enter the "To" location.');
+      return;
+    }
 
-   this.noRidesAvailable = false;
+    this.noRidesAvailable = false;
 
-   this.postRide.UserId = this.ursrProfile.id;
-   this.postRide.UserName = this.ursrProfile.name;
-   this.postRide.IsSearch = 0;
+    this.postRide.UserId = this.ursrProfile.id;
+    this.postRide.UserName = this.ursrProfile.name;
+    this.postRide.IsSearch = 0;
 
-
+    // Add the remark to postRide before sending
+    this.postRide.User_Comment = this.userRemark;
 
     this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(resp => {
       this.isLoadingSearch = false;
@@ -84,30 +100,9 @@ export class CarpoolSearchComponent {
       this.showData = false;
       this._globalService.utilities.notify.error('Failed to search rides.');
     });
-
-
-    //this.isLoadingSearch = true; // Start loading for search button
-    // setTimeout(() => {
-    //   this.carpoolResults = [
-    //     { type: 'Pooler', name: 'Ankit Sharma', from: 'Okhla' },
-    //     { type: 'Seeker', name: 'Ramesh Kumar', from: 'Badarpur' },
-    //     { type: 'Pooler', name: 'Pooja Singh', from: 'Jasola' },
-    //     { type: 'Seeker', name: 'Neha Verma', from: 'Kalkaji' },
-    //     { type: 'Pooler', name: 'Vikas Bhardwaj', from: 'Sarita Vihar' },
-    //     { type: 'Seeker', name: 'Sakshi Gupta', from: 'Tughlakabad' },
-    //     { type: 'Pooler', name: 'Amit Yadav', from: 'Govindpuri' },
-    //     { type: 'Seeker', name: 'Rohit Ahuja', from: 'Nehru Place' },
-    //     { type: 'Pooler', name: 'Meera Patel', from: 'Greater Kailash' },
-    //     { type: 'Seeker', name: 'Kunal Chhabra', from: 'Lajpat Nagar' }
-    //   ];
-    //   this.isLoadingSearch = false; // End loading after search results are updated
-    // }, 2000); // Simulating async process (2 seconds delay)
   }
 
-
   connectCarpool(item: any) {
-  
-
     const param: any = {
       UserId: this.ursrProfile.id,
       RideId: item.rideID
@@ -128,119 +123,49 @@ export class CarpoolSearchComponent {
     });
   }
 
-  // Method to handle form submission
-  // submitRequest(): void {
-
-  //   this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida'
-  //   this.postRide.To_Latitude ='28.560965';
-  //   this.postRide.To_Longitude ='77.370719';
-
-  //   this.ursrProfile = JSON.parse(this._globalService.utilities.storage.get('UserProfile')) || undefined;
-
-  //   // Validate 'From' and 'To' addresses
-  //  if (!this.postRide.From_Address) {
-  //    this._globalService.utilities.notify.error('Please enter the "From" location.');
-  //    return;
-  //  }
-
-  // //  if (!this.postRide.To_Address) {
-  // //    this._globalService.utilities.notify.error('Please enter the "To" location.');
-  // //    return;
-  // //  }
-
-  //  this.noRidesAvailable = false;
-
-  //  this.postRide.UserId = this.ursrProfile.id;
-  //  this.postRide.UserName = this.ursrProfile.name;
-  //  this.postRide.IsSearch = 1;
-
-
-
-  //   this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(resp => {
-  //     this.isLoadingSearch = false;
-
-  //     if (resp.status === 1) {
-  //       this.RideList = resp.data;
-  //       this.showData = true;
-
-  //       if (this.RideList.length === 0) {
-  //         this.noRidesAvailable = true;
-  //         this._globalService.utilities.notify.warning('No ride found on this route');
-  //       }else {
-  //       // Success message after submitting ride
-  //       this._globalService.utilities.notify.success('Ride submitted successfully!');
-  //     }
-  //     } else {
-  //       this.showData = false;
-  //       this._globalService.utilities.notify.error('Error on Search Page.');
-  //     }
-  //   }, error => {
-  //     this.isLoadingSearch = false;
-  //     this._globalService.utilities.notify.error('Failed to search rides.');
-  //   });
-
-
-
-  //   // this.isLoadingSubmit = true; 
-  //   // this._globalService.utilities.notify.info(`Role: ${this.selectedRole}, From: ${this.fromLocation}, To: A-83, Okhla Phase II, New Delhi`);
-  //   // setTimeout(() => {
-  //   //   this.isLoadingSubmit = false; 
-  //   // }, 1500); 
-  // }
-
-
-
-
-
-
   submitRequest(): void {
-    // Set default destination for "To" address
     this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida';
     this.postRide.To_Latitude = '28.560965';
     this.postRide.To_Longitude = '77.370719';
-  
-    
+
     this.ursrProfile = JSON.parse(this._globalService.utilities.storage.get('UserProfile')) || undefined;
-  
+
     // Validate "From" address
     if (!this.postRide.From_Address) {
       this._globalService.utilities.notify.error('Please enter the "From" location.');
       return;
     }
-  
+
     // Check if a ride has already been submitted today for the same "From" and "To" address
     const today = new Date().toISOString().slice(0, 10);
     const lastSubmittedDate = localStorage.getItem('lastSubmittedDate') || '';
     const lastSubmittedFrom = localStorage.getItem('lastSubmittedFrom') || '';
     const lastSubmittedTo = localStorage.getItem('lastSubmittedTo') || '';
-  
+
     if (lastSubmittedDate === today && lastSubmittedFrom === this.postRide.From_Address && lastSubmittedTo === this.postRide.To_Address) {
       this._globalService.utilities.notify.warning('You have already submitted a ride for today on this route.');
       return;
     }
-  
-    // Disable the submit button immediately when the request starts
+
     this.isLoadingSubmit = true;
-    
-    // Prepare ride submission data
+
     this.postRide.UserId = this.ursrProfile.id;
     this.postRide.UserName = this.ursrProfile.name;
-    this.postRide.IsSearch = 1; // Just setting this flag for now, can be used if needed
-  
-    // Make API request to submit the ride
+    this.postRide.IsSearch = 1;
+
+    // Add the remark to postRide before sending
+    this.postRide.User_Comment = this.userRemark;
+
     this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(
       resp => {
-        // Disable submit button after submission is complete
         this.isLoadingSubmit = false;
-  
+
         if (resp.status === 1) {
           this.RideList = resp.data;
           this.showData = true;
-  
-          // Success: Show success notification
+
           this._globalService.utilities.notify.success('Ride submitted successfully!');
-  
-          // Store the current "From" and "To" address and today's date in localStorage
+
           localStorage.setItem('lastSubmittedDate', today);
           localStorage.setItem('lastSubmittedFrom', this.postRide.From_Address);
           localStorage.setItem('lastSubmittedTo', this.postRide.To_Address);
@@ -250,38 +175,32 @@ export class CarpoolSearchComponent {
         }
       },
       error => {
-        // Re-enable the button in case of failure
         this.isLoadingSubmit = false;
         this._globalService.utilities.notify.error('Failed to submit the ride. Please try again.');
       }
     );
   }
-  
-  
-
-
-
-
-  // Method to handle connecting with the carpool partner
 
   handleDropAddress(place: any, Control: string) {
     if (Control === 'From') {
       this.postRide.From_Address = place.formatted_address;
       this.postRide.Form_Latitude = place.geometry.location.lat().toString();
       this.postRide.Form_Longitude = place.geometry.location.lng().toString();
-
-
-
     } else {
-      this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida'
-      this.postRide.To_Latitude ='28.560965';
-      this.postRide.To_Longitude ='77.370719';
+      this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida';
+      this.postRide.To_Latitude = '28.560965';
+      this.postRide.To_Longitude = '77.370719';
     }
 
-     // Automatically update comment if both addresses are filled
-    if (this.postRide.To_Address && this.postRide.From_Address) {
-      this.postRide.User_Comment = `I am looking for a ride from ${this.postRide.From_Address} to ${this.postRide.To_Address}`;
+    // Automatically update remark with From, To, and email when From is selected
+    if (this.postRide.From_Address && this.postRide.To_Address) {
+      this.userRemark = `I am looking for a ride from ${this.postRide.From_Address} to ${this.postRide.To_Address}. My email is ${this.ursrProfile?.email || 'not available'}`;
     }
   }
 
+  // Method to allow manual updates to remark (e.g., adding phone number)
+  updateRemarkManually(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.userRemark = input.value; // Allows manual editing, including phone number
+  }
 }

@@ -25,7 +25,7 @@
     .center-logo {
       width: 80px;
       height: auto;
-      border: 2px solid #e61c76;
+      border: 2px solid #c32823;
       border-radius:10%;
       padding: 5px;
       background-color: #ffffff;
@@ -40,12 +40,12 @@
     .profile-img {
       width: 40px;
       height: 40px;
-      border: 2px solid #e61c76;
+      border: 2px solid #c32823;
       border-radius: 50%;
     }
 
     .dropdown-toggle-animated {
-      background: #002147;
+      background: #c32823;
       color: #ffffff;
       font-weight: 600;
       border-radius: 20px;
@@ -57,8 +57,8 @@
       transition: all 0.3s ease;
 
       &:hover {
-        background: #e61c76;
-        color: #002147;
+        background: #d8231d;
+        color: #ffffff;
         box-shadow: 0px 4px 10px rgba(255, 215, 0, 0.3);
       }
     }
@@ -77,7 +77,7 @@
         transition: all 0.3s ease;
 
         &:hover {
-          background: #e61c76;
+          background: #c32823;
           color: #ffffff;
         }
       }

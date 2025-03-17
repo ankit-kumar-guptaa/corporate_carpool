@@ -160,3 +160,43 @@
 .animate-title {
   animation: fadeInUp 0.5s ease-out;
 }
+
+
+/* Remark and Contact Section */
+.remark-contact-section {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+  }
+
+  h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a2e44;
+  }
+
+  .form-input {
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 1rem;
+    border: 2px solid #e1e5eb;
+    background: #fff;
+    transition: all 0.3s ease;
+
+    &:focus {
+      border-color: #1a2e44;
+      box-shadow: 0 0 12px rgba(26, 46, 68, 0.3);
+      outline: none;
+    }
+
+    &:hover {
+      border-color: #cfd6e1;
+    }
+  }
+}

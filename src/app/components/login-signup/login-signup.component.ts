@@ -15,7 +15,7 @@ export class LoginSignupComponent implements AfterViewInit {
   isOtpSectionVisible: boolean = false;
   isPasswordSectionVisible: boolean = false;
   otpValue: string = '';
-  domain: string = 'businessnext'
+  domain: string = 'elitecorporatesolutions'
   serverOTP: string = '';
   _user: UserModel = new UserModel();
   @Output() loginEvent = new EventEmitter<string>();
