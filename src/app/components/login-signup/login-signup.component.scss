@@ -3,6 +3,12 @@ body {
   font-family: 'Poppins', sans-serif;
   background-color: #f5f7fa;
   color: #333;
+  overflow: hidden; /* Prevent scrolling flicker when modal is open */
+  transition: overflow 0.3s ease; /* Smooth transition for overflow change */
+}
+
+body:not(.modal-open) {
+  overflow: auto; /* Restore scrolling when modal is closed */
 }
 
 .container-fluid {
@@ -176,7 +182,7 @@ body {
   border-radius: 12px;
   padding: 12px 24px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Simplified hover transition */
   position: relative;
   overflow: hidden;
   z-index: 1;
@@ -200,8 +206,17 @@ body {
 }
 
 .btn-primary:hover, .btn-success:hover, .btn-warning:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  /* Removed transform to avoid conflict with modal fade */
+  background-color: #002244; /* Darker shade for primary */
+  box-shadow: 0 6px 15px rgba(0, 51, 102, 0.2);
+}
+
+.btn-success:hover {
+  background-color: #008c56; /* Darker shade for success */
+}
+
+.btn-warning:hover {
+  background-color: #d88e00; /* Darker shade for warning */
 }
 
 .btn-primary::after, .btn-success::after, .btn-warning::after {
@@ -280,13 +295,17 @@ body {
 
 /* Why Carpool Section */
 .why-carpool-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 25px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 15px;
   margin-top: 30px;
+  overflow-x: auto; /* In case screen is too small, allows horizontal scrolling */
 }
 
 .benefit-card {
+  flex: 0 0 23%; /* Each card takes approximately 23% width with space for gaps */
+  min-width: 220px; /* Minimum width to ensure readability */
   background-color: #ffffff;
   border-radius: 16px;
   padding: 30px 20px;
@@ -468,6 +487,71 @@ body {
   color: #6c757d;
 }
 
+/* Modal Styles (Fix Black Screen and Input Clickability) */
+.modal {
+  transition: opacity 0.3s ease-in-out; /* Match Bootstrap's fade duration */
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1060; /* Increased to ensure it's above everything */
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modal-dialog {
+  transition: opacity 0.3s ease-in-out; /* Smooth fade */
+  opacity: 0;
+  z-index: 1061; /* Above modal backdrop */
+}
+
+.modal.show .modal-dialog {
+  opacity: 1;
+}
+
+.modal-backdrop {
+  transition: opacity 0.3s ease-in-out; /* Sync with modal */
+  opacity: 0;
+  z-index: 1050; /* Below modal dialog but above content */
+  background-color: rgba(0, 0, 0, 0.5); /* Ensure proper backdrop color */
+}
+
+.modal-backdrop.show {
+  opacity: 0.5;
+}
+
+/* Ensure Modal Content is Clickable */
+.modal-content {
+  z-index: 1062; /* Above dialog for content */
+  pointer-events: auto; /* Ensure all elements inside are clickable */
+}
+
+.modal-body input {
+  pointer-events: auto; /* Explicitly enable click on input */
+}
+
+/* Modal-Specific Button Styles (Avoid Flicker on Hover) */
+.modal-footer .btn-primary {
+  transition: background-color 0.3s ease; /* Only color change on hover */
+}
+
+.modal-footer .btn-primary:hover {
+  background-color: #002244; /* Darker shade */
+  transform: none; /* Remove transform to avoid flicker */
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.2); /* Subtle shadow change */
+}
+
+.resend-otp-btn {
+  transition: color 0.3s ease; /* Only color change on hover */
+}
+
+.resend-otp-btn:hover {
+  color: #003366;
+  text-decoration: underline;
+}
+
 /* Animations */
 .fade-in {
   opacity: 0;
@@ -515,32 +599,6 @@ body {
   }
 }
 
-
-
-/* Why Carpool Section - Fixed to ensure 4 cards in one row */
-.why-carpool-grid {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  gap: 15px;
-  margin-top: 30px;
-  overflow-x: auto; /* In case screen is too small, allows horizontal scrolling */
-}
-
-.benefit-card {
-  flex: 0 0 23%; /* Each card takes approximately 23% width with space for gaps */
-  min-width: 220px; /* Minimum width to ensure readability */
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 30px 20px;
-  text-align: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Add responsive adjustments */
 @media (max-width: 992px) {
   .why-carpool-grid {
     flex-wrap: wrap;
@@ -554,5 +612,463 @@ body {
 @media (max-width: 576px) {
   .benefit-card {
     flex: 0 0 100%; /* On small screens, 1 card per row */
+  }
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.input-with-icon .fa-phone {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+
+
+.signup-progress {
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  height: 10px;
+  background-color: #e1e5eb;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, #003366, #00a86b);
+  transition: width 0.3s ease;
+}
+
+.step-indicators {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.step-indicators span {
+  width: 30px;
+  height: 30px;
+  background-color: #e1e5eb;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.step-indicators span.active {
+  background-color: #003366;
+  color: #fff;
+}
+
+.signup-steps {
+  position: relative;
+}
+
+.step {
+  display: none;
+}
+
+.step.active {
+  display: block;
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Reuse existing styles */
+.form-section {
+  /* Ensure no conflict with card styles */
+}
+
+.input-group-custom {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.form-control.form-input {
+  border-radius: 12px;
+  padding: 14px 14px 14px 45px;
+  font-size: 1rem;
+  border: 1px solid #e1e5eb;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.form-control.form-input:focus {
+  border-color: #003366;
+  box-shadow: 0 0 10px rgba(0, 51, 102, 0.15);
+  outline: none;
+}
+
+.btn-primary, .btn-success, .btn-warning {
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
+}
+
+.btn-primary {
+  background-color: #003366;
+  border: none;
+}
+
+.btn-success {
+  background-color: #00a86b;
+  border: none;
+}
+
+.btn-warning {
+  background-color: #f59f00;
+  border: none;
+  color: #fff;
+}
+
+.btn-primary:hover, .btn-success:hover, .btn-warning:hover {
+  background-color: #002244;
+  box-shadow: 0 6px 15px rgba(0, 51, 102, 0.2);
+}
+
+.btn-success:hover {
+  background-color: #008c56;
+}
+
+.btn-warning:hover {
+  background-color: #d88e00;
+}
+
+.resend-otp-btn {
+  transition: color 0.3s ease;
+}
+
+.resend-otp-btn:hover {
+  color: #003366;
+  text-decoration: underline;
+}
+
+.otp-input-container {
+  text-align: center;
+}
+
+.resend-otp-section {
+  margin-bottom: 20px;
+}
+
+
+
+
+
+/* Base Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+.container-fluid {
+  padding: 0 50px;
+}
+
+/* Login/Signup Card */
+.login-signup-card {
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-signup-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.btn-toggle {
+  background: none;
+  border: none;
+  color: #6c757d;
+  font-weight: 600;
+  font-size: 1.3rem;
+  padding: 10px 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.btn-toggle.active {
+  color: #003366;
+}
+
+.btn-toggle.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #003366;
+}
+
+.input-group-custom {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+.form-control.form-input {
+  border-radius: 12px;
+  padding: 14px 14px 14px 45px;
+  font-size: 1rem;
+  border: 1px solid #e1e5eb;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+  width: 100%;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control.form-input:focus {
+  border-color: #003366;
+  box-shadow: 0 0 10px rgba(0, 51, 102, 0.15);
+  outline: none;
+}
+
+.btn-primary,
+.btn-success,
+.btn-warning,
+.btn-secondary {
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #003366;
+  border: none;
+}
+
+.btn-success {
+  background-color: #00a86b;
+  border: none;
+}
+
+.btn-warning {
+  background-color: #f59f00;
+  border: none;
+  color: #fff;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border: none;
+  color: #fff;
+}
+
+.btn-primary:hover,
+.btn-success:hover,
+.btn-warning:hover,
+.btn-secondary:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.2);
+}
+
+.forget-password-btn,
+.already-registered-btn {
+  color: #6c757d;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.forget-password-btn:hover,
+.already-registered-btn:hover {
+  color: #003366;
+  text-decoration: underline;
+}
+
+/* Signup Progress */
+.signup-container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.signup-progress {
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  height: 10px;
+  background-color: #e1e5eb;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, #003366, #00a86b);
+  transition: width 0.3s ease;
+}
+
+.step-indicators {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.step-indicators span {
+  width: 25px;
+  height: 25px;
+  background-color: #e1e5eb;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.step-indicators span.active {
+  background-color: #003366;
+  color: #fff;
+}
+
+.signup-form {
+  display: block;
+}
+
+.text-success {
+  color: #00a86b;
+  font-weight: 500;
+}
+
+/* OTP Modal */
+.modal {
+  display: block;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-dialog {
+  max-width: 400px;
+}
+
+.modal-content {
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  border-bottom: none;
+  padding: 20px;
+}
+
+.modal-title {
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+.btn-close {
+  font-size: 1.5rem;
+  opacity: 0.5;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.resend-otp-section {
+  margin-bottom: 20px;
+}
+
+.resend-otp-btn {
+  color: #6c757d;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.resend-otp-btn:hover {
+  color: #003366;
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 0 20px;
+  }
+  .card-body {
+    padding: 1rem;
+  }
+  .toggle-container {
+    gap: 15px;
+  }
+  .btn-toggle {
+    font-size: 1rem;
+  }
+  .input-group-custom {
+    margin-bottom: 15px;
   }
 }
