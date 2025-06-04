@@ -51,14 +51,15 @@ export class LoginSignupComponent implements OnInit {
     this.serverOTP = '';
     this.serverPhoneOTP = '';
     this.resendTimer = 0;
+    this.showOtpModal = false;
   }
 
   onEmailInput(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     const email = inputElement.value.trim();
-    console.log('Email Input:', email); // Debug log
-    this._user.email = email; // Explicitly set the email to ensure binding
-    const officialEmailPattern = new RegExp(`^[a-zA-Z0-9._%+-]+@(${this.domain}|gmail\\.com)$`); // Fixed regex
+    console.log('Email Input:', email);
+    this._user.email = email;
+    const officialEmailPattern = new RegExp(`^[a-zA-Z0-9._%+-]+@(${this.domain}|gmail\\.com)$`);
     this.isEmailSent = officialEmailPattern.test(email) && email !== '';
     this.updateProgress();
   }
@@ -66,14 +67,14 @@ export class LoginSignupComponent implements OnInit {
   onPhoneInput(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     this._user.mobile_No = inputElement.value.trim();
-    console.log('Phone Input:', this._user.mobile_No); // Debug log
+    console.log('Phone Input:', this._user.mobile_No);
     this.updateProgress();
   }
 
   onOtpInput(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     this.currentOtp = inputElement.value.trim();
-    console.log('OTP Input:', this.currentOtp); // Debug log
+    console.log('OTP Input:', this.currentOtp);
   }
 
   updateProgress(): void {
@@ -91,7 +92,7 @@ export class LoginSignupComponent implements OnInit {
   }
 
   sendOtp(): void {
-    console.log('Sending OTP, Email:', this._user.email); // Debug log
+    console.log('Sending OTP, Email:', this._user.email);
     if (!this._user.email || this._user.email.trim() === '') {
       this._globalService.utilities.notify.error('Please Enter Email.');
       return;
@@ -104,46 +105,52 @@ export class LoginSignupComponent implements OnInit {
     this.serverOTP = Math.floor(100000 + Math.random() * 900000).toString();
     this.currentOtp = '';
     this.sendOtpByEmail(this._user.email, this.serverOTP);
-    this.isEmailOtpMode = true;
-    this.showOtpModal = true;
   }
 
   sendOtpByEmail(email: string, OTP: string) {
-    const param: any = {};
-    param.To = email;
-    param.Subject = 'GreenCar - OTP for Registration';
-    param.Body = btoa(`Dear Employee,<br/><br/>Your OTP is: <b>${OTP}</b><br/><br/>Please don't share your OTP with anyone. OTP is valid for 10 minutes<br/><br/>Regards,<br/><b>GreenCar</b>`);
+    const param: any = {
+      To: email,
+      Subject: 'GreenCar - OTP for Registration',
+      Body: `Dear Employee,<br/><br/>Your OTP is: <b>${OTP}</b><br/><br/>Please don't share your OTP with anyone. OTP is valid for 10 minutes<br/><br/>Regards,<br/><b>GreenCar</b>`
+    };
+    console.log('Email Request Payload:', param);
     this._globalService.ServiceManager.request.postWithoutEncryptionEmail('Ride/sendemail', param).subscribe(
-      () => {
+      (response) => {
+        console.log('Email Send Response:', response);
         this.startResendTimer();
         this._globalService.utilities.notify.success('OTP sent to your email.');
+        this.isEmailOtpMode = true;
+        this.showOtpModal = true; // Open modal only on success
       },
       (err) => {
-        this._globalService.utilities.notify.error('Something went wrong. Try again.');
+        console.error('Email Send Error:', err);
+        this._globalService.utilities.notify.error('Failed to send OTP email. Please try again.');
       }
     );
   }
 
   sendPhoneOtp(): void {
-    console.log('Sending Phone OTP, Phone:', this._user.mobile_No); // Debug log
+    console.log('Sending Phone OTP, Phone:', this._user.mobile_No);
     if (!this._user.mobile_No || this._user.mobile_No.trim() === '' || this._user.mobile_No.length !== 10) {
       this._globalService.utilities.notify.error('Please Enter a valid 10-digit Phone Number.');
       return;
     }
     this._globalService.ServiceManager.request.get(`Ride/SendOTP?MobileNo=${this._user.mobile_No}`).subscribe(
       (resp) => {
+        console.log('Phone OTP Response:', resp);
         if (resp.status === 'ok') {
           this.serverPhoneOTP = resp.requestid.slice(8, 14);
           this.currentOtp = '';
           this.startResendTimer();
           this._globalService.utilities.notify.success('OTP sent to your mobile number.');
           this.isEmailOtpMode = false;
-          this.showOtpModal = true;
+          this.showOtpModal = true; // Open modal only on success
         } else {
           this._globalService.utilities.notify.error('Failed to send OTP. Please try again later.');
         }
       },
       (err) => {
+        console.error('Phone OTP Error:', err);
         this._globalService.utilities.notify.error('Something went wrong. Try again.');
       }
     );
@@ -252,5 +259,10 @@ export class LoginSignupComponent implements OnInit {
 
   forgotPassword(): void {
     this._globalService.utilities.notify.info('Forgot Password feature is not yet implemented.');
+  }
+
+  closeOtpModal(): void {
+    this.showOtpModal = false;
+    this.currentOtp = '';
   }
 }

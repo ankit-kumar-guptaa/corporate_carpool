@@ -15,160 +15,160 @@
       </div>
     </div>
 
-<!-- Login/Signup Form -->
-<div class="col-md-5 mb-4">
-  <div class="card h-100 shadow-lg border-0 login-signup-card">
-    <div class="card-body p-5">
-      <div class="toggle-container mb-4">
-        <button type="button" class="btn btn-toggle" [class.active]="isLoginActive" (click)="toggleForm(true)">
-          Login
-        </button>
-        <button type="button" class="btn btn-toggle" [class.active]="!isLoginActive" (click)="toggleForm(false)">
-          Sign Up
-        </button>
-      </div>
-
-      <div *ngIf="isLoginActive" class="form-section">
-        <div class="mb-4 input-group-custom">
-          <label for="login-email" class="form-label">Email Address</label>
-          <div class="input-with-icon">
-            <i class="fas fa-envelope input-icon"></i>
-            <input type="email" id="login-email" name="login-email" [(ngModel)]="_user.email" class="form-control form-input"
-                   placeholder="name@elitecorporatesolutions.com" required>
-          </div>
-        </div>
-        <div class="mb-4 input-group-custom">
-          <label for="login-password" class="form-label">Password</label>
-          <div class="input-with-icon">
-            <i class="fas fa-lock input-icon"></i>
-            <input type="password" id="login-password" name="login-password" [(ngModel)]="_user.Password" class="form-control form-input"
-                   placeholder="Your password" required>
-          </div>
-        </div>
-        <div class="d-flex justify-content-end mb-4">
-          <button type="button" class="btn btn-link forget-password-btn" (click)="forgotPassword()">Forgot Password?</button>
-        </div>
-        <button type="button" class="btn btn-primary btn-lg w-100 login-btn" (click)="login()"
-                [disabled]="!_user.email || !_user.Password">
-          <i class="fas fa-sign-in-alt me-2"></i> Login
-        </button>
-      </div>
-
-      <div *ngIf="!isLoginActive" class="form-section signup-container">
-        <div class="signup-progress">
-          <div class="progress-bar">
-            <div class="progress" [style.width]="progress + '%'"></div>
-          </div>
-          <div class="step-indicators">
-            <span [class.active]="progress >= 25">1</span>
-            <span [class.active]="progress >= 50">2</span>
-            <span [class.active]="progress >= 75">3</span>
-            <span [class.active]="progress >= 75">4</span>
-            <span [class.active]="progress === 100">5</span>
-          </div>
+  <!-- Login/Signup Form -->
+  <div class="col-md-5 mb-4">
+    <div class="card h-100 shadow-lg border-0 login-signup-card">
+      <div class="card-body p-5">
+        <div class="toggle-container mb-4">
+          <button type="button" class="btn btn-toggle" [class.active]="isLoginActive" (click)="toggleForm(true)">
+            Login
+          </button>
+          <button type="button" class="btn btn-toggle" [class.active]="!isLoginActive" (click)="toggleForm(false)">
+            Sign Up
+          </button>
         </div>
 
-        <form #signupForm="ngForm" (ngSubmit)="signup()" class="signup-form">
+        <div *ngIf="isLoginActive" class="form-section">
           <div class="mb-4 input-group-custom">
-            <label for="signup-email" class="form-label">Email Address</label>
+            <label for="login-email" class="form-label">Email Address</label>
             <div class="input-with-icon">
               <i class="fas fa-envelope input-icon"></i>
-              <input type="email" id="signup-email" name="signup-email" class="form-control form-input"
-                     placeholder="name@elitecorporatesolutions.com" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
-                     [disabled]="isEmailVerified">
+              <input type="email" id="login-email" name="login-email" [(ngModel)]="_user.email" class="form-control form-input"
+                     placeholder="name@elitecorporatesolutions.com" required>
             </div>
-            <button type="button" class="btn btn-warning btn-sm mt-2" (click)="sendOtp()" *ngIf="!isEmailVerified"
-                    [disabled]="!isEmailSent || isEmailVerified">
-              Send OTP
-            </button>
-            <span class="text-success" *ngIf="isEmailVerified">Email Verified</span>
           </div>
-
           <div class="mb-4 input-group-custom">
-            <label for="signup-phone" class="form-label">Phone Number</label>
-            <div class="input-with-icon">
-              <i class="fas fa-phone input-icon"></i>
-              <input type="tel" id="signup-phone" name="signup-phone" class="form-control form-input"
-                     placeholder="Enter your 10-digit phone number" [(ngModel)]="_user.mobile_No" (input)="onPhoneInput($event)" required
-                     [disabled]="isPhoneVerified">
-            </div>
-            <div class="mt-2">
-              <button type="button" class="btn btn-warning btn-sm me-2" (click)="sendPhoneOtp()" *ngIf="!isPhoneVerified"
-                      [disabled]="!_user.mobile_No || _user.mobile_No.length !== 10 || isPhoneVerified">
-                Send OTP
-              </button>
-              <button type="button" class="btn btn-secondary btn-sm" (click)="editPhone()" *ngIf="isPhoneVerified">
-                Edit Phone
-              </button>
-              <span class="text-success" *ngIf="isPhoneVerified">Phone Verified</span>
-            </div>
-          </div>
-
-          <div class="mb-4 input-group-custom" *ngIf="isPhoneVerified">
-            <label for="signup-name" class="form-label">Full Name</label>
-            <div class="input-with-icon">
-              <i class="fas fa-user input-icon"></i>
-              <input type="text" id="signup-name" name="signup-name" class="form-control form-input" placeholder="Your full name"
-                     [(ngModel)]="_user.name" required>
-            </div>
-          </div>
-
-          <div class="mb-4 input-group-custom" *ngIf="isPhoneVerified">
-            <label for="signup-password" class="form-label">Password</label>
+            <label for="login-password" class="form-label">Password</label>
             <div class="input-with-icon">
               <i class="fas fa-lock input-icon"></i>
-              <input type="password" id="signup-password" name="signup-password" class="form-control form-input"
-                     placeholder="Create a password" [(ngModel)]="_user.Password" required>
+              <input type="password" id="login-password" name="login-password" [(ngModel)]="_user.Password" class="form-control form-input"
+                     placeholder="Your password" required>
             </div>
           </div>
-
-          <button type="submit" class="btn btn-success btn-lg w-100" [disabled]="progress !== 100">
-            <i class="fas fa-user-plus me-2"></i> Sign Up
+          <div class="d-flex justify-content-end mb-4">
+            <button type="button" class="btn btn-link forget-password-btn" (click)="forgotPassword()">Forgot Password?</button>
+          </div>
+          <button type="button" class="btn btn-primary btn-lg w-100 login-btn" (click)="login()"
+                  [disabled]="!_user.email || !_user.Password">
+            <i class="fas fa-sign-in-alt me-2"></i> Login
           </button>
-          <div class="text-center mt-3">
-            <button type="button" class="btn btn-link already-registered-btn" (click)="toggleForm(true)">
-              Already Registered? Login here
-            </button>
-          </div>
-        </form>
+        </div>
 
-        <!-- OTP Modal -->
-        <div class="modal fade" [class.show]="showOtpModal" [style.display]="showOtpModal ? 'block' : 'none'" tabindex="-1"
-             aria-labelledby="otpModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="otpModalLabel">{{ isEmailOtpMode ? 'Verify Email OTP' : 'Verify Phone OTP' }}</h5>
-                <button type="button" class="btn-close" (click)="showOtpModal = false" aria-label="Close"></button>
+        <div *ngIf="!isLoginActive" class="form-section signup-container">
+          <div class="signup-progress">
+            <div class="progress-bar">
+              <div class="progress" [style.width]="progress + '%'"></div>
+            </div>
+            <div class="step-indicators">
+              <span [class.active]="progress >= 25">1</span>
+              <span [class.active]="progress >= 50">2</span>
+              <span [class.active]="progress >= 75">3</span>
+              <span [class.active]="progress >= 75">4</span>
+              <span [class.active]="progress === 100">5</span>
+            </div>
+          </div>
+
+          <form #signupForm="ngForm" (ngSubmit)="signup()" class="signup-form">
+            <div class="mb-4 input-group-custom">
+              <label for="signup-email" class="form-label">Email Address</label>
+              <div class="input-with-icon">
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" id="signup-email" name="signup-email" class="form-control form-input"
+                       placeholder="name@elitecorporatesolutions.com" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
+                       [disabled]="isEmailVerified">
               </div>
-              <div class="modal-body text-center">
-                <p class="text-muted">Enter the 6-digit OTP sent to {{ isEmailOtpMode ? _user.email : _user.mobile_No }}</p>
-                <div class="mb-3">
-                  <input type="text" class="form-control form-input text-center" placeholder="Enter OTP"
-                         maxlength="6" [(ngModel)]="currentOtp" (input)="onOtpInput($event)" required>
-                </div>
-                <div class="resend-otp-section">
-                  <p class="text-muted mb-2">Didn't receive OTP? 
-                    <button type="button" class="btn btn-link resend-otp-btn" [disabled]="resendTimer > 0"
-                            (click)="resendOtp()">
-                      Resend OTP
-                    </button>
-                  </p>
-                  <p class="text-muted" *ngIf="resendTimer > 0">Resend in {{ resendTimer }}s</p>
-                </div>
+              <button type="button" class="btn btn-warning btn-sm mt-2" (click)="sendOtp()" *ngIf="!isEmailVerified"
+                      [disabled]="!isEmailSent || isEmailVerified">
+                Send OTP
+              </button>
+              <span class="text-success" *ngIf="isEmailVerified">Email Verified</span>
+            </div>
+
+            <div class="mb-4 input-group-custom">
+              <label for="signup-phone" class="form-label">Phone Number</label>
+              <div class="input-with-icon">
+                <i class="fas fa-phone input-icon"></i>
+                <input type="tel" id="signup-phone" name="signup-phone" class="form-control form-input"
+                       placeholder="Enter your 10-digit phone number" [(ngModel)]="_user.mobile_No" (input)="onPhoneInput($event)" required
+                       [disabled]="isPhoneVerified">
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-lg w-100" (click)="verifyOtp()">
-                  <i class="fas fa-check-circle me-2"></i> Verify OTP
+              <div class="mt-2">
+                <button type="button" class="btn btn-warning btn-sm me-2" (click)="sendPhoneOtp()" *ngIf="!isPhoneVerified"
+                        [disabled]="!_user.mobile_No || _user.mobile_No.length !== 10 || isPhoneVerified">
+                  Send OTP
                 </button>
+                <button type="button" class="btn btn-secondary btn-sm" (click)="editPhone()" *ngIf="isPhoneVerified">
+                  Edit Phone
+                </button>
+                <span class="text-success" *ngIf="isPhoneVerified">Phone Verified</span>
               </div>
             </div>
+
+            <div class="mb-4 input-group-custom" *ngIf="isPhoneVerified">
+              <label for="signup-name" class="form-label">Full Name</label>
+              <div class="input-with-icon">
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="signup-name" name="signup-name" class="form-control form-input" placeholder="Your full name"
+                       [(ngModel)]="_user.name" required>
+              </div>
+            </div>
+
+            <div class="mb-4 input-group-custom" *ngIf="isPhoneVerified">
+              <label for="signup-password" class="form-label">Password</label>
+              <div class="input-with-icon">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="signup-password" name="signup-password" class="form-control form-input"
+                       placeholder="Create a password" [(ngModel)]="_user.Password" required>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-lg w-100" [disabled]="progress !== 100">
+              <i class="fas fa-user-plus me-2"></i> Sign Up
+            </button>
+            <div class="text-center mt-3">
+              <button type="button" class="btn btn-link already-registered-btn" (click)="toggleForm(true)">
+                Already Registered? Login here
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- OTP Modal -->
+    <div class="modal fade" [class.show]="showOtpModal" [style.display]="showOtpModal ? 'block' : 'none'" tabindex="-1"
+         aria-labelledby="otpModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="otpModalLabel">{{ isEmailOtpMode ? 'Verify Email OTP' : 'Verify Phone OTP' }}</h5>
+            <button type="button" class="btn-close" (click)="closeOtpModal()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+            <p class="text-muted">Enter the 6-digit OTP sent to {{ isEmailOtpMode ? _user.email : _user.mobile_No }}</p>
+            <div class="mb-3">
+              <input type="text" class="form-control form-input text-center" placeholder="Enter OTP"
+                     maxlength="6" [(ngModel)]="currentOtp" (input)="onOtpInput($event)" required>
+            </div>
+            <div class="resend-otp-section">
+              <p class="text-muted mb-2">Didn't receive OTP? 
+                <button type="button" class="btn btn-link resend-otp-btn" [disabled]="resendTimer > 0"
+                        (click)="resendOtp()">
+                  Resend OTP
+                </button>
+              </p>
+              <p class="text-muted" *ngIf="resendTimer > 0">Resend in {{ resendTimer }}s</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-lg w-100" (click)="verifyOtp()">
+              <i class="fas fa-check-circle me-2"></i> Verify OTP
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
 
 
