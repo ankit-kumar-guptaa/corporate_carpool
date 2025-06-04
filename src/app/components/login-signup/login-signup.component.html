@@ -35,7 +35,7 @@
               <div class="input-with-icon">
                 <i class="fas fa-envelope input-icon"></i>
                 <input type="email" id="login-email" name="login-email" [(ngModel)]="_user.email" class="form-control form-input"
-                       placeholder="name@elitecorporatesolutions.com" required>
+                       placeholder="name@asb.edu.in" required>
               </div>
             </div>
             <div class="mb-4 input-group-custom">
@@ -75,7 +75,7 @@
                 <div class="input-with-icon">
                   <i class="fas fa-envelope input-icon"></i>
                   <input type="email" id="signup-email" name="signup-email" class="form-control form-input"
-                         placeholder="name@elitecorporatesolutions.com" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
+                         placeholder="name@asb.edu.in" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
                          [disabled]="isEmailVerified">
                 </div>
                 <button type="button" class="btn btn-warning btn-sm mt-2" (click)="sendOtp()" *ngIf="!isEmailVerified"
