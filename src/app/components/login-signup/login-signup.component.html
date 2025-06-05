@@ -109,7 +109,7 @@
               <div class="input-with-icon">
                 <i class="fas fa-user input-icon"></i>
                 <input type="text" id="signup-name" name="signup-name" class="form-control form-input" placeholder="Your full name"
-                       [(ngModel)]="_user.name" required>
+                       [(ngModel)]="_user.name" (input)="updateProgress()" required>
               </div>
             </div>
 
@@ -118,7 +118,7 @@
               <div class="input-with-icon">
                 <i class="fas fa-lock input-icon"></i>
                 <input type="password" id="signup-password" name="signup-password" class="form-control form-input"
-                       placeholder="Create a password" [(ngModel)]="_user.Password" required>
+                       placeholder="Create a password" [(ngModel)]="_user.Password" (input)="updateProgress()" required> 
               </div>
             </div>
 
