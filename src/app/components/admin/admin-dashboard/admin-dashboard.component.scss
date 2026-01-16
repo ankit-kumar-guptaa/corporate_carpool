@@ -1,0 +1,138 @@
+:host {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dash {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slide-up {
+    opacity: 0;
+    animation: slideUp 0.6s ease-out forwards;
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Colors & Gradients */
+.bg-soft-primary { background-color: rgba(59, 130, 246, 0.1); }
+.bg-soft-success { background-color: rgba(16, 185, 129, 0.1); }
+.bg-soft-info { background-color: rgba(6, 182, 212, 0.1); }
+.bg-soft-warning { background-color: rgba(245, 158, 11, 0.1); }
+.bg-soft-danger { background-color: rgba(239, 68, 68, 0.1); }
+.bg-soft-secondary { background-color: rgba(107, 114, 128, 0.1); }
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.text-primary { color: #3b82f6 !important; }
+.text-success { color: #10b981 !important; }
+.text-info { color: #06b6d4 !important; }
+.text-warning { color: #f59e0b !important; }
+.text-danger { color: #ef4444 !important; }
+.text-brown { color: #a52a2a !important; }
+
+.bg-brown { background-color: #a52a2a !important; }
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Components */
+.stat-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+}
+
+.icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+/* Custom Bar Chart */
+.group-hover:hover {
+    opacity: 1 !important;
+}
+
+.group-hover:hover .tooltip-value {
+    opacity: 1 !important;
+    transition: opacity 0.2s ease;
+}
+
+.tooltip-value {
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+    font-size: 10px;
+}
+
+/* Recent Rides List */
+.hover-bg-light:hover {
+    background-color: #f8fafc !important;
+}
+
+.transition-base {
+    transition: all 0.2s ease;
+}
+
+.hover-underline:hover {
+    text-decoration: underline !important;
+}
+
+.letter-spacing-1 {
+    letter-spacing: 0.05em;
+}
+
+.custom-table th {
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+.custom-table td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.table-row-hover {
+    transition: background-color 0.2s ease;
+}
+
+.table-row-hover:hover {
+    background-color: rgba(59, 130, 246, 0.02);
+}

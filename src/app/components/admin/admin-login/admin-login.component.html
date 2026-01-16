@@ -1,0 +1,28 @@
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
+  <div class="card shadow-lg border-0 rounded-lg login-card">
+    <div class="card-body p-5">
+      <div class="text-center mb-4">
+        <h1 class="h3 mb-3 font-weight-normal text-primary fw-bold">Admin Portal</h1>
+        <p class="text-muted">Sign in to manage GreenCar Corporate</p>
+      </div>
+
+      <form (ngSubmit)="login()">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="username" name="username" required>
+          <label for="username">Username</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="password" class="form-control" id="password" placeholder="Password" [(ngModel)]="password" name="password" required>
+          <label for="password">Password</label>
+        </div>
+
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary btn-lg fw-bold" type="submit" [disabled]="isLoading">
+            <span *ngIf="!isLoading">Sign In</span>
+            <span *ngIf="isLoading"><i class="fas fa-spinner fa-spin"></i> Authenticating...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

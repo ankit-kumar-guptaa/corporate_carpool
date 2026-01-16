@@ -1,0 +1,114 @@
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-5 animate-fade-in">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">Rides Management</h2>
+            <p class="text-muted mb-0">Track and manage employee rides and CO₂ impact</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-danger rounded-pill shadow-sm fw-bold px-4" (click)="export('PDF')">
+                <i class="fas fa-file-pdf me-2"></i> PDF
+            </button>
+            <button class="btn btn-outline-success rounded-pill shadow-sm fw-bold px-4" (click)="export('Excel')">
+                <i class="fas fa-file-excel me-2"></i> Excel
+            </button>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4 animate-slide-up">
+        <div class="card-body p-4">
+            <!-- Filters -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <label class="form-label small text-muted fw-bold">Date Range</label>
+                    <div class="input-group shadow-sm rounded-3 overflow-hidden">
+                        <span class="input-group-text bg-white border-end-0 ps-3"><i class="far fa-calendar-alt text-muted"></i></span>
+                        <input type="date" class="form-control border-start-0 bg-white py-2">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small text-muted fw-bold">Employee</label>
+                    <div class="input-group shadow-sm rounded-3 overflow-hidden">
+                        <span class="input-group-text bg-white border-end-0 ps-3"><i class="fas fa-user text-muted"></i></span>
+                        <input type="text" class="form-control border-start-0 bg-white py-2" placeholder="Search employee...">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small text-muted fw-bold">Status</label>
+                    <select class="form-select bg-white shadow-sm rounded-3 py-2">
+                        <option value="">All</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Ongoing">Ongoing</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-primary w-100 rounded-pill shadow-sm fw-bold py-2" (click)="filter()">
+                        <i class="fas fa-filter me-2"></i> Apply
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table class="table table-hover align-middle custom-table">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="border-0 ps-4 text-secondary text-uppercase small letter-spacing-1 py-3">Ride ID</th>
+                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Employee</th>
+                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Route</th>
+                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Distance</th>
+                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">CO₂ Saved</th>
+                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Date</th>
+                            <th class="border-0 text-end pe-4 text-secondary text-uppercase small letter-spacing-1 py-3">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ride of rides" class="table-row-hover">
+                            <td class="ps-4 fw-bold text-primary">#{{ride.id}}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-xs bg-soft-primary rounded-circle me-2 d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 30px; height: 30px;">
+                                        {{ride.employee.charAt(0)}}
+                                    </div>
+                                    <span class="fw-bold text-dark">{{ride.employee}}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="small">
+                                    <span class="text-muted">{{ride.from}}</span>
+                                    <i class="fas fa-long-arrow-alt-right mx-2 text-primary"></i>
+                                    <span class="text-muted">{{ride.to}}</span>
+                                </div>
+                            </td>
+                            <td class="fw-bold">{{ride.distance}} km</td>
+                            <td>
+                                <span class="badge bg-soft-success text-success rounded-pill px-3">
+                                    <i class="fas fa-leaf me-1"></i> {{ride.co2}} kg
+                                </span>
+                            </td>
+                            <td class="text-muted">{{ride.date | date:'mediumDate'}}</td>
+                            <td class="text-end pe-4">
+                                <span class="badge rounded-pill px-3 py-1" 
+                                    [ngClass]="{'bg-success': ride.status === 'Completed', 'bg-danger': ride.status === 'Cancelled', 'bg-info': ride.status === 'Ongoing'}">
+                                    {{ride.status}}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <nav class="d-flex justify-content-between align-items-center mt-4 border-top pt-4">
+                <span class="text-muted small">Showing 1 to 8 of 245 entries</span>
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item disabled"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center" href="#" style="width: 32px; height: 32px;"><i class="fas fa-chevron-left"></i></a></li>
+                    <li class="page-item active"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center shadow-sm" href="#" style="width: 32px; height: 32px;">1</a></li>
+                    <li class="page-item"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center" href="#" style="width: 32px; height: 32px;">2</a></li>
+                    <li class="page-item"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center" href="#" style="width: 32px; height: 32px;">3</a></li>
+                    <li class="page-item"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center" href="#" style="width: 32px; height: 32px;"><i class="fas fa-chevron-right"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

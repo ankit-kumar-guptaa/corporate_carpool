@@ -20,6 +20,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './Shared/shared.module';
 import { LoaderComponent } from './Shared/loader/loader.component';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
+import { AdminLoginComponent } from './components/admin/admin-login/admin-login.component';
+import { AdminDashboardComponent } from './components/admin/admin-dashboard/admin-dashboard.component';
+import { AdminEmployeesComponent } from './components/admin/admin-employees/admin-employees.component';
+import { AdminReportsComponent } from './components/admin/admin-reports/admin-reports.component';
+import { AdminRidesComponent } from './components/admin/admin-rides/admin-rides.component';
+import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layout.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,8 +37,13 @@ import { AutocompleteComponent } from './autocomplete/autocomplete.component';
     DashboardComponent,
     CarpoolSearchComponent,
     LoaderComponent,
-    AutocompleteComponent
-    
+    AutocompleteComponent,
+    AdminLoginComponent,
+    AdminDashboardComponent,
+    AdminEmployeesComponent,
+    AdminReportsComponent,
+    AdminRidesComponent,
+    AdminLayoutComponent
   ],
   imports: [
     BrowserModule,

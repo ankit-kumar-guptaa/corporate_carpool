@@ -1,0 +1,67 @@
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div class="glass-sidebar border-end" id="sidebar-wrapper">
+      <div class="sidebar-heading text-white fw-bold py-4 px-3 fs-4 d-flex align-items-center">
+        <div class="logo-icon me-2"><i class="fas fa-leaf"></i></div>
+        <span class="logo-text">GreenCar<span class="text-accent">Admin</span></span>
+      </div>
+      
+      <div class="list-group list-group-flush py-3 px-2 gap-2">
+        <a routerLink="/admin/dashboard" routerLinkActive="active" class="list-group-item list-group-item-action rounded-3">
+          <i class="fas fa-th-large me-3"></i> 
+          <span>Dashboard</span>
+        </a>
+        <a routerLink="/admin/employees" routerLinkActive="active" class="list-group-item list-group-item-action rounded-3">
+          <i class="fas fa-users me-3"></i> 
+          <span>Employees</span>
+        </a>
+        <a routerLink="/admin/rides" routerLinkActive="active" class="list-group-item list-group-item-action rounded-3">
+          <i class="fas fa-car me-3"></i> 
+          <span>Rides</span>
+        </a>
+        <a routerLink="/admin/reports" routerLinkActive="active" class="list-group-item list-group-item-action rounded-3">
+          <i class="fas fa-chart-pie me-3"></i> 
+          <span>Analytics</span>
+        </a>
+      </div>
+
+      <div class="mt-auto p-3">
+          <div class="user-card p-3 rounded-3 mb-3">
+              <div class="d-flex align-items-center">
+                  <div class="avatar-sm rounded-circle me-2"><img src="assets/admin-avatar.png" onerror="this.src='https://ui-avatars.com/api/?name=Admin&background=random'" class="rounded-circle w-100"></div>
+                  <div class="overflow-hidden">
+                      <div class="fw-bold text-white text-truncate">Administrator</div>
+                      <div class="text-white-50 small text-truncate">admin&#64;greencar.com</div>
+                  </div>
+              </div>
+          </div>
+          <a href="javascript:void(0)" (click)="logout()" class="btn btn-danger w-100 rounded-pill">
+            <i class="fas fa-sign-out-alt me-2"></i> Logout
+          </a>
+      </div>
+    </div>
+  
+    <!-- Page Content -->
+    <div id="page-content-wrapper" class="w-100 bg-light-modern">
+      <nav class="navbar navbar-expand-lg navbar-glass sticky-top py-3 px-4 mb-4">
+        <div class="container-fluid">
+          <button class="btn btn-icon-only text-dark" id="menu-toggle" (click)="toggleSidebar()">
+              <i class="fas fa-bars fa-lg"></i>
+          </button>
+          
+          <div class="d-flex align-items-center ms-auto gap-3">
+              <div class="notification-bell position-relative cursor-pointer">
+                  <i class="far fa-bell fa-lg text-secondary"></i>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white p-1">
+                    <span class="visually-hidden">New alerts</span>
+                  </span>
+              </div>
+          </div>
+        </div>
+      </nav>
+  
+      <div class="container-fluid px-4 pb-5 content-container">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,49 @@
+:host {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slide-up {
+    opacity: 0;
+    animation: slideUp 0.6s ease-out forwards;
+}
+
+.bg-soft-primary { background-color: rgba(59, 130, 246, 0.1); }
+.bg-soft-success { background-color: rgba(16, 185, 129, 0.1); }
+
+.custom-table th {
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.custom-table td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.table-row-hover {
+    transition: background-color 0.2s ease;
+}
+
+.table-row-hover:hover {
+    background-color: rgba(59, 130, 246, 0.02);
+}
+
+.avatar-xs {
+    font-size: 0.75rem;
+}
