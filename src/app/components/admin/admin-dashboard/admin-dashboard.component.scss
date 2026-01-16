@@ -10,129 +10,195 @@
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes dash {
-    to { stroke-dashoffset: 0; }
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-}
-
 .animate-fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
+    animation: fadeIn 0.5s ease-out forwards;
 }
 
 .animate-slide-up {
     opacity: 0;
-    animation: slideUp 0.6s ease-out forwards;
+    animation: slideUp 0.5s ease-out forwards;
 }
 
-.animate-pulse {
-    animation: pulse 2s infinite;
-}
-
-/* Colors & Gradients */
-.bg-soft-primary { background-color: rgba(59, 130, 246, 0.1); }
-.bg-soft-success { background-color: rgba(16, 185, 129, 0.1); }
-.bg-soft-info { background-color: rgba(6, 182, 212, 0.1); }
-.bg-soft-warning { background-color: rgba(245, 158, 11, 0.1); }
-.bg-soft-danger { background-color: rgba(239, 68, 68, 0.1); }
-.bg-soft-secondary { background-color: rgba(107, 114, 128, 0.1); }
-
-.bg-gradient-success {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-
-.text-primary { color: #3b82f6 !important; }
-.text-success { color: #10b981 !important; }
-.text-info { color: #06b6d4 !important; }
-.text-warning { color: #f59e0b !important; }
-.text-danger { color: #ef4444 !important; }
-.text-brown { color: #a52a2a !important; }
-
-.bg-brown { background-color: #a52a2a !important; }
-
-.dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-/* Components */
-.stat-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
-}
-
-.icon-box {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-}
-
-/* Custom Bar Chart */
-.group-hover:hover {
-    opacity: 1 !important;
-}
-
-.group-hover:hover .tooltip-value {
-    opacity: 1 !important;
-    transition: opacity 0.2s ease;
-}
-
-.tooltip-value {
-    white-space: nowrap;
-    z-index: 10;
-    pointer-events: none;
-    font-size: 10px;
-}
-
-/* Recent Rides List */
-.hover-bg-light:hover {
-    background-color: #f8fafc !important;
-}
-
-.transition-base {
-    transition: all 0.2s ease;
-}
-
-.hover-underline:hover {
-    text-decoration: underline !important;
-}
-
-.letter-spacing-1 {
+/* Utils */
+.ls-1 {
     letter-spacing: 0.05em;
 }
 
+.fs-sm {
+    font-size: 0.875rem;
+}
+
+/* Hover Effects */
+.hover-lift {
+    transition: all 0.2s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.1)!important;
+}
+
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+.hover-bg-light {
+    transition: background-color 0.2s ease;
+}
+
+.hover-bg-light:hover {
+    background-color: #f8f9fa;
+}
+
+.hover-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Colors & Gradients */
+.bg-opacity-10 { --bs-bg-opacity: 0.1; }
+.bg-opacity-20 { --bs-bg-opacity: 0.2; }
+
+/* Icon Box */
+.icon-box {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Chart Styles */
+.bar {
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+}
+
+.group-hover:hover .bar {
+    opacity: 0.8 !important;
+}
+
+.group-hover:hover .tooltip-custom {
+    opacity: 1 !important;
+    transform: translate(-50%, -10px) !important;
+    transition: all 0.2s ease;
+}
+
+.tooltip-custom {
+    white-space: nowrap;
+    z-index: 100;
+    pointer-events: none;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    min-width: 60px;
+}
+
+.arrow-down {
+    width: 0; 
+    height: 0; 
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #212529;
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Table Styles */
 .custom-table th {
     font-weight: 600;
     font-size: 0.75rem;
+    letter-spacing: 0.05em;
 }
 
 .custom-table td {
     padding-top: 1rem;
     padding-bottom: 1rem;
+    vertical-align: middle;
 }
 
-.table-row-hover {
-    transition: background-color 0.2s ease;
+
+/* Soft Backgrounds for Badges */
+.bg-soft-primary {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
 }
 
-.table-row-hover:hover {
-    background-color: rgba(59, 130, 246, 0.02);
+.bg-soft-success {
+    background-color: rgba(25, 135, 84, 0.1);
+    color: #198754;
+}
+
+.bg-soft-info {
+    background-color: rgba(13, 202, 240, 0.1);
+    color: #0dcaf0;
+}
+
+.bg-soft-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+}
+
+/* Rank Styles */
+.rank-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+/* Avatar Gradient */
+.avatar-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 6px rgba(102, 126, 234, 0.25);
+}
+
+/* Table Row Modern Hover */
+.table-row-modern {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+
+.table-row-modern td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.table-row-modern td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.table-row-modern:hover {
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transform: scale(1.005);
+    z-index: 1;
+    position: relative;
+}
+
+/* Progress Bar in Table */
+.progress-thin {
+    height: 4px;
+    border-radius: 2px;
+    background-color: #e9ecef;
+    width: 80px;
+    overflow: hidden;
+}
+
+.progress-bar-custom {
+    height: 100%;
+    border-radius: 2px;
 }

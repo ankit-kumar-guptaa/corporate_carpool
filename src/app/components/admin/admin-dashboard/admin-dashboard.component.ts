@@ -8,31 +8,89 @@ import { Component } from '@angular/core';
 export class AdminDashboardComponent {
   
   // Stats for Charts
+  currentFilter: string = 'Monthly';
+
   monthlyStats = [
-      { month: 'Jan', value: 450, height: '40%', co2Val: 200, co2Height: '30%' },
-      { month: 'Feb', value: 520, height: '45%', co2Val: 250, co2Height: '35%' },
-      { month: 'Mar', value: 600, height: '55%', co2Val: 300, co2Height: '40%' },
-      { month: 'Apr', value: 750, height: '65%', co2Val: 380, co2Height: '50%' },
-      { month: 'May', value: 800, height: '70%', co2Val: 420, co2Height: '55%' },
-      { month: 'Jun', value: 950, height: '85%', co2Val: 500, co2Height: '65%' },
-      { month: 'Jul', value: 1100, height: '95%', co2Val: 600, co2Height: '75%' },
-      { month: 'Aug', value: 850, height: '75%', co2Val: 480, co2Height: '60%' },
-      { month: 'Sep', value: 900, height: '80%', co2Val: 520, co2Height: '65%' },
-      { month: 'Oct', value: 1000, height: '90%', co2Val: 580, co2Height: '70%' },
-      { month: 'Nov', value: 1200, height: '100%', co2Val: 700, co2Height: '85%' },
-      { month: 'Dec', value: 1150, height: '98%', co2Val: 650, co2Height: '80%' },
+      { label: 'Jan', rides: 450, co2: 200 },
+      { label: 'Feb', rides: 520, co2: 250 },
+      { label: 'Mar', rides: 600, co2: 300 },
+      { label: 'Apr', rides: 750, co2: 380 },
+      { label: 'May', rides: 800, co2: 420 },
+      { label: 'Jun', rides: 950, co2: 500 },
+      { label: 'Jul', rides: 1100, co2: 600 },
+      { label: 'Aug', rides: 850, co2: 480 },
+      { label: 'Sep', rides: 900, co2: 520 },
+      { label: 'Oct', rides: 1000, co2: 580 },
+      { label: 'Nov', rides: 1200, co2: 700 },
+      { label: 'Dec', rides: 1150, co2: 650 },
   ];
 
-  // Recent Rides Data
-  recentRides = [
-      { from: 'Noida Sec 62', to: 'Cyber Hub, Gurgaon', user: 'Amit Singh', co2: 4.2, time: '10 mins ago' },
-      { from: 'Dwarka Sec 10', to: 'Connaught Place', user: 'Sarah Jenkins', co2: 2.8, time: '25 mins ago' },
-      { from: 'Indirapuram', to: 'Noida Sec 18', user: 'Rahul Sharma', co2: 1.5, time: '42 mins ago' },
-      { from: 'Vasant Kunj', to: 'Aerocity', user: 'Priya Verma', co2: 3.1, time: '1 hr ago' },
-      { from: 'Saket', to: 'Nehru Place', user: 'Vikram M.', co2: 1.2, time: '2 hrs ago' }
+  weeklyStats = [
+      { label: 'Mon', rides: 120, co2: 45 },
+      { label: 'Tue', rides: 145, co2: 55 },
+      { label: 'Wed', rides: 160, co2: 65 },
+      { label: 'Thu', rides: 135, co2: 50 },
+      { label: 'Fri', rides: 180, co2: 75 },
+      { label: 'Sat', rides: 90, co2: 30 },
+      { label: 'Sun', rides: 60, co2: 20 },
   ];
 
-  // Updated Top Employees with Role
+  dailyStats = [
+      { label: '00-04', rides: 15, co2: 5 },
+      { label: '04-08', rides: 45, co2: 15 },
+      { label: '08-12', rides: 180, co2: 70 },
+      { label: '12-16', rides: 120, co2: 45 },
+      { label: '16-20', rides: 210, co2: 85 },
+      { label: '20-24', rides: 60, co2: 25 },
+  ];
+
+  // Ride Status for Donut Chart
+  rideStatusStats = [
+      { label: 'Completed', value: 65, color: '#0d6efd' }, // Primary Blue
+      { label: 'Scheduled', value: 25, color: '#0dcaf0' }, // Info Cyan
+      { label: 'Cancelled', value: 10, color: '#dc3545' }  // Danger Red
+  ];
+
+  get currentStats() {
+    switch (this.currentFilter) {
+        case 'Weekly': return this.weeklyStats;
+        case 'Today': return this.dailyStats;
+        default: return this.monthlyStats;
+    }
+  }
+
+  setFilter(filter: string) {
+    this.currentFilter = filter;
+  }
+
+  // Helper for Chart Scaling
+  getMaxValue(type: 'rides' | 'co2'): number {
+    return Math.max(...this.currentStats.map(s => s[type])) * 1.1; // 10% padding
+  }
+
+  // Generate Bar Height (0-100%)
+  getBarHeight(val: number): string {
+    const max = this.getMaxValue('rides');
+    return `${(val / max) * 100}%`;
+  }
+
+  // Generate SVG Points for Line Chart
+  getPolylinePoints(): string {
+    const stats = this.currentStats;
+    const maxCo2 = this.getMaxValue('co2');
+    
+    // We need to map each data point to X,Y coordinates
+    // X is distributed evenly: (index / (count - 1)) * 100
+    // Y is inverted: 100 - (value / max) * 100
+    
+    return stats.map((stat, index) => {
+        const x = (index / (stats.length - 1)) * 100;
+        const y = 100 - ((stat.co2 / maxCo2) * 100);
+        return `${x},${y}`;
+    }).join(' ');
+  }
+
+  // Top Employees with Role
   topEmployees = [
     { name: 'Rahul Sharma', dept: 'IT Engineering', role: 'Pooler', rides: 145, distance: '2,340', co2: 450 },
     { name: 'Priya Verma', dept: 'HR', role: 'Seeker', rides: 132, distance: '1,980', co2: 380 },
