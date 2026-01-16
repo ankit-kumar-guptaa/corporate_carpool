@@ -10,17 +10,31 @@ import { FormGroup, FormBuilder } from '@angular/forms';
      
        
      <div class="input-wrapper">
-  <input #inputElement
-    type="text" 
-    [(ngModel)]="autocompleteInput"  
-    class="form-input"
-    #addresstext
-    placeholder="Enter location"
-   
-  >
-</div>
+       <span class="search-icon"><i class="fas fa-map-pin"></i></span>
+       <input #inputElement
+         type="text" 
+         [(ngModel)]="autocompleteInput"  
+         class="form-input"
+         #addresstext
+         placeholder="Enter location"
+        
+       >
+     </div>
              
-    `
+    `,
+    styles: [`
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .search-icon {
+            padding-left: 15px;
+            color: #1976d2; /* Primary Blue */
+            display: flex;
+            align-items: center;
+        }
+    `]
     
 })
 export class AutocompleteComponent implements OnInit, AfterViewInit {

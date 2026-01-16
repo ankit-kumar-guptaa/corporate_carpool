@@ -10,7 +10,7 @@ export const environment = {
   name: 'Dev',
   bannerclass: 'topbanner_dev1',
   appinsightkey: '',
-  base: 'https://api.carpoolindia.com/api',
+  base: 'https://api.greencar.ngo/api',
   base___:'http://localhost:5000/api',
   lang: 'en-us',
   salt: '@exam@',

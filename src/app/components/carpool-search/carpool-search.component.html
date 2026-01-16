@@ -1,117 +1,180 @@
-<div class="container my-5">
-  <section class="card mb-4 shadow-lg border-0 search-carpool-card animate-card">
-    <div class="card-body p-5">
-      <h2 class="card-title mb-4 text-gradient">Find a Carpool Partner</h2>
-      
-      <!-- Form Section -->
-      <div class="row g-4 mb-4 align-items-end">
-        <div class="col-md-2">
-          <label for="role" class="form-label fw-bold text-muted">Are you a:</label>
-          <select id="role" class="form-select form-input shadow-sm" [(ngModel)]="selectedRole">
-            <option value="Either">Either</option>
-            <option value="Pooler">Pooler</option>
-            <option value="Seeker">Seeker</option>
-          </select>
-        </div>
-        
-        <div class="col-md-3" style="
-        position: relative;
-        top: 25px;
-    ">
-          <label for="from" class="form-label fw-bold text-muted">From</label>
-          <AutocompleteComponent (setAddress)="handleDropAddress($event, 'From')" [autocompleteInput]="postRide.From_Address" ></AutocompleteComponent>
+<div class="container-fluid px-4 my-5">
+  <section class="card mb-5 shadow-lg border-0 search-carpool-card animate-card">
+    <div class="card-body p-0">
+      <!-- Header Section -->
+      <div class="card-header-custom py-5 px-4 text-center text-white">
+        <h2 class="font-weight-bold mb-2 text-uppercase letter-spacing-1">Corporate Ride Finder</h2>
+        <p class="mb-0 opacity-90 font-italic">Connect with colleagues for a smarter, greener commute</p>
+      </div>
+
+      <div class="p-5">
+        <!-- Top Row: Role, Mode, From, To -->
+        <div class="row g-4 align-items-end">
+          
+          <!-- Role Selection -->
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label fw-bold text-primary small text-uppercase mb-2">I am a</label>
+            <div class="input-group shadow-sm rounded-pill overflow-hidden border-blue">
+              <span class="input-group-text bg-white border-0 ps-3"><i class="fas fa-user text-primary"></i></span>
+              <select class="form-select border-0 py-2 fw-bold text-dark" [(ngModel)]="selectedRole">
+                <option value="Either">Either (Pooler/Seeker)</option>
+                <option value="Pooler">Pooler (I have a vehicle)</option>
+                <option value="Seeker">Seeker (Need a ride)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Transport Mode -->
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label fw-bold text-danger small text-uppercase mb-2">Transport Mode</label>
+            <div class="input-group shadow-sm rounded-pill overflow-hidden border-red">
+              <span class="input-group-text bg-white border-0 ps-3"><i class="fas fa-car-side text-danger"></i></span>
+              <select class="form-select border-0 py-2 fw-bold text-dark" [(ngModel)]="transportMode">
+                <option value="" disabled selected>Select Mode</option>
+                <option *ngFor="let mode of transportOptions" [value]="mode">{{ mode }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- From Location (Autocomplete) -->
+          <div class="col-lg-3 col-md-6">
+             <label class="form-label fw-bold text-primary small text-uppercase mb-2">From Location</label>
+             <div class="autocomplete-wrapper border-blue shadow-sm rounded-pill overflow-hidden">
+                <AutocompleteComponent (setAddress)="handleDropAddress($event, 'From')" [autocompleteInput]="postRide.From_Address"></AutocompleteComponent>
+             </div>
+          </div>
+
+          <!-- To Location (Readonly) -->
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label fw-bold text-danger small text-uppercase mb-2">To (Office)</label>
+            <div class="input-group shadow-sm rounded-pill overflow-hidden border-red bg-light">
+              <span class="input-group-text bg-transparent border-0 ps-3"><i class="fas fa-building text-danger"></i></span>
+              <input type="text" class="form-control border-0 bg-transparent py-2 fw-bold text-muted" 
+                     value="Sector 62, Noida (Office)" readonly title="B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida, Uttar Pradesh 201309">
+            </div>
+          </div>
+
         </div>
 
-        <div class="col-md-2 text-center">
-          <button type="button" class="btn add-via-button shadow-sm" (click)="addVia()">
-            <span class="d-flex align-items-center">
-              <i class="fas fa-plus-circle me-2"></i> Add Via
-            </span>
+        <!-- Middle Row: Add Via Button & Via Points -->
+        <div class="row g-4 mt-2">
+             <div class="col-12">
+                <button type="button" class="btn btn-outline-primary rounded-pill fw-bold px-4" (click)="addVia()">
+                    <i class="fas fa-plus-circle me-1"></i> Add Stop / Via Point
+                </button>
+             </div>
+        </div>
+
+        <!-- Via Inputs Section -->
+        <div *ngIf="isAddViaClicked" class="via-section mt-4 p-4 bg-soft-blue rounded-xl animate-fade-in border-left-primary">
+          <label class="form-label fw-bold text-primary small text-uppercase mb-3">Via Points</label>
+          <div class="row g-3">
+            <div class="col-md-4" *ngFor="let location of viaLocations; let i = index">
+              <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white border-blue">
+                <span class="input-group-text bg-white border-0 ps-3"><i class="fas fa-map-marker-alt text-primary"></i></span>
+                <div class="flex-grow-1">
+                    <AutocompleteComponent></AutocompleteComponent>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Row: Remarks (Full Width) -->
+        <div class="mt-4">
+          <label class="form-label fw-bold text-dark small text-uppercase mb-2">Remarks / Notes</label>
+          <div class="input-group shadow-sm rounded-xl overflow-hidden border-grey">
+            <span class="input-group-text bg-white border-0 ps-3"><i class="fas fa-comment-dots text-secondary"></i></span>
+            <input type="text" class="form-control border-0 py-3" 
+                   [(ngModel)]="userRemark" placeholder="e.g. Leaving at 6 PM, need to carry a bag..." 
+                   (input)="updateRemarkManually($event)">
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-center gap-4 mt-5">
+          <button type="button" class="btn btn-primary btn-lg px-5 rounded-pill shadow-lg hover-scale btn-wide" 
+                  (click)="searchCarpool()" [disabled]="isLoadingSearch">
+            <span *ngIf="!isLoadingSearch"><i class="fas fa-search me-2"></i> Find Rides</span>
+            <span *ngIf="isLoadingSearch"><i class="fas fa-spinner fa-spin me-2"></i> Searching...</span>
+          </button>
+
+          <button type="button" class="btn btn-danger btn-lg px-5 rounded-pill shadow-lg hover-scale btn-wide" 
+                  (click)="submitRequest()" [disabled]="isLoadingSubmit">
+            <span *ngIf="!isLoadingSubmit"><i class="fas fa-paper-plane me-2"></i> Post Ride</span>
+            <span *ngIf="isLoadingSubmit"><i class="fas fa-spinner fa-spin me-2"></i> Posting...</span>
           </button>
         </div>
 
-        <div class="col-md-5">
-          <label for="to" class="form-label fw-bold text-muted">To (Office Address)</label>
-          <input type="text" id="to" name="to" class="form-control form-input shadow-sm" 
-                 value="B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida, Uttar Pradesh 201309" readonly>
-        </div>
-      </div>
-
-      <!-- Via Inputs -->
-      <div *ngIf="isAddViaClicked" class="via-inputs mt-4 animate-fade-in">
-        <div class="row g-3">
-          <div class="col-md-4" *ngFor="let location of viaLocations; let i = index">
-            <AutocompleteComponent></AutocompleteComponent>
-          </div>
-        </div>
-      </div>
-
-      <!-- Remark and Contact Section -->
-<div class="remark-contact-section mt-5">
-  <h4 class="mb-3 text-muted">Additional Details</h4>
-  <div class="row g-4">
-    <!-- Remark Input (Combined with Manual Phone) -->
-    <div class="col-12">
-      <label for="remark" class="form-label fw-bold text-muted">Remark</label>
-      <input type="text" id="remark" class="form-control form-input shadow-sm" 
-             [(ngModel)]="userRemark" placeholder="Update remarks with additional instructions if any." 
-             (input)="updateRemarkManually($event)">
-    </div>
-  </div>
-</div>
-
-      <!-- Buttons -->
-      <div class="text-center mt-5 d-flex justify-content-center gap-3">
-        <button type="button" class="btn btn-gradient-primary btn-lg search-button shadow-lg" 
-                (click)="searchCarpool()">
-          <span *ngIf="!isLoadingSearch" class="d-flex align-items-center">
-            <i class="fas fa-search me-2"></i> Search
-          </span>
-          <span *ngIf="isLoadingSearch" class="d-flex align-items-center">
-            <i class="fas fa-spinner fa-spin me-2"></i> Searching...
-          </span>
-        </button>
-
-        <button type="button" class="btn btn-gradient-success btn-lg submit-button shadow-lg" 
-                (click)="submitRequest()" [disabled]="isLoadingSubmit">
-          <span *ngIf="!isLoadingSubmit" class="d-flex align-items-center">
-            <i class="fas fa-check-circle me-2"></i> Submit
-          </span>
-          <span *ngIf="isLoadingSubmit" class="d-flex align-items-center">
-            <i class="fas fa-spinner fa-spin me-2"></i> Submitting...
-          </span>
-        </button>
       </div>
     </div>
   </section>
 
-  <!-- Carpool Results -->
-  <div *ngIf="RideList.length > 0" class="results mt-5 carpool-results-container">
-    <h4 class="mb-4 text-gradient-secondary animate-title">Available Carpools</h4>
-    <ul class="list-group carpool-list">
-      <li class="list-group-item mb-3 shadow-sm animate-list-item" *ngFor="let carpool of RideList; let i = index" [style.--order]="i">
-        <div class="row align-items-center">
-          <div class="col-12 col-md-9 mb-2 mb-md-0">
-            <div class="carpool-info">
-              <span class="user-type badge bg-primary me-2">{{ carpool.userType }}</span>
-              <span class="fw-bold">{{ carpool.userName }}</span>
-              <span class="badge bg-light text-muted ms-2">{{ carpool.from_Address }}</span>
+  <!-- Results Section -->
+  <div *ngIf="RideList.length > 0" class="results-section mt-5">
+    <div class="d-flex align-items-center justify-content-center mb-5">
+        <div class="divider-line bg-primary"></div>
+        <h3 class="mx-4 fw-bold text-primary text-uppercase animate-title mb-0">Available Rides</h3>
+        <div class="divider-line bg-primary"></div>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6" *ngFor="let carpool of RideList; let i = index">
+        <div class="card h-100 border-0 shadow-hover animate-list-item card-result" [style.--order]="i">
+          <div class="card-body p-4 position-relative overflow-hidden">
+             <!-- Decorative corner -->
+             <div class="corner-shape" [ngClass]="{'bg-primary': carpool.userType === 'Pooler', 'bg-danger': carpool.userType === 'Seeker'}"></div>
+             
+            <div class="d-flex justify-content-between align-items-start mb-3 position-relative z-1">
+              <span class="badge rounded-pill px-3 py-2 text-uppercase letter-spacing-1 shadow-sm" 
+                    [ngClass]="{'bg-primary text-white': carpool.userType === 'Pooler', 'bg-danger text-white': carpool.userType === 'Seeker'}">
+                {{ carpool.userType }}
+              </span>
+              <small class="text-muted fw-bold"><i class="far fa-clock me-1"></i> Today</small>
             </div>
-          </div>
-          <div class="col-12 col-md-3 text-center text-md-end">
+            
+            <div class="text-center mb-4 position-relative z-1">
+                <div class="avatar-circle mb-2 mx-auto" [ngClass]="{'bg-primary-soft text-primary': carpool.userType === 'Pooler', 'bg-danger-soft text-danger': carpool.userType === 'Seeker'}">
+                    {{ carpool.userName.charAt(0) }}
+                </div>
+                <h5 class="card-title fw-bold text-dark mb-1">{{ carpool.userName }}</h5>
+                <p class="small text-muted mb-0" *ngIf="carpool.userType === 'Pooler'">Offering a ride</p>
+                <p class="small text-muted mb-0" *ngIf="carpool.userType === 'Seeker'">Looking for a ride</p>
+            </div>
+
+            <div class="location-timeline mb-4 position-relative z-1">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-box bg-white shadow-sm text-danger rounded-circle me-3">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <span class="text-dark fw-medium text-truncate">{{ carpool.from_Address }}</span>
+                </div>
+                <div class="timeline-connector"></div>
+                <div class="d-flex align-items-center">
+                    <div class="icon-box bg-white shadow-sm text-primary rounded-circle me-3">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <span class="text-dark fw-medium text-truncate">Sector 62, Noida</span>
+                </div>
+            </div>
+
             <button [disabled]="carpool.isSendRequest" 
-                    class="btn btn-connect btn-outline-primary shadow-sm" 
+                    class="btn w-100 rounded-pill fw-bold shadow-sm position-relative z-1" 
+                    [ngClass]="{'btn-outline-primary': carpool.userType === 'Pooler', 'btn-outline-danger': carpool.userType === 'Seeker'}"
                     (click)="connectCarpool(carpool)">
               <i class="fas fa-link me-2"></i> Connect
             </button>
           </div>
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 
-  <div *ngIf="RideList.length < 1" class="results mt-5 text-center">
-    <h4 class="mb-4 text-muted animate-title">No Record Found</h4>
-    <p class="text-muted">Try adjusting your search criteria!</p>
+  <div *ngIf="RideList.length < 1 && showData" class="text-center mt-5 animate-fade-in">
+    <div class="empty-state-icon mb-3 text-muted opacity-50">
+        <i class="fas fa-road fa-4x"></i>
+    </div>
+    <h4 class="text-muted fw-bold">No rides found matching your criteria.</h4>
+    <p class="text-muted">Be the first to post a ride request!</p>
   </div>
 </div>

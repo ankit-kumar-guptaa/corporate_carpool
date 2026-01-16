@@ -22,6 +22,8 @@ export class CarpoolSearchComponent {
   RideList: any[] = [];
   showData: boolean = false;
   userRemark: string = ''; // For remark
+  transportMode: string = '';
+  transportOptions: string[] = ['Cab', 'Bus', 'Own Car', 'Own Bike'];
 
   constructor(private _globalService: GlobalService) {
     // Fetch user profile and email on component initialization
@@ -77,7 +79,7 @@ export class CarpoolSearchComponent {
     this.postRide.IsSearch = 0;
 
     // Add the remark to postRide before sending
-    this.postRide.User_Comment = this.userRemark;
+    this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '');
 
     this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(resp => {
       this.isLoadingSearch = false;
@@ -154,7 +156,7 @@ export class CarpoolSearchComponent {
     this.postRide.IsSearch = 1;
 
     // Add the remark to postRide before sending
-    this.postRide.User_Comment = this.userRemark;
+    this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '');
 
     this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(
       resp => {
