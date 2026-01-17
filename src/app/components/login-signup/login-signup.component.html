@@ -12,7 +12,7 @@
             "At Elite Corporate Solutions, we are committed to shaping a greener future. Our Corporate Carpool Program is a bold step towards reducing our carbon footprint, easing commutes, and fostering a sense of community among our employees. Together, we can drive change!"
           </div>
           <div class="mt-4">
-            <h5 class="fw-bold mb-0">Mr. John Doe</h5>
+            <h5 class="fw-bold mb-0">Mr. Rajiv Arora</h5>
             <small class="text-muted">Director, Elite Corporate Solutions</small>
           </div>
         </div>
@@ -66,16 +66,34 @@
 
           <!-- Signup Form -->
           <div *ngIf="!isLoginActive" class="form-section signup-container animate-fade-in">
-            <div class="signup-progress">
-              <div class="progress-bar">
-                <div class="progress" [style.width]="progress + '%'"></div>
+            <!-- Modern Stepper -->
+            <div class="signup-stepper mb-5">
+              <div class="progress-track">
+                <div class="progress-fill" [style.width]="progress + '%'"></div>
               </div>
-              <div class="step-indicators">
-                <span [class.active]="progress >= 25">1</span>
-                <span [class.active]="progress >= 50">2</span>
-                <span [class.active]="progress >= 75">3</span>
-                <span [class.active]="progress >= 75">4</span>
-                <span [class.active]="progress === 100">5</span>
+              
+              <!-- Step 1: Email -->
+              <div class="step-item" [class.active]="progress < 50" [class.completed]="progress >= 50">
+                <div class="step-circle">
+                  <i class="fas" [class.fa-envelope]="progress < 50" [class.fa-check]="progress >= 50"></i>
+                </div>
+                <span class="step-label">Email</span>
+              </div>
+
+              <!-- Step 2: Phone -->
+              <div class="step-item" [class.active]="progress >= 50 && progress < 75" [class.completed]="progress >= 75">
+                <div class="step-circle">
+                  <i class="fas" [class.fa-phone]="progress < 75" [class.fa-check]="progress >= 75"></i>
+                </div>
+                <span class="step-label">Phone</span>
+              </div>
+
+              <!-- Step 3: Details -->
+              <div class="step-item" [class.active]="progress >= 75" [class.completed]="progress === 100">
+                <div class="step-circle">
+                  <i class="fas" [class.fa-user]="progress < 100" [class.fa-check]="progress === 100"></i>
+                </div>
+                <span class="step-label">Details</span>
               </div>
             </div>
 
