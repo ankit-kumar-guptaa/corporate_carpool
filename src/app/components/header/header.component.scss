@@ -84,6 +84,25 @@
     }
   }
 
+  .login-buttons {
+    .btn-primary {
+      background-color: #c32823;
+      border-color: #c32823;
+      &:hover {
+        background-color: #d8231d;
+        border-color: #d8231d;
+      }
+    }
+    .btn-outline-primary {
+      color: #c32823;
+      border-color: #c32823;
+      &:hover {
+        background-color: #c32823;
+        color: #fff;
+      }
+    }
+  }
+
   // Responsive Design
   @media (max-width: 992px) {
     .header {

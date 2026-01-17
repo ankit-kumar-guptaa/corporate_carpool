@@ -2,7 +2,7 @@
   <div class="container-fluid d-flex justify-content-between align-items-center">
     <!-- Left Section -->
     <div class="header-left d-none d-md-flex">
-      <h1 class="h5 mb-0 text-uppercase text-truncate">Corporate Carpool Program</h1>
+      <h1 class="h5 mb-0 text-uppercase text-truncate">ESG project of satvik greens</h1>
     </div>
 
     <!-- Center Logo -->
@@ -40,6 +40,12 @@
           <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
         </ul>
       </div>
+    </div>
+
+    <!-- Login Buttons (Visible when not logged in) -->
+    <div *ngIf="!isLoggedIn" class="login-buttons d-flex align-items-center gap-2">
+      <a routerLink="/" class="btn btn-outline-primary rounded-pill px-4 fw-bold">Employee Login</a>
+      <a routerLink="/admin/login" class="btn btn-primary rounded-pill px-4 fw-bold">Admin Login</a>
     </div>
   </div>
 </header>

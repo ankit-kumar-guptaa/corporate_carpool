@@ -1,136 +1,148 @@
 <div class="container-fluid py-5">
-  <div class="row justify-content-center align-items-stretch">
+  <div class="row justify-content-center align-items-stretch g-5">
     <!-- Chairman Message -->
-    <div class="col-md-5 mb-4">
-      <div class="card h-100 shadow-sm border-0 chairman-message-card">
-        <div class="card-body p-4 text-center">
-          <h2 class="card-title text-primary mb-4">A Message from Our Director</h2>
+    <div class="col-lg-5 col-md-6 mb-4">
+      <div class="chairman-message-card h-100">
+        <div class="card-body p-4 p-lg-5 text-center d-flex flex-column justify-content-center">
+          <h2 class="card-title fw-bold mb-4">A Message from Our Director</h2>
           <div class="chairman-img-container mb-4">
-            <img src="chairman.jpg" alt="Director Photo" class="chairman-img">
+            <img src="chairman.jpg" alt="Director Photo" class="chairman-img" onerror="this.src='https://ui-avatars.com/api/?name=Director&background=0D8ABC&color=fff&size=200'">
           </div>
-          <p class="card-text text-secondary quote-text">
+          <div class="quote-text">
             "At Elite Corporate Solutions, we are committed to shaping a greener future. Our Corporate Carpool Program is a bold step towards reducing our carbon footprint, easing commutes, and fostering a sense of community among our employees. Together, we can drive change!"
-          </p>
+          </div>
+          <div class="mt-4">
+            <h5 class="fw-bold mb-0">Mr. John Doe</h5>
+            <small class="text-muted">Director, Elite Corporate Solutions</small>
+          </div>
         </div>
       </div>
     </div>
 
-  <!-- Login/Signup Form -->
-  <div class="col-md-5 mb-4">
-    <div class="card h-100 shadow-lg border-0 login-signup-card">
-      <div class="card-body p-5">
-        <div class="toggle-container mb-4">
-          <button type="button" class="btn btn-toggle" [class.active]="isLoginActive" (click)="toggleForm(true)">
-            Login
-          </button>
-          <button type="button" class="btn btn-toggle" [class.active]="!isLoginActive" (click)="toggleForm(false)">
-            Sign Up
-          </button>
-        </div>
-
-        <div *ngIf="isLoginActive" class="form-section">
-          <div class="mb-4 input-group-custom">
-            <label for="login-email" class="form-label">Email Address</label>
-            <div class="input-with-icon">
-              <i class="fas fa-envelope input-icon"></i>
-              <input type="email" id="login-email" name="login-email" [(ngModel)]="_user.email" class="form-control form-input"
-                     placeholder="name@elitecorporatesolutions.com" required>
-            </div>
-          </div>
-          <div class="mb-4 input-group-custom">
-            <label for="login-password" class="form-label">Password</label>
-            <div class="input-with-icon">
-              <i class="fas fa-lock input-icon"></i>
-              <input type="password" id="login-password" name="login-password" [(ngModel)]="_user.Password" class="form-control form-input"
-                     placeholder="Your password" required>
-            </div>
-          </div>
-          <div class="d-flex justify-content-end mb-4">
-            <button type="button" class="btn btn-link forget-password-btn" (click)="forgotPassword()">Forgot Password?</button>
-          </div>
-          <button type="button" class="btn btn-primary btn-lg w-100 login-btn" (click)="login()"
-                  [disabled]="!_user.email || !_user.Password">
-            <i class="fas fa-sign-in-alt me-2"></i> Login
-          </button>
-        </div>
-
-        <div *ngIf="!isLoginActive" class="form-section signup-container">
-          <div class="signup-progress">
-            <div class="progress-bar">
-              <div class="progress" [style.width]="progress + '%'"></div>
-            </div>
-            <div class="step-indicators">
-              <span [class.active]="progress >= 25">1</span>
-              <span [class.active]="progress >= 50">2</span>
-              <span [class.active]="progress >= 75">3</span>
-              <span [class.active]="progress >= 75">4</span>
-              <span [class.active]="progress === 100">5</span>
-            </div>
+    <!-- Login/Signup Form -->
+    <div class="col-lg-5 col-md-6 mb-4">
+      <div class="login-signup-card h-100">
+        <div class="card-body p-4 p-lg-5">
+          <div class="text-center mb-4">
+            <h3 class="fw-bold">Welcome to <span class="text-success">GreenCar</span></h3>
+            <p class="text-muted">Join the movement for a better commute</p>
           </div>
 
-          <form #signupForm="ngForm" (ngSubmit)="signup()" class="signup-form">
+          <div class="toggle-container mb-4">
+            <button type="button" class="btn btn-toggle" [class.active]="isLoginActive" (click)="toggleForm(true)">
+              Login
+            </button>
+            <button type="button" class="btn btn-toggle" [class.active]="!isLoginActive" (click)="toggleForm(false)">
+              Sign Up
+            </button>
+          </div>
+
+          <!-- Login Form -->
+          <div *ngIf="isLoginActive" class="form-section animate-fade-in">
             <div class="mb-4 input-group-custom">
-              <label for="signup-email" class="form-label">Email Address</label>
+              <label for="login-email" class="form-label">Email Address</label>
               <div class="input-with-icon">
                 <i class="fas fa-envelope input-icon"></i>
-                <input type="email" id="signup-email" name="signup-email" class="form-control form-input"
-                       placeholder="name@elitecorporatesolutions.com" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
-                       [disabled]="isEmailVerified">
+                <input type="email" id="login-email" name="login-email" [(ngModel)]="_user.email" class="form-control form-input"
+                       placeholder="name@elitecorporatesolutions.com" required>
               </div>
-              <button type="button" class="btn btn-warning btn-sm mt-2" (click)="sendOtp()" *ngIf="!isEmailVerified"
-                      [disabled]="!isEmailSent || isEmailVerified">
-                Send OTP
-              </button>
-              <span class="text-success" *ngIf="isEmailVerified">Email Verified</span>
             </div>
-
             <div class="mb-4 input-group-custom">
-              <label for="signup-phone" class="form-label">Phone Number</label>
-              <div class="input-with-icon">
-                <i class="fas fa-phone input-icon"></i>
-                <input type="tel" id="signup-phone" name="signup-phone" class="form-control form-input"
-                       placeholder="Enter your 10-digit phone number" [(ngModel)]="_user.mobile_No" (input)="onPhoneInput($event)" required
-                       [disabled]="isPhoneVerified">
-              </div>
-              <div class="mt-2">
-                <button type="button" class="btn btn-warning btn-sm me-2" (click)="sendPhoneOtp()" *ngIf="!isPhoneVerified"
-                        [disabled]="!_user.mobile_No || _user.mobile_No.length !== 10 || isPhoneVerified">
-                  Send OTP
-                </button>
-                <button type="button" class="btn btn-secondary btn-sm" (click)="editPhone()" *ngIf="isPhoneVerified">
-                  Edit Phone
-                </button>
-                <span class="text-success" *ngIf="isPhoneVerified">Phone Verified</span>
-              </div>
-            </div>
-
-            <div class="mb-4 input-group-custom" *ngIf="isPhoneVerified">
-              <label for="signup-name" class="form-label">Full Name</label>
-              <div class="input-with-icon">
-                <i class="fas fa-user input-icon"></i>
-                <input type="text" id="signup-name" name="signup-name" class="form-control form-input" placeholder="Your full name"
-                       [(ngModel)]="_user.name" (input)="updateProgress()" required>
-              </div>
-            </div>
-
-            <div class="mb-4 input-group-custom" *ngIf="isPhoneVerified">
-              <label for="signup-password" class="form-label">Password</label>
+              <label for="login-password" class="form-label">Password</label>
               <div class="input-with-icon">
                 <i class="fas fa-lock input-icon"></i>
-                <input type="password" id="signup-password" name="signup-password" class="form-control form-input"
-                       placeholder="Create a password" [(ngModel)]="_user.Password" (input)="updateProgress()" required> 
+                <input type="password" id="login-password" name="login-password" [(ngModel)]="_user.Password" class="form-control form-input"
+                       placeholder="Your password" required>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end mb-4">
+              <button type="button" class="btn btn-link forget-password-btn" (click)="forgotPassword()">Forgot Password?</button>
+            </div>
+            <button type="button" class="btn btn-primary btn-lg w-100 shadow-sm" (click)="login()"
+                    [disabled]="!_user.email || !_user.Password">
+              <i class="fas fa-sign-in-alt me-2"></i> Login
+            </button>
+          </div>
+
+          <!-- Signup Form -->
+          <div *ngIf="!isLoginActive" class="form-section signup-container animate-fade-in">
+            <div class="signup-progress">
+              <div class="progress-bar">
+                <div class="progress" [style.width]="progress + '%'"></div>
+              </div>
+              <div class="step-indicators">
+                <span [class.active]="progress >= 25">1</span>
+                <span [class.active]="progress >= 50">2</span>
+                <span [class.active]="progress >= 75">3</span>
+                <span [class.active]="progress >= 75">4</span>
+                <span [class.active]="progress === 100">5</span>
               </div>
             </div>
 
-            <button type="submit" class="btn btn-success btn-lg w-100" [disabled]="progress !== 100">
-              <i class="fas fa-user-plus me-2"></i> Sign Up
-            </button>
-            <div class="text-center mt-3">
-              <button type="button" class="btn btn-link already-registered-btn" (click)="toggleForm(true)">
-                Already Registered? Login here
+            <form #signupForm="ngForm" (ngSubmit)="signup()" class="signup-form">
+              <div class="mb-4 input-group-custom">
+                <label for="signup-email" class="form-label">Email Address</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-envelope input-icon"></i>
+                  <input type="email" id="signup-email" name="signup-email" class="form-control form-input"
+                         placeholder="name@elitecorporatesolutions.com" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
+                         [disabled]="isEmailVerified">
+                </div>
+                <button type="button" class="btn btn-warning btn-sm mt-2 w-100" (click)="sendOtp()" *ngIf="!isEmailVerified"
+                        [disabled]="!isEmailSent || isEmailVerified">
+                  Verify Email
+                </button>
+                <span class="text-success d-block mt-2" *ngIf="isEmailVerified"><i class="fas fa-check-circle me-1"></i> Email Verified</span>
+              </div>
+
+              <div class="mb-4 input-group-custom">
+                <label for="signup-phone" class="form-label">Phone Number</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-phone input-icon"></i>
+                  <input type="tel" id="signup-phone" name="signup-phone" class="form-control form-input"
+                         placeholder="Enter your 10-digit phone number" [(ngModel)]="_user.mobile_No" (input)="onPhoneInput($event)" required
+                         [disabled]="isPhoneVerified">
+                </div>
+                <div class="mt-2">
+                  <button type="button" class="btn btn-warning btn-sm w-100" (click)="sendPhoneOtp()" *ngIf="!isPhoneVerified"
+                          [disabled]="!_user.mobile_No || _user.mobile_No.length !== 10 || isPhoneVerified">
+                    Verify Phone
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-sm w-100 mt-2" (click)="editPhone()" *ngIf="isPhoneVerified">
+                    Edit Phone
+                  </button>
+                  <span class="text-success d-block mt-2" *ngIf="isPhoneVerified"><i class="fas fa-check-circle me-1"></i> Phone Verified</span>
+                </div>
+              </div>
+
+              <div class="mb-4 input-group-custom" *ngIf="isPhoneVerified">
+                <label for="signup-name" class="form-label">Full Name</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-user input-icon"></i>
+                  <input type="text" id="signup-name" name="signup-name" class="form-control form-input" placeholder="Your full name"
+                         [(ngModel)]="_user.name" (input)="updateProgress()" required>
+                </div>
+              </div>
+
+              <div class="mb-4 input-group-custom" *ngIf="isPhoneVerified">
+                <label for="signup-password" class="form-label">Password</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-lock input-icon"></i>
+                  <input type="password" id="signup-password" name="signup-password" class="form-control form-input"
+                         placeholder="Create a password" [(ngModel)]="_user.Password" (input)="updateProgress()" required> 
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm" [disabled]="progress !== 100">
+                <i class="fas fa-user-plus me-2"></i> Create Account
               </button>
-            </div>
-          </form>
+              <div class="text-center mt-3">
+                <button type="button" class="btn btn-link already-registered-btn" (click)="toggleForm(true)">
+                  Already Registered? Login here
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -139,30 +151,33 @@
     <div class="modal fade" [class.show]="showOtpModal" [style.display]="showOtpModal ? 'block' : 'none'" tabindex="-1"
          aria-labelledby="otpModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content shadow-lg">
           <div class="modal-header">
-            <h5 class="modal-title" id="otpModalLabel">{{ isEmailOtpMode ? 'Verify Email OTP' : 'Verify Phone OTP' }}</h5>
+            <h5 class="modal-title" id="otpModalLabel">{{ isEmailOtpMode ? 'Verify Email' : 'Verify Phone' }}</h5>
             <button type="button" class="btn-close" (click)="closeOtpModal()" aria-label="Close"></button>
           </div>
-          <div class="modal-body text-center">
-            <p class="text-muted">Enter the 6-digit OTP sent to {{ isEmailOtpMode ? _user.email : _user.mobile_No }}</p>
+          <div class="modal-body text-center p-4">
+            <div class="mb-4">
+                <i class="fas fa-shield-alt fa-3x text-primary"></i>
+            </div>
+            <p class="text-muted mb-4">Enter the 6-digit OTP sent to <br><strong>{{ isEmailOtpMode ? _user.email : _user.mobile_No }}</strong></p>
             <div class="mb-3">
-              <input type="text" class="form-control form-input text-center" placeholder="Enter OTP"
-                     maxlength="6" [(ngModel)]="currentOtp" (input)="onOtpInput($event)" required>
+              <input type="text" class="form-control form-input text-center fs-4 letter-spacing-2" placeholder="000000"
+                     maxlength="6" [(ngModel)]="currentOtp" (input)="onOtpInput($event)" required style="letter-spacing: 5px;">
             </div>
             <div class="resend-otp-section">
-              <p class="text-muted mb-2">Didn't receive OTP? 
-                <button type="button" class="btn btn-link resend-otp-btn" [disabled]="resendTimer > 0"
+              <p class="text-muted mb-2">Didn't receive code? 
+                <button type="button" class="btn btn-link resend-otp-btn p-0" [disabled]="resendTimer > 0"
                         (click)="resendOtp()">
                   Resend OTP
                 </button>
               </p>
-              <p class="text-muted" *ngIf="resendTimer > 0">Resend in {{ resendTimer }}s</p>
+              <p class="text-muted small" *ngIf="resendTimer > 0">Resend in <span class="fw-bold">{{ resendTimer }}s</span></p>
             </div>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer justify-content-center pb-4 border-0">
             <button type="button" class="btn btn-primary btn-lg w-100" (click)="verifyOtp()">
-              <i class="fas fa-check-circle me-2"></i> Verify OTP
+              <i class="fas fa-check-circle me-2"></i> Verify & Proceed
             </button>
           </div>
         </div>
@@ -170,37 +185,34 @@
     </div>
   </div>
 
-
-
-
   <!-- Why Carpool Section -->
   <div class="section-container mt-5">
-    <h1 class="section-title">Why <span class="highlight-text">Carpool</span> With Us?</h1>
+    <h2 class="section-title">Why <span class="highlight-text">Carpool</span> With Us?</h2>
     <div class="row justify-content-center">
-      <div class="col-lg-10">
+      <div class="col-xl-10">
         <div class="why-carpool-grid">
-          <div class="benefit-card fade-in">
+          <div class="benefit-card">
             <div class="benefit-icon">
               <i class="fas fa-money-bill-wave"></i>
             </div>
             <h5>Save Money</h5>
-            <p>Share fuel costs and parking fees with travelers.</p>
+            <p>Share fuel costs and parking fees with fellow travelers.</p>
           </div>
-          <div class="benefit-card fade-in">
+          <div class="benefit-card">
             <div class="benefit-icon">
               <i class="fas fa-smile-beam"></i>
             </div>
             <h5>Reduce Stress</h5>
             <p>Enjoy a more relaxed commute with someone you can trust.</p>
           </div>
-          <div class="benefit-card fade-in">
+          <div class="benefit-card">
             <div class="benefit-icon">
               <i class="fas fa-leaf"></i>
             </div>
             <h5>Go Green</h5>
             <p>Lower your carbon footprint and help the environment.</p>
           </div>
-          <div class="benefit-card fade-in">
+          <div class="benefit-card">
             <div class="benefit-icon">
               <i class="fas fa-users"></i>
             </div>
@@ -213,20 +225,20 @@
   </div>
 
   <!-- Getting Started Section -->
-  <div class="section-container mt-5">
-    <h2 class="section-title">How to <span class="highlight-text">Get Started</span></h2>
+  <div class="section-container bg-white rounded-4 shadow-sm py-5 px-3">
+    <h2 class="section-title mb-5">How to <span class="highlight-text">Get Started</span></h2>
     <div class="row justify-content-center">
-      <div class="col-lg-10">
+      <div class="col-xl-9">
         <div class="steps-container">
-          <div class="step-card fade-in">
+          <div class="step-card">
             <div class="step-number">1</div>
             <div class="step-content">
               <h5>Create a Profile</h5>
-              <p>Sign up on our internal carpooling platform.</p>
+              <p>Sign up on our internal carpooling platform using your corporate email.</p>
             </div>
           </div>
           <div class="step-connector"></div>
-          <div class="step-card fade-in">
+          <div class="step-card">
             <div class="step-number">2</div>
             <div class="step-content">
               <h5>Find Your Match</h5>
@@ -234,7 +246,7 @@
             </div>
           </div>
           <div class="step-connector"></div>
-          <div class="step-card fade-in">
+          <div class="step-card">
             <div class="step-number">3</div>
             <div class="step-content">
               <h5>Connect and Coordinate</h5>
@@ -242,11 +254,11 @@
             </div>
           </div>
           <div class="step-connector"></div>
-          <div class="step-card fade-in">
+          <div class="step-card">
             <div class="step-number">4</div>
             <div class="step-content">
               <h5>Commute Together</h5>
-              <p>Enjoy the ride!</p>
+              <p>Enjoy the ride and the benefits of shared commuting!</p>
             </div>
           </div>
         </div>
@@ -258,35 +270,35 @@
   <div class="section-container mt-5 mb-5">
     <h2 class="section-title">Carpool <span class="highlight-text">Tips</span></h2>
     <div class="row justify-content-center">
-      <div class="col-lg-10">
+      <div class="col-xl-10">
         <div class="tips-container">
-          <div class="tip-card fade-in">
+          <div class="tip-card">
             <div class="tip-icon">
               <i class="fas fa-clock"></i>
             </div>
             <h5>Be Punctual</h5>
-            <p>Respect your carpool partners' time.</p>
+            <p>Respect your carpool partners' time. Arrive a few minutes early.</p>
           </div>
-          <div class="tip-card fade-in">
+          <div class="tip-card">
             <div class="tip-icon">
               <i class="fas fa-comments"></i>
             </div>
             <h5>Communicate Clearly</h5>
             <p>Keep everyone informed of any changes to your schedule.</p>
           </div>
-          <div class="tip-card fade-in">
+          <div class="tip-card">
             <div class="tip-icon">
               <i class="fas fa-handshake"></i>
             </div>
             <h5>Be Considerate</h5>
-            <p>Offer to share driving duties and expenses.</p>
+            <p>Offer to share driving duties and keep the car clean.</p>
           </div>
-          <div class="tip-card fade-in">
+          <div class="tip-card">
             <div class="tip-icon">
-              <i class="fas fa-smile"></i>
+              <i class="fas fa-music"></i>
             </div>
-            <h5>Have Fun!</h5>
-            <p>Use the commute as an opportunity to socialize and network.</p>
+            <h5>Enjoy the Ride</h5>
+            <p>Use the commute as an opportunity to socialize or relax.</p>
           </div>
         </div>
       </div>
