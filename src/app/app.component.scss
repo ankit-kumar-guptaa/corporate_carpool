@@ -12,7 +12,7 @@
 .card-title {
     font-weight: 700;
     font-size: 2rem;
-    color: #003366;
+    color: #123454;
     font-family: 'Merriweather', serif;
 }
 
@@ -31,19 +31,19 @@
 }
 
 .search-button {
-    background: linear-gradient(90deg, #42a5f5, #007bff);
+    background: linear-gradient(90deg, #123454, #2a5298);
     color: white;
     border: none;
     border-radius: 50px;
     padding: 0.75rem 2rem;
     font-weight: 700;
-    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 6px 15px rgba(18, 52, 84, 0.3);
     transition: all 0.3s ease;
 }
 
 .search-button:hover {
-    background: linear-gradient(90deg, #007bff, #42a5f5);
-    box-shadow: 0 10px 25px rgba(0, 123, 255, 0.5);
+    background: linear-gradient(90deg, #2a5298, #123454);
+    box-shadow: 0 10px 25px rgba(18, 52, 84, 0.5);
     transform: translateY(-3px);
 }
 
@@ -96,9 +96,9 @@
 }
 
 .btn-connect:hover {
-    background-color: #007bff;
+    background-color: #123454;
     color: white;
-    border-color: #007bff;
+    border-color: #123454;
     transform: translateY(-2px);
 }
 

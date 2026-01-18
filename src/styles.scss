@@ -1,3 +1,43 @@
+/* Variables */
+$primary-color: #123454;
+$secondary-color: #f08824;
+$white-color: #ffffff;
+
+/* Bootstrap Overrides */
+.bg-primary { background-color: $primary-color !important; }
+.text-primary { color: $primary-color !important; }
+.btn-primary { 
+    background-color: $primary-color !important; 
+    border-color: $primary-color !important;
+    &:hover {
+        background-color: darken($primary-color, 10%) !important;
+        border-color: darken($primary-color, 10%) !important;
+    }
+}
+
+.bg-secondary { background-color: $secondary-color !important; }
+.text-secondary { color: $secondary-color !important; }
+.btn-secondary { 
+    background-color: $secondary-color !important; 
+    border-color: $secondary-color !important;
+    &:hover {
+        background-color: darken($secondary-color, 10%) !important;
+        border-color: darken($secondary-color, 10%) !important;
+    }
+}
+
+.bg-danger { background-color: $secondary-color !important; } /* Use orange for danger to match theme request? Or keep red? User said "theme #123454 #f08824". Usually secondary is accent. Let's map danger to secondary if appropriate, or just leave it red. But user said "sabka UI theme colour change". I'll map .text-danger and .bg-danger to secondary color if it makes sense. In carpool search, "Seeker" is red. Maybe make Seeker Orange (#f08824). */
+.text-danger { color: $secondary-color !important; }
+.btn-danger {
+    background-color: $secondary-color !important;
+    border-color: $secondary-color !important;
+    &:hover {
+        background-color: darken($secondary-color, 10%) !important;
+        border-color: darken($secondary-color, 10%) !important;
+    }
+}
+
+
 /* You can add global styles to this file, and also import other style files */
 #toast-container {
     position: fixed;

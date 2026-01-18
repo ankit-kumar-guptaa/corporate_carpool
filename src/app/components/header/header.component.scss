@@ -1,6 +1,6 @@
 .header {
   background: #ffffff;
-  color: #002147;
+  color: #123454;
   padding: 20px 40px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-family: 'Merriweather', serif;
@@ -9,7 +9,7 @@
     h1 {
       font-size: 18px;
       font-weight: 700;
-      color: #002147;
+      color: #123454;
       margin: 0;
       padding: 0;
       text-transform: uppercase;
@@ -23,13 +23,13 @@
     text-align: center;
 
     .center-logo {
-      width: 80px;
+      width: 250px;
       height: auto;
-      border: 2px solid #c32823;
-      border-radius:10%;
+      border: none;
+      border-radius: 0;
       padding: 5px;
-      background-color: #ffffff;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: transparent;
+      box-shadow: none;
     }
   }
 
@@ -40,12 +40,12 @@
     .profile-img {
       width: 40px;
       height: 40px;
-      border: 2px solid #c32823;
+      border: 2px solid #f08824;
       border-radius: 50%;
     }
 
     .dropdown-toggle-animated {
-      background: #c32823;
+      background: #f08824;
       color: #ffffff;
       font-weight: 600;
       border-radius: 20px;
@@ -57,27 +57,27 @@
       transition: all 0.3s ease;
 
       &:hover {
-        background: #d8231d;
+        background: #d06d10;
         color: #ffffff;
-        box-shadow: 0px 4px 10px rgba(255, 215, 0, 0.3);
+        box-shadow: 0px 4px 10px rgba(240, 136, 36, 0.3);
       }
     }
 
     .dropdown-menu {
       background: #ffffff;
-      color: #002147;
+      color: #123454;
       border-radius: 12px;
       box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
 
       .dropdown-item {
         font-weight: 500;
-        color: #002147;
+        color: #123454;
         padding: 10px 15px;
         border-radius: 8px;
         transition: all 0.3s ease;
 
         &:hover {
-          background: #c32823;
+          background: #f08824;
           color: #ffffff;
         }
       }
@@ -86,18 +86,18 @@
 
   .login-buttons {
     .btn-primary {
-      background-color: #c32823;
-      border-color: #c32823;
+      background-color: #f08824;
+      border-color: #f08824;
       &:hover {
-        background-color: #d8231d;
-        border-color: #d8231d;
+        background-color: #d06d10;
+        border-color: #d06d10;
       }
     }
     .btn-outline-primary {
-      color: #c32823;
-      border-color: #c32823;
+      color: #f08824;
+      border-color: #f08824;
       &:hover {
-        background-color: #c32823;
+        background-color: #f08824;
         color: #fff;
       }
     }
