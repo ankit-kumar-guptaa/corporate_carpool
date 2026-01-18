@@ -11,3 +11,57 @@
 .text-info {
     color: #0dcaf0 !important;
 }
+
+/* Modal Styling */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #123454, #2a5298);
+}
+
+.text-secondary {
+    color: #f08824 !important;
+}
+
+.border-secondary {
+    border-color: #f08824 !important;
+}
+
+.btn-primary {
+    background-color: #123454;
+    border-color: #123454;
+    &:hover {
+        background-color: #0e2a42;
+        border-color: #0e2a42;
+    }
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+    &:hover {
+        background-color: #6c757d;
+        color: white;
+    }
+}
+
+.letter-spacing-1 {
+    letter-spacing: 1px;
+}
+
+.letter-spacing-2 {
+    letter-spacing: 2px;
+}
+
+.qr-container {
+    transition: transform 0.3s ease;
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+.company-code-section {
+    transition: all 0.3s ease;
+    &:hover {
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        transform: translateY(-3px);
+    }
+}

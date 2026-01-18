@@ -21,7 +21,8 @@ export class AdminEmployeesComponent {
   constructor(private _globalService: GlobalService) {}
 
   inviteEmployee() {
-    this._globalService.utilities.notify.info('Invite feature coming soon!');
+    // This method is now triggered by data-bs-toggle="modal"
+    // We can keep it empty or use it for analytics if needed
   }
 
   approve(emp: any) {
