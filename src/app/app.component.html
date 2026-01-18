@@ -1,11 +1,5 @@
 <app-header [isLoggedIn]="isLoggedIn" [userName]="loggedInUserName" (logoutEvent)="logout()"></app-header>
 
-<div *ngIf="!isLoggedIn">
-  <app-login-signup (loginEvent)="onLogin($event)"></app-login-signup>
-</div>
-
-<div *ngIf="isLoggedIn">
-  <router-outlet></router-outlet> 
-</div>
+<router-outlet></router-outlet> 
 <app-loader></app-loader>
 <app-footer></app-footer>

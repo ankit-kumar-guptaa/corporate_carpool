@@ -220,6 +220,11 @@ export class LoginSignupComponent implements OnInit {
           const userdetails = JSON.parse(res.data.dataset.table1[0].userdetails)[0];
           this.loginEvent.emit(userdetails.name);
           this._globalService.utilities.storage.set('UserProfile', JSON.stringify(userdetails));
+
+          // Set localStorage for AppComponent to pick up
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('loggedInUserName', userdetails.name);
+
           this.router.navigate(['/carpool-search']);
         } else {
           this._globalService.utilities.notify.error('Invalid Login Details.');
@@ -249,6 +254,11 @@ export class LoginSignupComponent implements OnInit {
           const userdetails = JSON.parse(res.data.dataset.table1[0].userdetails)[0];
           this.loginEvent.emit(userdetails.name);
           this._globalService.utilities.storage.set('UserProfile', JSON.stringify(userdetails));
+
+          // Set localStorage for AppComponent to pick up
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('loggedInUserName', userdetails.name);
+
           this.router.navigate(['/carpool-search']);
         } else {
           this._globalService.utilities.notify.error('Email or Phone already exists.');

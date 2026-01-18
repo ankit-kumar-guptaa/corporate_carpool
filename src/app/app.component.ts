@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,29 +10,39 @@ export class AppComponent implements OnInit {
   isLoggedIn: boolean = false;
   loggedInUserName: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    // Subscribe to router events to update auth state on navigation
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.checkLoginStatus();
+      }
+    });
+  }
 
   ngOnInit(): void {
+    this.checkLoginStatus();
+  }
+
+  checkLoginStatus() {
     const loggedIn = localStorage.getItem('isLoggedIn');
     const userName = localStorage.getItem('loggedInUserName');
 
     if (loggedIn === 'true' && userName) {
       this.isLoggedIn = true;
       this.loggedInUserName = userName;
-      
-      // this.router.navigate(['/carpool-search']);
+    } else {
+      this.isLoggedIn = false;
+      this.loggedInUserName = '';
     }
   }
 
   onLogin(userName: string): void {
+    // This might still be called if referenced elsewhere, but primary logic is now in checkLoginStatus
     this.isLoggedIn = true;
     this.loggedInUserName = userName;
 
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('loggedInUserName', userName);
-
-    
-    // this.router.navigate(['/carpool-search']);
   }
 
   logout(): void {
