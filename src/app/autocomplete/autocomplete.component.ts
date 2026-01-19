@@ -10,14 +10,14 @@ import { FormGroup, FormBuilder } from '@angular/forms';
      
        
      <div class="input-wrapper">
-       <span class="search-icon"><i class="fas fa-map-pin"></i></span>
+       <span class="search-icon" *ngIf="showIcon"><i class="fas fa-map-pin"></i></span>
        <input #inputElement
          type="text" 
          [(ngModel)]="autocompleteInput"  
-         class="form-input"
+         class="form-control form-input"
          #addresstext
          placeholder="Enter location"
-        
+         [style.padding-left]="showIcon ? '' : '12px'"
        >
      </div>
              
@@ -39,6 +39,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class AutocompleteComponent implements OnInit, AfterViewInit {
     @Input() adressType: string ="geocode";
+    @Input() showIcon: boolean = true;
   
     @Output() setAddress: EventEmitter<any> = new EventEmitter();
     @ViewChild('addresstext') addresstext: any;

@@ -1,52 +1,72 @@
-<header class="header py-3">
-  <div class="container-fluid d-flex justify-content-between align-items-center">
-    <!-- Left Section -->
-    <div class="header-left d-none d-md-flex">
-      <h1 class="h5 mb-0 text-uppercase text-truncate">ESG project of satvik greens</h1>
-    </div>
-
-    <!-- Center Logo -->
-    <div class="header-logo text-center">
-      <img
-        src="https://saatvikgroup.com/wp-content/uploads/2025/06/Saatvik_Solar_Logo-1-scaled.png"
-        alt="Saatvik Group Logo"
-        class="center-logo"
-      />
-    </div>
-
-    <!-- Right Section -->
-    <div *ngIf="isLoggedIn" class="profile-section d-flex align-items-center">
-      <img
-        src="https://www.pngall.com/wp-content/uploads/5/Profile-Transparent.png"
-        alt="Profile"
-        class="profile-img me-2"
-      />
-      <div class="dropdown">
-        <button
-          class="btn dropdown-toggle dropdown-toggle-animated"
-          type="button"
-          id="dropdownMenuButton"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <span class="text-truncate d-inline-block" style="max-width: 150px;">{{ userName }}</span>
-        </button>
-        <ul
-          class="dropdown-menu mt-4 dropdown-menu-end animate-dropdown"
-          aria-labelledby="dropdownMenuButton"
-        >
-          <li><a class="dropdown-item" [routerLink]="isAdmin ? '/admin/dashboard' : '/dashboard'">Dashboard</a></li>
-          <li *ngIf="!isAdmin"><a class="dropdown-item" routerLink="/carpool-search">Carpool Search</a></li>
-          <li><hr class="dropdown-divider" /></li>
-          <li><button class="dropdown-item text-danger" (click)="logout()">Logout</button></li>
-        </ul>
+<header class="header py-2 sticky-top bg-white">
+  <div class="container-fluid d-flex justify-content-between align-items-center position-relative" style="min-height: 60px;">
+    
+    <!-- Left Section: Text (Visible on larger screens) -->
+    <div class="header-left d-none d-lg-flex align-items-center">
+      <div class="esg-badge">
+        <span class="badge-label">ESG PROJECT</span>
+        <span class="badge-text">Saatvik Greens</span>
       </div>
     </div>
 
-    <!-- Login Buttons (Visible when not logged in) -->
-    <div *ngIf="!isLoggedIn" class="login-buttons d-flex align-items-center gap-2">
-      <a routerLink="/" class="btn btn-outline-primary rounded-pill px-4 fw-bold">Employee Login</a>
-      <a routerLink="/admin/login" class="btn btn-primary rounded-pill px-4 fw-bold">Admin Login</a>
+    <!-- Center Section: Logos (Absolutely centered on desktop) -->
+    <div class="logo-container d-flex align-items-center gap-2">
+      <!-- GreenCar Logo -->
+      <div class="logo-pill bg-white rounded-pill px-3 py-1 shadow-sm d-flex align-items-center justify-content-center">
+        <img src="https://greencar.ngo/assets/logo.png" alt="GreenCar Carpool" class="logo-img">
+      </div>
+      
+      <!-- Separator -->
+      <div class="vr bg-secondary opacity-25 mx-2 d-none d-sm-block" style="height: 25px;"></div>
+      
+      <!-- Saatvik Logo -->
+      <div class="logo-pill bg-white rounded-pill px-3 py-1 shadow-sm d-flex align-items-center justify-content-center">
+        <img src="https://saatvikgroup.com/wp-content/uploads/2025/06/Saatvik_Solar_Logo-1-scaled.png" alt="Saatvik Group" class="logo-img">
+      </div>
     </div>
+
+    <!-- Right Section: Login/Profile -->
+    <div class="header-right d-flex align-items-center">
+      
+      <!-- Profile Dropdown -->
+      <div *ngIf="isLoggedIn" class="profile-section d-flex align-items-center">
+        <img
+          src="https://www.pngall.com/wp-content/uploads/5/Profile-Transparent.png"
+          alt="Profile"
+          class="profile-img me-2"
+        />
+        <div class="dropdown">
+          <button
+            class="btn dropdown-toggle dropdown-toggle-animated"
+            type="button"
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <span class="text-truncate d-inline-block user-name-span">{{ userName }}</span>
+          </button>
+          <ul
+            class="dropdown-menu mt-4 dropdown-menu-end animate-dropdown"
+            aria-labelledby="dropdownMenuButton"
+          >
+            <li><a class="dropdown-item" [routerLink]="isAdmin ? '/admin/dashboard' : '/dashboard'">Dashboard</a></li>
+            <li *ngIf="!isAdmin"><a class="dropdown-item" routerLink="/carpool-search">Carpool Search</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><button class="dropdown-item text-danger" (click)="logout()">Logout</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Login Buttons -->
+      <div *ngIf="!isLoggedIn" class="login-buttons d-flex align-items-center gap-2">
+        <a routerLink="/" class="btn btn-outline-primary rounded-pill px-3 fw-bold employee-btn">
+          <i class="fas fa-user-tie me-1 d-none d-sm-inline"></i> Employee
+        </a>
+        <a routerLink="/admin/login" class="btn btn-primary rounded-pill px-3 fw-bold admin-btn">
+          <i class="fas fa-user-shield me-1 d-none d-sm-inline"></i> Admin
+        </a>
+      </div>
+    </div>
+
   </div>
 </header>

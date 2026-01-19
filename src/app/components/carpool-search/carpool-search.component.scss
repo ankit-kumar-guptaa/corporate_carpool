@@ -190,3 +190,34 @@
     animation: fadeInUp 0.5s ease forwards;
     animation-delay: calc(var(--order) * 0.1s);
 }
+.swap-btn {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-width: 2px;
+  
+  i {
+    transition: transform 0.4s ease;
+    font-size: 1.1rem;
+  }
+
+  &:hover {
+    background-color: #e7f1ff;
+    border-color: #0d6efd;
+    transform: scale(1.1);
+    
+    i {
+      transform: rotate(180deg);
+      color: #0d6efd;
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Signup Stepper */

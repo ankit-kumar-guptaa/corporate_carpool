@@ -25,9 +25,41 @@ export class CarpoolSearchComponent {
   transportMode: string = '';
   transportOptions: string[] = ['Cab', 'Bus', 'Own Car', 'Own Bike'];
 
+  readonly OFFICE_ADDRESS = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida, Uttar Pradesh 201309';
+  readonly OFFICE_LAT = '28.560965';
+  readonly OFFICE_LNG = '77.370719';
+
   constructor(private _globalService: GlobalService) {
     // Fetch user profile and email on component initialization
     this.loadUserProfile();
+    // Initialize To Address to Office by default
+    this.postRide.To_Address = this.OFFICE_ADDRESS;
+    this.postRide.To_Latitude = this.OFFICE_LAT;
+    this.postRide.To_Longitude = this.OFFICE_LNG;
+  }
+
+  // Method to swap From and To locations
+  swapLocations(): void {
+    const tempAddr = this.postRide.From_Address;
+    const tempLat = this.postRide.Form_Latitude;
+    const tempLng = this.postRide.Form_Longitude;
+
+    this.postRide.From_Address = this.postRide.To_Address;
+    this.postRide.Form_Latitude = this.postRide.To_Latitude;
+    this.postRide.Form_Longitude = this.postRide.To_Longitude;
+
+    this.postRide.To_Address = tempAddr;
+    this.postRide.To_Latitude = tempLat;
+    this.postRide.To_Longitude = tempLng;
+
+    this.updateRemarkAuto();
+  }
+
+  // Helper to update remark
+  updateRemarkAuto() {
+    if (this.postRide.From_Address && this.postRide.To_Address) {
+      this.userRemark = `I am looking for a ride from ${this.postRide.From_Address} to ${this.postRide.To_Address}. My email is ${this.ursrProfile?.email || 'not available'}`;
+    }
   }
 
   // Fetch user profile and email
@@ -55,9 +87,7 @@ export class CarpoolSearchComponent {
 
   // Method to search carpool based on the selected role and location
   searchCarpool(): void {
-    this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida';
-    this.postRide.To_Latitude = '28.560965';
-    this.postRide.To_Longitude = '77.370719';
+    // Note: postRide.To_Address is already set (default or swapped)
 
     this.ursrProfile = JSON.parse(this._globalService.utilities.storage.get('UserProfile')) || undefined;
 
@@ -126,9 +156,7 @@ export class CarpoolSearchComponent {
   }
 
   submitRequest(): void {
-    this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida';
-    this.postRide.To_Latitude = '28.560965';
-    this.postRide.To_Longitude = '77.370719';
+    // Note: postRide.To_Address is already set (default or swapped)
 
     this.ursrProfile = JSON.parse(this._globalService.utilities.storage.get('UserProfile')) || undefined;
 
@@ -188,16 +216,11 @@ export class CarpoolSearchComponent {
       this.postRide.From_Address = place.formatted_address;
       this.postRide.Form_Latitude = place.geometry.location.lat().toString();
       this.postRide.Form_Longitude = place.geometry.location.lng().toString();
-    } else {
-      this.postRide.To_Address = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida';
-      this.postRide.To_Latitude = '28.560965';
-      this.postRide.To_Longitude = '77.370719';
-    }
+    } 
+    // Removed 'else' block that forced reset of To Address
 
     // Automatically update remark with From, To, and email when From is selected
-    if (this.postRide.From_Address && this.postRide.To_Address) {
-      this.userRemark = `I am looking for a ride from ${this.postRide.From_Address} to ${this.postRide.To_Address}. My email is ${this.ursrProfile?.email || 'not available'}`;
-    }
+    this.updateRemarkAuto();
   }
 
   // Method to allow manual updates to remark (e.g., adding phone number)

@@ -78,7 +78,7 @@ export class LoginSignupComponent implements OnInit {
   }
 
   updateProgress(): void {
-    if (this.isEmailVerified && this.isPhoneVerified && this._user.name && this._user.Password) {
+    if (this.isEmailVerified && this.isPhoneVerified && this._user.name && this._user.Password && this._user.Address) {
       this.progress = 100;
     } else if (this.isEmailVerified && this._user.mobile_No) {
       this.progress = 75;
@@ -202,6 +202,13 @@ export class LoginSignupComponent implements OnInit {
     this._user.mobile_No = '';
     this.isPhoneSent = false;
     this.isPhoneVerified = false;
+    this.updateProgress();
+  }
+
+  handleAddress(place: any) {
+    this._user.Address = place.formatted_address;
+    this._user.Latitude = place.geometry.location.lat().toString();
+    this._user.Longitude = place.geometry.location.lng().toString();
     this.updateProgress();
   }
 

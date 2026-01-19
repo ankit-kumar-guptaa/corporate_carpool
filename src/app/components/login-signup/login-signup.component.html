@@ -44,7 +44,7 @@
               <div class="input-with-icon">
                 <i class="fas fa-envelope input-icon"></i>
                 <input type="email" id="login-email" name="login-email" [(ngModel)]="_user.email" class="form-control form-input"
-                       placeholder="name@elitecorporatesolutions.com" required>
+                       placeholder="name@saatvikgroup.com" required>
               </div>
             </div>
             <div class="mb-4 input-group-custom">
@@ -103,7 +103,7 @@
                 <div class="input-with-icon">
                   <i class="fas fa-envelope input-icon"></i>
                   <input type="email" id="signup-email" name="signup-email" class="form-control form-input"
-                         placeholder="name@elitecorporatesolutions.com" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
+                         placeholder="name@saatvikgroup.com" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
                          [disabled]="isEmailVerified">
                 </div>
                 <button type="button" class="btn btn-warning btn-sm mt-2 w-100" (click)="sendOtp()" *ngIf="!isEmailVerified"
@@ -152,17 +152,12 @@
               </div>
 
               <div class="mb-4 input-group-custom" *ngIf="isPhoneVerified">
-                <label for="signup-vehicle" class="form-label">Existing Vehicle</label>
+                <label for="signup-address" class="form-label">Home Location</label>
                 <div class="input-with-icon">
-                  <i class="fas fa-car input-icon"></i>
-                  <select id="signup-vehicle" name="signup-vehicle" class="form-control form-input form-select"
-                          [(ngModel)]="_user.VehicleType" (change)="updateProgress()" required>
-                    <option value="" disabled selected>Select your vehicle type</option>
-                    <option value="Company Cab">Company Cab</option>
-                    <option value="Own Car">Own Car</option>
-                    <option value="Own Bike">Own Bike</option>
-                    <option value="Cab">Cab</option>
-                  </select>
+                  <i class="fas fa-map-marker-alt input-icon"></i>
+                  <div class="flex-grow-1" style="margin-left: 2.8rem;">
+                    <AutocompleteComponent (setAddress)="handleAddress($event)" [autocompleteInput]="_user.Address" [showIcon]="false"></AutocompleteComponent>
+                  </div>
                 </div>
               </div>
 

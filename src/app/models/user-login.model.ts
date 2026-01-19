@@ -9,6 +9,9 @@ export class UserModel {
   Password: string;
   phoneOtp: string;
   VehicleType: string;
+  Address: string;
+  Latitude: string;
+  Longitude: string;
 
   constructor();
   constructor(ProfileListModel: UserModel);
@@ -23,5 +26,8 @@ export class UserModel {
     this.Password = users && users.Password || '';
     this.phoneOtp = users && users.phoneOtp || '';
     this.VehicleType = users && users.VehicleType || '';
+    this.Address = users && users.Address || '';
+    this.Latitude = users && users.Latitude || '';
+    this.Longitude = users && users.Longitude || '';
   }
 }
