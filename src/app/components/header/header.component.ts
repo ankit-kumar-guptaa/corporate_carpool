@@ -7,6 +7,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class HeaderComponent {
   @Input() isLoggedIn: boolean = false;
+  @Input() isAdmin: boolean = false;
   @Input() userName: string = 'User';
   @Output() logoutEvent = new EventEmitter<void>();
 

@@ -8,6 +8,7 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class AppComponent implements OnInit {
   isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
   loggedInUserName: string = '';
 
   constructor(private router: Router) {
@@ -26,12 +27,20 @@ export class AppComponent implements OnInit {
   checkLoginStatus() {
     const loggedIn = localStorage.getItem('isLoggedIn');
     const userName = localStorage.getItem('loggedInUserName');
+    const adminUser = localStorage.getItem('adminUser');
 
-    if (loggedIn === 'true' && userName) {
+    if (adminUser) {
+      const admin = JSON.parse(adminUser);
       this.isLoggedIn = true;
+      this.isAdmin = true;
+      this.loggedInUserName = admin.username || 'Admin';
+    } else if (loggedIn === 'true' && userName) {
+      this.isLoggedIn = true;
+      this.isAdmin = false;
       this.loggedInUserName = userName;
     } else {
       this.isLoggedIn = false;
+      this.isAdmin = false;
       this.loggedInUserName = '';
     }
   }
@@ -39,6 +48,7 @@ export class AppComponent implements OnInit {
   onLogin(userName: string): void {
     // This might still be called if referenced elsewhere, but primary logic is now in checkLoginStatus
     this.isLoggedIn = true;
+    this.isAdmin = false;
     this.loggedInUserName = userName;
 
     localStorage.setItem('isLoggedIn', 'true');
@@ -47,10 +57,12 @@ export class AppComponent implements OnInit {
 
   logout(): void {
     this.isLoggedIn = false;
+    this.isAdmin = false;
     this.loggedInUserName = '';
 
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('loggedInUserName');
+    localStorage.removeItem('adminUser');
 
     // Redirect to the home page after logout
     this.router.navigate(['/']);

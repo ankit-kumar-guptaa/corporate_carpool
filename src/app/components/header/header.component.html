@@ -35,9 +35,10 @@
           class="dropdown-menu mt-4 dropdown-menu-end animate-dropdown"
           aria-labelledby="dropdownMenuButton"
         >
-          <li><a class="dropdown-item" routerLink="/dashboard">Dashboard</a></li>
-          <li><a class="dropdown-item" routerLink="/carpool-search">Carpool Search</a></li>
-          <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+          <li><a class="dropdown-item" [routerLink]="isAdmin ? '/admin/dashboard' : '/dashboard'">Dashboard</a></li>
+          <li *ngIf="!isAdmin"><a class="dropdown-item" routerLink="/carpool-search">Carpool Search</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <li><button class="dropdown-item text-danger" (click)="logout()">Logout</button></li>
         </ul>
       </div>
     </div>
