@@ -8,6 +8,7 @@ export class UserModel {
   Gender: string;
   Password: string;
   phoneOtp: string;
+  VehicleType: string;
 
   constructor();
   constructor(ProfileListModel: UserModel);
@@ -21,5 +22,6 @@ export class UserModel {
     this.Gender = users && users.Gender || '';
     this.Password = users && users.Password || '';
     this.phoneOtp = users && users.phoneOtp || '';
+    this.VehicleType = users && users.VehicleType || '';
   }
 }

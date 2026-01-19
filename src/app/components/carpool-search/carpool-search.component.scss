@@ -11,7 +11,7 @@
 }
 
 .card-header-custom {
-    background: linear-gradient(135deg, #123454, #f08824); /* Blue to Red Gradient */
+    background: #123454; /* Solid Primary Color */
     position: relative;
     overflow: hidden;
 }
@@ -23,7 +23,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at top right, rgba(255,255,255,0.2), transparent);
+    /* Removed gradient overlay */
 }
 
 .letter-spacing-1 {

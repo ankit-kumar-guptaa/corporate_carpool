@@ -1,28 +1,106 @@
-<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
-  <div class="card shadow-lg border-0 rounded-lg login-card">
-    <div class="card-body p-5">
-      <div class="text-center mb-4">
-        <h1 class="h3 mb-3 font-weight-normal text-primary fw-bold">Admin Portal</h1>
-        <p class="text-muted">Sign in to manage GreenCar Corporate</p>
+<div class="container-fluid min-vh-100 d-flex p-0 overflow-hidden bg-white">
+  <div class="row g-0 w-100">
+    
+    <!-- Left Side: ESG & Brand Messaging -->
+    <div class="col-lg-7 d-none d-lg-flex flex-column justify-content-between p-5 bg-brand position-relative text-white overflow-hidden">
+      <!-- Background Overlay -->
+      <div class="bg-overlay"></div>
+      
+      <!-- Decorative Circles -->
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+
+      <!-- Header: Logos -->
+      <div class="position-relative z-index-1 d-flex align-items-center gap-3 animate-fade-down">
+        <!-- Assuming GreenCar Logo exists, if not using text/icon placeholder -->
+        <div class="d-flex align-items-center gap-2">
+             <div class="bg-white rounded-pill px-3 py-1">
+            <img src="https://greencar.ngo/assets/logo.png" alt="GreenCar Carpool" height="50">
+        </div>
+        </div>
+        <div class="vr bg-white opacity-50 mx-2" style="height: 30px;"></div>
+        <div class="bg-white rounded-pill px-3 py-1">
+            <img src="https://saatvikgroup.com/wp-content/uploads/2025/06/Saatvik_Solar_Logo-1-scaled.png" alt="Saatvik Group" height="50">
+        </div>
       </div>
 
-      <form (ngSubmit)="login()">
-        <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="username" name="username" required>
-          <label for="username">Username</label>
+      <!-- Main Content: ESG Message -->
+      <div class="position-relative z-index-1 mt-auto mb-auto ps-4 animate-fade-in">
+        <span class="badge bg-warning text-dark fw-bold mb-3 px-3 py-2 rounded-pill text-uppercase letter-spacing-1">ESG Initiative</span>
+        <h1 class="display-4 fw-bold mb-3">Driving Corporate <br> <span class="text-warning">Sustainability</span></h1>
+        <p class="lead opacity-90 mb-4" style="max-width: 600px;">
+          Join the movement towards a greener future. Our corporate carpooling solution reduces carbon footprint, fosters community, and drives environmental responsibility.
+        </p>
+        
+        <div class="d-flex gap-4 mt-5">
+            <div class="stat-item">
+                <h3 class="fw-bold mb-0">100%</h3>
+                <p class="small opacity-75 text-uppercase">Green Commitment</p>
+            </div>
+            <div class="vr bg-white opacity-25"></div>
+            <div class="stat-item">
+                <h3 class="fw-bold mb-0">Zero</h3>
+                <p class="small opacity-75 text-uppercase">Carbon Goals</p>
+            </div>
+            <div class="vr bg-white opacity-25"></div>
+            <div class="stat-item">
+                <h3 class="fw-bold mb-0">Saatvik</h3>
+                <p class="small opacity-75 text-uppercase">Powered By</p>
+            </div>
         </div>
-        <div class="form-floating mb-3">
-          <input type="password" class="form-control" id="password" placeholder="Password" [(ngModel)]="password" name="password" required>
-          <label for="password">Password</label>
+      </div>
+
+      <!-- Footer: Copyright -->
+      <div class="position-relative z-index-1 mt-auto">
+        <p class="small opacity-50 mb-0">&copy; 2025 GreenCar ESG Project. Powered by Saatvik Group.</p>
+      </div>
+    </div>
+
+    <!-- Right Side: Login Form -->
+    <div class="col-lg-5 d-flex align-items-center justify-content-center bg-white position-relative">
+      <div class="login-wrapper w-100 p-5 animate-slide-up" style="max-width: 500px;">
+        
+        <div class="text-center mb-5">
+            <div class="d-inline-block p-3 rounded-circle bg-primary-subtle mb-3">
+                <i class="fas fa-user-shield text-primary fa-2x"></i>
+            </div>
+            <h2 class="fw-bold text-dark">Admin Portal</h2>
+            <p class="text-muted">Secure access for ESG Administrators</p>
         </div>
 
-        <div class="d-grid gap-2">
-          <button class="btn btn-primary btn-lg fw-bold" type="submit" [disabled]="isLoading">
-            <span *ngIf="!isLoading">Sign In</span>
-            <span *ngIf="isLoading"><i class="fas fa-spinner fa-spin"></i> Authenticating...</span>
-          </button>
+        <form (ngSubmit)="login()" class="needs-validation">
+          <div class="form-floating mb-4">
+            <input type="text" class="form-control bg-light border-0 rounded-3" id="username" placeholder="Username" [(ngModel)]="username" name="username" required>
+            <label for="username" class="text-muted"><i class="fas fa-user me-2"></i>Username</label>
+          </div>
+          
+          <div class="form-floating mb-4">
+            <input type="password" class="form-control bg-light border-0 rounded-3" id="password" placeholder="Password" [(ngModel)]="password" name="password" required>
+            <label for="password" class="text-muted"><i class="fas fa-lock me-2"></i>Password</label>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rememberMe">
+              <label class="form-check-label text-muted small" for="rememberMe">Remember me</label>
+            </div>
+            <a href="#" class="text-primary text-decoration-none small fw-bold">Forgot Password?</a>
+          </div>
+
+          <div class="d-grid">
+            <button class="btn btn-primary btn-lg rounded-pill fw-bold py-3 shadow-lg hover-scale" type="submit" [disabled]="isLoading">
+              <span *ngIf="!isLoading">Sign In to Dashboard <i class="fas fa-arrow-right ms-2"></i></span>
+              <span *ngIf="isLoading"><i class="fas fa-spinner fa-spin me-2"></i> Authenticating...</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="text-center mt-5">
+            <p class="small text-muted mb-0">Need help? <a href="#" class="text-secondary fw-bold text-decoration-none">Contact Support</a></p>
         </div>
-      </form>
+
+      </div>
     </div>
+
   </div>
 </div>

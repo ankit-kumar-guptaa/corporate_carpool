@@ -4,16 +4,16 @@
     <div class="col-lg-5 col-md-6 mb-4">
       <div class="chairman-message-card h-100">
         <div class="card-body p-4 p-lg-5 text-center d-flex flex-column justify-content-center">
-          <h2 class="card-title fw-bold mb-4">A Message from Our Director</h2>
+          <h2 class="card-title fw-bold mb-4">A Message from Our CEO</h2>
           <div class="chairman-img-container mb-4">
             <img src="chairman.jpg" alt="Director Photo" class="chairman-img" onerror="this.src='https://ui-avatars.com/api/?name=Director&background=0D8ABC&color=fff&size=200'">
           </div>
           <div class="quote-text">
-            "At Elite Corporate Solutions, we are committed to shaping a greener future. Our Corporate Carpool Program is a bold step towards reducing our carbon footprint, easing commutes, and fostering a sense of community among our employees. Together, we can drive change!"
+            "At Saatvik, we are committed to shaping a greener future. Our Corporate Carpool Program is a bold step towards reducing our carbon footprint, easing commutes, and fostering a sense of community among our employees. Together, we can drive change!"
           </div>
           <div class="mt-4">
-            <h5 class="fw-bold mb-0">Mr. Rajiv Arora</h5>
-            <small class="text-muted">Director, Elite Corporate Solutions</small>
+            <h5 class="fw-bold mb-0">Mr. Prashant Mathur</h5>
+            <small class="text-muted">CEO, Saatvik</small>
           </div>
         </div>
       </div>
@@ -148,6 +148,21 @@
                   <i class="fas fa-lock input-icon"></i>
                   <input type="password" id="signup-password" name="signup-password" class="form-control form-input"
                          placeholder="Create a password" [(ngModel)]="_user.Password" (input)="updateProgress()" required> 
+                </div>
+              </div>
+
+              <div class="mb-4 input-group-custom" *ngIf="isPhoneVerified">
+                <label for="signup-vehicle" class="form-label">Existing Vehicle</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-car input-icon"></i>
+                  <select id="signup-vehicle" name="signup-vehicle" class="form-control form-input form-select"
+                          [(ngModel)]="_user.VehicleType" (change)="updateProgress()" required>
+                    <option value="" disabled selected>Select your vehicle type</option>
+                    <option value="Company Cab">Company Cab</option>
+                    <option value="Own Car">Own Car</option>
+                    <option value="Own Bike">Own Bike</option>
+                    <option value="Cab">Cab</option>
+                  </select>
                 </div>
               </div>
 

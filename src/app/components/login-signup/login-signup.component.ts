@@ -234,7 +234,7 @@ export class LoginSignupComponent implements OnInit {
   }
 
   signup(): void {
-    if (!this._user.email || !this._user.mobile_No || !this._user.Password || !this._user.name) {
+    if (!this._user.email || !this._user.mobile_No || !this._user.Password || !this._user.name || !this._user.VehicleType) {
       this._globalService.utilities.notify.error('Please fill all required fields.');
       return;
     }
@@ -243,7 +243,8 @@ export class LoginSignupComponent implements OnInit {
       mobile_No: this._user.mobile_No,
       Password: this._user.Password,
       name: this._user.name,
-      domain: this.domain
+      domain: this.domain,
+      VehicleType: this._user.VehicleType
     };
     const helperdata = new helper();
     helperdata.spName = 'CORP_User_Register';
