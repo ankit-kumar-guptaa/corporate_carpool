@@ -548,6 +548,7 @@ h1, h2, h3, h4, h5, h6 {
   h5 {
     font-size: 1.1rem;
     font-weight: 700;
+    margin-bottom: 1rem;
   }
   
   p {
@@ -598,4 +599,99 @@ h1, h2, h3, h4, h5, h6 {
   .step-connector {
     display: none;
   }
+}
+
+/* Impact Analysis Styles */
+.selection-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #fff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    color: $text-muted;
+    transition: all 0.3s ease;
+  }
+
+  span {
+    font-weight: 600;
+    color: $text-muted;
+  }
+
+  &:hover {
+    border-color: rgba($primary-color, 0.5);
+    background: rgba($primary-color, 0.02);
+  }
+
+  &.selected {
+    border-color: $primary-color;
+    background: rgba($primary-color, 0.05);
+    box-shadow: 0 5px 15px rgba($primary-color, 0.15);
+
+    i {
+      color: $primary-color;
+      transform: scale(1.1);
+    }
+    span {
+      color: $primary-color;
+    }
+  }
+}
+
+.small-card {
+  padding: 1rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.impact-result-card {
+  background: #f8fcf9;
+  border: 1px solid #d4edda;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.co2-saving-badge {
+  display: inline-block;
+  background: #d4edda;
+  color: #155724;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Animations */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }
