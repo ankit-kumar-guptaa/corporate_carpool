@@ -1,0 +1,106 @@
+<div class="container-fluid py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <div class="impact-card shadow-lg p-4 p-md-5 bg-white rounded-4">
+        
+        <div class="text-center mb-5">
+          <h2 class="fw-bold text-primary mb-2">Transport Impact Analysis</h2>
+          <p class="text-muted">Help us calculate your potential environmental impact before you start carpooling.</p>
+        </div>
+
+        <!-- 1. Mode of Transport -->
+        <div class="mb-4">
+          <label class="form-label fw-bold mb-3">How do you currently commute?</label>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="selection-card" [class.selected]="transportMode === 'Self'" (click)="selectTransport('Self')">
+                <i class="fas fa-car-side mb-2 fa-2x"></i>
+                <span>Self Driven</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="selection-card" [class.selected]="transportMode === 'Cab'" (click)="selectTransport('Cab')">
+                <i class="fas fa-taxi mb-2 fa-2x"></i>
+                <span>Cab / Taxi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Vehicle Type (If Self) -->
+        <div class="mb-4 animate-slide-up" *ngIf="transportMode === 'Self'">
+          <label class="form-label fw-bold mb-3">Vehicle Type</label>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="selection-card" [class.selected]="vehicleType === 'Car'" (click)="selectVehicle('Car')">
+                <i class="fas fa-car mb-2 fa-2x"></i>
+                <span>Car</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="selection-card" [class.selected]="vehicleType === 'Bike'" (click)="selectVehicle('Bike')">
+                <i class="fas fa-motorcycle mb-2 fa-2x"></i>
+                <span>Two Wheeler</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Fuel Type (If Self & Vehicle Selected) -->
+        <div class="mb-4 animate-slide-up" *ngIf="transportMode === 'Self' && vehicleType">
+          <label class="form-label fw-bold mb-3">Fuel Type</label>
+          <div class="row g-2">
+            <div class="col-4">
+              <div class="selection-card small-card" [class.selected]="(vehicleType === 'Car' ? fuelType : bikeFuelType) === 'Petrol'" (click)="selectFuel('Petrol')">
+                <i class="fas fa-gas-pump mb-1"></i>
+                <span>Petrol</span>
+              </div>
+            </div>
+            <div class="col-4" *ngIf="vehicleType === 'Car'">
+              <div class="selection-card small-card" [class.selected]="fuelType === 'CNG'" (click)="selectFuel('CNG')">
+                <i class="fas fa-burn mb-1"></i>
+                <span>CNG</span>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="selection-card small-card" [class.selected]="(vehicleType === 'Car' ? fuelType : bikeFuelType) === 'Electric'" (click)="selectFuel('Electric')">
+                <i class="fas fa-bolt mb-1"></i>
+                <span>Electric</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Impact Results -->
+        <div class="impact-result-card animate-scale-in mb-4" *ngIf="impactCalculated">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="text-start">
+              <small class="text-muted d-block">Commute Distance</small>
+              <span class="fw-bold fs-5">{{ distanceKm | number:'1.1-1' }} km</span>
+            </div>
+            <div class="text-end">
+               <small class="text-muted d-block">Current CO2/day</small>
+               <span class="fw-bold text-danger">{{ currentEmission | number:'1.2-2' }} kg</span>
+            </div>
+          </div>
+          <hr class="my-2">
+          <div class="text-center mt-3">
+            <small class="text-success fw-bold text-uppercase ls-1">Potential Savings with Carpool</small>
+            <div class="display-4 fw-bold text-success mt-1">
+              {{ co2Saved | number:'1.2-2' }} <span class="fs-6">kg CO2/day</span>
+            </div>
+            <p class="text-muted small mt-2 mb-0">
+              <i class="fas fa-leaf text-success me-1"></i> You could save ~{{ (co2Saved * 22) | number:'1.0-0' }} kg CO2 per month!
+            </p>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-success btn-lg w-100 shadow-sm mt-2" 
+                (click)="submitImpact()"
+                [disabled]="!impactCalculated">
+          <i class="fas fa-check-circle me-2"></i> Submit & Start Carpooling
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

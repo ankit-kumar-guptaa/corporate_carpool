@@ -11,11 +11,12 @@ import { AdminEmployeesComponent } from './components/admin/admin-employees/admi
 import { AdminReportsComponent } from './components/admin/admin-reports/admin-reports.component';
 import { AdminRidesComponent } from './components/admin/admin-rides/admin-rides.component';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
-
+import { TransportImpactComponent } from './components/transport-impact/transport-impact.component';
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'carpool-search', component: CarpoolSearchComponent, canActivate: [AuthGuard] },
+  { path: 'transport-impact', component: TransportImpactComponent, canActivate: [AuthGuard] },
   
   // Admin Routes
   { path: 'admin/login', component: AdminLoginComponent },

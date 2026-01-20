@@ -1,0 +1,108 @@
+
+/* Variables */
+$primary-color: #123454;
+$accent-color: #f08824;
+$green-color: #00a86b;
+$bg-color: #f8f9fa;
+$text-muted: #6c757d;
+
+.impact-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* Impact Analysis Styles */
+.selection-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #fff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    color: $text-muted;
+    transition: all 0.3s ease;
+  }
+
+  span {
+    font-weight: 600;
+    color: $text-muted;
+  }
+
+  &:hover {
+    border-color: rgba($primary-color, 0.5);
+    background: rgba($primary-color, 0.02);
+  }
+
+  &.selected {
+    border-color: $primary-color;
+    background: rgba($primary-color, 0.05);
+    box-shadow: 0 5px 15px rgba($primary-color, 0.15);
+
+    i {
+      color: $primary-color;
+      transform: scale(1.1);
+    }
+    span {
+      color: $primary-color;
+    }
+  }
+}
+
+.small-card {
+  padding: 1rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.impact-result-card {
+  background: #f8fcf9;
+  border: 1px solid #d4edda;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, $green-color 0%, darken($green-color, 10%) 100%);
+  border: none;
+  box-shadow: 0 4px 15px rgba($green-color, 0.3);
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba($green-color, 0.4);
+  }
+  
+  &:disabled {
+    background: #ccc;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Animations */
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}

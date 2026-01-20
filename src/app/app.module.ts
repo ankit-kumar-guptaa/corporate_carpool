@@ -26,6 +26,9 @@ import { AdminEmployeesComponent } from './components/admin/admin-employees/admi
 import { AdminReportsComponent } from './components/admin/admin-reports/admin-reports.component';
 import { AdminRidesComponent } from './components/admin/admin-rides/admin-rides.component';
 import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layout.component';
+import { TransportImpactComponent } from './components/transport-impact/transport-impact.component';
+
+
 
 @NgModule({
   declarations: [
@@ -35,6 +38,7 @@ import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layo
     HeaderComponent,
     FooterComponent,
     DashboardComponent,
+    TransportImpactComponent,
     CarpoolSearchComponent,
     LoaderComponent,
     AutocompleteComponent,
