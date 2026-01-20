@@ -1,0 +1,93 @@
+name: BuildAndDeployAngular
+
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'angular.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig*.json'
+      - 'server.ts'
+      - 'webpack.server.config.js'
+      - 'web.config'
+    branches:
+      - Development
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'angular.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig*.json'
+      - 'server.ts'
+      - 'webpack.server.config.js'
+      - 'web.config'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        npm ci || npm install
+
+    - name: Build Angular SSR
+      run: npm run build -- --configuration production
+
+    - name: Test
+      run: npm test -- --watch=false --browsers=ChromeHeadless
+      continue-on-error: true
+
+    - name: Prepare deployment files
+      run: |
+        mkdir -p ./Release
+        cp -r dist/green-car/* ./Release/
+        # Copy node_modules for IIS Node (required for SSR)
+        # cp -r node_modules ./Release/
+        # Copy web.config if it exists at root
+        if [ -f web.config ]; then
+          cp web.config ./Release/
+        fi
+        # Copy web.config from src if root doesn't have it
+        if [ -f src/web.config ] && [ ! -f web.config ]; then
+          cp src/web.config ./Release/
+        fi
+        # Copy package.json for reference
+        cp package.json ./Release/
+
+    - name: Debug FTP Server
+      run: |
+        echo "FTP Server: ${{ secrets.AWS_FTP_SERVER }}"
+
+    - name: Enable App Offline
+      run: |
+        echo "<html><body>Site under maintenance</body></html>" > app_offline.htm
+        curl -T app_offline.htm ftp://${{ secrets.AWS_FTP_SERVER }}/greencar.ngo/app_offline.htm --user ${{ secrets.AWS_FTP_USERNAME }}:${{ secrets.AWS_FTP_PASSWORD }}
+
+    - name: FTP Deploy ${{ secrets.AWS_FTP_SERVER }}
+      uses: SamKirkland/FTP-Deploy-Action@4.1.0
+      with:
+        server: ${{ secrets.AWS_FTP_SERVER }}
+        username: ${{ secrets.AWS_FTP_USERNAME }}
+        password: ${{ secrets.AWS_FTP_PASSWORD }}
+        local-dir: ./Release/
+        server-dir: /greencar.ngo/
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/.DS_Store
+          **/Thumbs.db
+
+    - name: Remove App Offline
+      run: |
+        curl --quote "DELE /greencar.ngo/app_offline.htm" ftp://${{ secrets.AWS_FTP_SERVER }} --user ${{ secrets.AWS_FTP_USERNAME }}:${{ secrets.AWS_FTP_PASSWORD }}

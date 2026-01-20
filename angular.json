@@ -22,7 +22,6 @@
       "prefix": "app",
       "architect": {
         "build": {
-        
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/corporate_carpool",
@@ -43,12 +42,7 @@
               "src/styles.scss",
               "node_modules/ngx-toastr/toastr.css"
             ],
-            "scripts": [],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
