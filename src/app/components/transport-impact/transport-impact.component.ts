@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalService } from '../../services/global-service';
+import { helper } from '../../models/helper';
 
 @Component({
   selector: 'app-transport-impact',
@@ -13,6 +14,7 @@ export class TransportImpactComponent implements OnInit {
   fuelType: string = '';
   bikeFuelType: string = '';
   impactCalculated: boolean = false;
+  signupData: any = null;
   
   // Constants for Office Location (Example: Connaught Place, New Delhi)
   readonly OFFICE_LAT: number = 28.6304; 
@@ -26,19 +28,33 @@ export class TransportImpactComponent implements OnInit {
   userLatitude: string = '';
   userLongitude: string = '';
 
-  constructor(private router: Router, private _globalService: GlobalService) { }
+  constructor(private router: Router, private _globalService: GlobalService) { 
+    // Capture state from navigation (LoginSignupComponent)
+    const nav = this.router.getCurrentNavigation();
+    if (nav?.extras?.state?.['signupData']) {
+      this.signupData = nav.extras.state['signupData'];
+    } else {
+       // Fallback for direct access if history.state is populated (e.g. slight refresh delay)
+       this.signupData = history.state.signupData;
+    }
+  }
 
   ngOnInit(): void {
-    // Get user details to get location
-    const userProfile = this._globalService.utilities.storage.get('UserProfile');
-    if (userProfile) {
-      // Parse if it's a string, or use directly
-      const user = typeof userProfile === 'string' ? JSON.parse(userProfile) : userProfile;
-      this.userLatitude = user.Latitude;
-      this.userLongitude = user.Longitude;
+    if (this.signupData) {
+      // New User Flow
+      this.userLatitude = this.signupData.Latitude;
+      this.userLongitude = this.signupData.Longitude;
     } else {
-      // If no user, redirect to login
-      this.router.navigate(['/']);
+      // Existing User Flow (Edit Profile)
+      const userProfile = this._globalService.utilities.storage.get('UserProfile');
+      if (userProfile) {
+        const user = typeof userProfile === 'string' ? JSON.parse(userProfile) : userProfile;
+        this.userLatitude = user.Latitude;
+        this.userLongitude = user.Longitude;
+      } else {
+        // If no user and no signup data, redirect to login
+        this.router.navigate(['/']);
+      }
     }
   }
 
@@ -134,13 +150,52 @@ export class TransportImpactComponent implements OnInit {
   }
 
   submitImpact(): void {
-    // User requested: "complete register ho jaaye carpool search par nhi login par lekar jaao"
-    // We clear the session to force a fresh login
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('loggedInUserName');
-    this._globalService.utilities.storage.removeItem('UserProfile');
-
-    this._globalService.utilities.notify.success('Thank you! Profile updated. Now please login to your carpool account.');
-    this.router.navigate(['/']);
+    if (this.signupData) {
+       // FINAL REGISTRATION STEP (New User)
+       const param: any = {
+         email: this.signupData.email,
+         mobile_No: this.signupData.mobile_No,
+         Password: this.signupData.Password,
+         name: this.signupData.name,
+         domain: this.signupData.domain || 'elitecorporatesolutions',
+         VehicleType: this.transportMode === 'Cab' ? 'Cab' : (this.vehicleType || 'None'),
+         Address: this.signupData.Address,
+         Latitude: this.signupData.Latitude,
+         Longitude: this.signupData.Longitude
+       };
+       
+       const helperdata = new helper();
+       helperdata.spName = 'CORP_User_Register';
+       helperdata.payload = JSON.stringify(param);
+       
+       this._globalService.ServiceManager.request.post('Ride/GetDataFromServer', helperdata).subscribe(
+         (res) => {
+           if (res.status === 1 && res.data.dataset.table.length > 0) {
+             this._globalService.utilities.notify.success('Registration Complete! Please Login.');
+             this.router.navigate(['/']);
+           } else {
+             this._globalService.utilities.notify.error('Registration Failed: Email or Phone already exists.');
+             // Redirect back to signup after a short delay so they can fix details
+             setTimeout(() => {
+                this.router.navigate(['/']); 
+             }, 3000);
+           }
+         },
+         (err) => {
+             console.error(err);
+             this._globalService.utilities.notify.error('Server Error during Registration.');
+         }
+       );
+    } else {
+      // Existing User Update Flow
+      // User requested: "complete register ho jaaye carpool search par nhi login par lekar jaao"
+      // We clear the session to force a fresh login
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('loggedInUserName');
+      this._globalService.utilities.storage.removeItem('UserProfile');
+  
+      this._globalService.utilities.notify.success('Thank you! Profile updated. Now please login to your carpool account.');
+      this.router.navigate(['/']);
+    }
   }
 }

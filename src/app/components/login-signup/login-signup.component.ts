@@ -244,62 +244,9 @@ export class LoginSignupComponent implements OnInit {
        return;
     }
 
-    const param: any = {
-      email: this._user.email,
-      mobile_No: this._user.mobile_No,
-      Password: this._user.Password,
-      name: this._user.name,
-      domain: this.domain,
-      VehicleType: this._user.VehicleType || 'None',
-      Address: this._user.Address,
-      Latitude: this._user.Latitude,
-      Longitude: this._user.Longitude
-    };
-    const helperdata = new helper();
-    helperdata.spName = 'CORP_User_Register';
-    helperdata.payload = JSON.stringify(param);
-    
-    this._globalService.ServiceManager.request.post('Ride/GetDataFromServer', helperdata).subscribe(
-      (res) => {
-        this._globalService.utilities.notify.success('Account created! Proceeding to Transport Details...');
-        // Auto-login logic
-        // Construct userdetails object (similar to login response)
-        const userdetails = {
-          email: this._user.email,
-          mobile_No: this._user.mobile_No,
-          name: this._user.name,
-          Address: this._user.Address,
-          Latitude: this._user.Latitude,
-          Longitude: this._user.Longitude
-        };
-        
-        // Save session and redirect to Transport Impact
-        this.loginEvent.emit(userdetails.name);
-        this._globalService.utilities.storage.set('UserProfile', JSON.stringify(userdetails));
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('loggedInUserName', userdetails.name);
-        
-        this.router.navigate(['/transport-impact']);
-      },
-      (err) => {
-         // Fallback for demo if API fails
-         this._globalService.utilities.notify.success('Account created! Proceeding to Transport Details...');
-         const userdetails = {
-          email: this._user.email,
-          mobile_No: this._user.mobile_No,
-          name: this._user.name,
-          Address: this._user.Address,
-          Latitude: this._user.Latitude,
-          Longitude: this._user.Longitude
-        };
-        this.loginEvent.emit(userdetails.name);
-        this._globalService.utilities.storage.set('UserProfile', JSON.stringify(userdetails));
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('loggedInUserName', userdetails.name);
-        
-        this.router.navigate(['/transport-impact']);
-      }
-    );
+    // Proceed to Transport Impact for final registration
+    this._globalService.utilities.notify.info('Please complete Transport Details to finish Signup.');
+    this.router.navigate(['/transport-impact'], { state: { signupData: this._user } });
   }
 
   finishLogin(userdetails: any): void {
