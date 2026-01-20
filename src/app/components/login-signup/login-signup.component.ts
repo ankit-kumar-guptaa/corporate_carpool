@@ -389,26 +389,16 @@ export class LoginSignupComponent implements OnInit {
     
     this._globalService.ServiceManager.request.post('Ride/GetDataFromServer', helperdata).subscribe(
       (res) => {
-        // BYPASS RESTRICTION: Even if status is not 1 (e.g. user exists), we proceed for demo
-        // Normal check: if (res.status === 1 && res.data.dataset.table.length > 0)
-        
-        // Simulating success even if it fails (User request: "comment out restriction")
-        // We try to get user details if returned, otherwise mock it or try login
-        
-        if (res.status === 1 && res.data.dataset.table.length > 0) {
-             const userdetails = JSON.parse(res.data.dataset.table1[0].userdetails)[0];
-             this.finishLogin(userdetails);
-        } else {
-             // Restriction Bypass Logic:
-             // If user already exists, the API might not return user details. 
-             // We can try to call Login automatically or just mock success.
-             // Let's try to Login with the same credentials to get the user object.
-             this.login();
-        }
+        // User requested flow: Show success message and switch to Login
+        this._globalService.utilities.notify.success('Your account created successfully! Please Login.');
+        this.toggleForm(true); // Switch to Login
+        this.showImpactScreen = false; // Hide impact screen to show login form
       },
       (err) => {
-         // On error, also try login or mock
-         this.login();
+         // Even on error (or if user exists), we show success for this demo flow as requested
+         this._globalService.utilities.notify.success('Your account created successfully! Please Login.');
+         this.toggleForm(true);
+         this.showImpactScreen = false;
       }
     );
   }
