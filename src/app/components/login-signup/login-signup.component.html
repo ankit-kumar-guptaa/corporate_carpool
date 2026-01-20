@@ -103,7 +103,7 @@
                 <div class="input-with-icon">
                   <i class="fas fa-envelope input-icon"></i>
                   <input type="email" id="signup-email" name="signup-email" class="form-control form-input"
-                         placeholder="name@saatvikgroup.com" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
+                         placeholder="name@amazon.com" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
                          [disabled]="isEmailVerified">
                 </div>
                 <button type="button" class="btn btn-warning btn-sm mt-2 w-100" (click)="sendOtp()" *ngIf="!isEmailVerified"

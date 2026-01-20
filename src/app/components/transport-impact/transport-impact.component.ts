@@ -100,6 +100,7 @@ export class TransportImpactComponent implements OnInit {
     } else if (this.transportMode === 'Self') {
       if (this.vehicleType === 'Car') {
         if (this.fuelType === 'Petrol') emissionFactor = 0.192;
+        else if (this.fuelType === 'Diesel') emissionFactor = 0.171;
         else if (this.fuelType === 'CNG') emissionFactor = 0.150; // Lower than petrol
         else if (this.fuelType === 'Electric') emissionFactor = 0.050; // Grid intensity dependent, but lower
       } else if (this.vehicleType === 'Bike') {
@@ -133,8 +134,13 @@ export class TransportImpactComponent implements OnInit {
   }
 
   submitImpact(): void {
-    // User "submit karte hi carpool search page par le jaa"
-    this._globalService.utilities.notify.success('Thank you! Your transport profile is updated.');
-    this.router.navigate(['/carpool-search']);
+    // User requested: "complete register ho jaaye carpool search par nhi login par lekar jaao"
+    // We clear the session to force a fresh login
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('loggedInUserName');
+    this._globalService.utilities.storage.removeItem('UserProfile');
+
+    this._globalService.utilities.notify.success('Thank you! Profile updated. Now please login to your carpool account.');
+    this.router.navigate(['/']);
   }
 }

@@ -33,11 +33,24 @@ export class DashboardComponent implements OnInit {
   updatedEmail: string = '';
   notifications: { message: string, type: string, timestamp: Date }[] = [];
 
+  // Impact Analysis Data
+  impactStats = {
+    beforeMode: 'Solo Car (Petrol)',
+    currentMode: 'Carpool (Passenger)',
+    beforeEmission: 12.5, // kg/day
+    currentEmission: 3.2, // kg/day
+    saved: 9.3,
+    reductionPercent: 74,
+    treesPlanted: 12
+  };
+
   constructor(private _globalService: GlobalService) {}
 
   ngOnInit(): void {
     this.loggedInUserName = localStorage.getItem('loggedInUserName') || '';
     this.loadData();
+    // Simulate fetching impact data
+    this.calculateImpact();
   }
 
   // Fetch all dashboard data
@@ -66,6 +79,20 @@ export class DashboardComponent implements OnInit {
         this.loadNotifications();
       }
     });
+  }
+
+  calculateImpact() {
+    // In a real app, this would come from the backend based on their "Transport Impact" submission
+    // For now, we simulate a realistic improvement scenario
+    this.impactStats = {
+        beforeMode: 'Solo Car (Petrol)',
+        currentMode: 'Carpool',
+        beforeEmission: 8.5,
+        currentEmission: 2.1,
+        saved: 6.4,
+        reductionPercent: 75,
+        treesPlanted: Math.floor(this.totalRidesCount / 5) + 2 // Mock logic
+    };
   }
 
   // Handle ride request acceptance

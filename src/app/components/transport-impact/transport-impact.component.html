@@ -46,30 +46,55 @@
           </div>
         </div>
 
-        <!-- 3. Fuel Type (If Self & Vehicle Selected) -->
-        <div class="mb-4 animate-slide-up" *ngIf="transportMode === 'Self' && vehicleType">
-          <label class="form-label fw-bold mb-3">Fuel Type</label>
-          <div class="row g-2">
-            <div class="col-4">
-              <div class="selection-card small-card" [class.selected]="(vehicleType === 'Car' ? fuelType : bikeFuelType) === 'Petrol'" (click)="selectFuel('Petrol')">
-                <i class="fas fa-gas-pump mb-1"></i>
-                <span>Petrol</span>
+            <!-- 3. Fuel Type (If Self & Vehicle Selected) -->
+            <div class="mb-4 animate-slide-up" *ngIf="transportMode === 'Self' && vehicleType">
+              <label class="form-label fw-bold mb-3">Fuel Type</label>
+              <div class="row g-2">
+                <!-- Car Fuel Options -->
+                <ng-container *ngIf="vehicleType === 'Car'">
+                  <div class="col-6">
+                    <div class="selection-card small-card" [class.selected]="fuelType === 'Petrol'" (click)="selectFuel('Petrol')">
+                      <i class="fas fa-gas-pump mb-1"></i>
+                      <span>Petrol</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="selection-card small-card" [class.selected]="fuelType === 'Diesel'" (click)="selectFuel('Diesel')">
+                      <i class="fas fa-truck-monster mb-1"></i> <!-- using a distinct icon or just gas-pump -->
+                      <span>Diesel</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="selection-card small-card" [class.selected]="fuelType === 'CNG'" (click)="selectFuel('CNG')">
+                      <i class="fas fa-burn mb-1"></i>
+                      <span>CNG</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="selection-card small-card" [class.selected]="fuelType === 'Electric'" (click)="selectFuel('Electric')">
+                      <i class="fas fa-bolt mb-1"></i>
+                      <span>Electric</span>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <!-- Bike Fuel Options -->
+                <ng-container *ngIf="vehicleType === 'Bike'">
+                  <div class="col-6">
+                    <div class="selection-card small-card" [class.selected]="bikeFuelType === 'Petrol'" (click)="selectFuel('Petrol')">
+                      <i class="fas fa-gas-pump mb-1"></i>
+                      <span>Petrol</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="selection-card small-card" [class.selected]="bikeFuelType === 'Electric'" (click)="selectFuel('Electric')">
+                      <i class="fas fa-bolt mb-1"></i>
+                      <span>Electric</span>
+                    </div>
+                  </div>
+                </ng-container>
               </div>
             </div>
-            <div class="col-4" *ngIf="vehicleType === 'Car'">
-              <div class="selection-card small-card" [class.selected]="fuelType === 'CNG'" (click)="selectFuel('CNG')">
-                <i class="fas fa-burn mb-1"></i>
-                <span>CNG</span>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="selection-card small-card" [class.selected]="(vehicleType === 'Car' ? fuelType : bikeFuelType) === 'Electric'" (click)="selectFuel('Electric')">
-                <i class="fas fa-bolt mb-1"></i>
-                <span>Electric</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <!-- Impact Results -->
         <div class="impact-result-card animate-scale-in mb-4" *ngIf="impactCalculated">
