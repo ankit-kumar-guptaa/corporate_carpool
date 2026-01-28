@@ -157,7 +157,7 @@ export class TransportImpactComponent implements OnInit {
          mobile_No: this.signupData.mobile_No,
          Password: this.signupData.Password,
          name: this.signupData.name,
-         domain: this.signupData.domain || 'elitecorporatesolutions',
+         domain: this.signupData.domain || 'amdocs.com',
          VehicleType: this.transportMode === 'Cab' ? 'Cab' : (this.vehicleType || 'None'),
          Address: this.signupData.Address,
          Latitude: this.signupData.Latitude,
