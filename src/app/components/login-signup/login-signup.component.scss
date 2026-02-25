@@ -1,4 +1,3 @@
-
 /* Variables */
 $primary-color: #123454; // Deep Navy
 $accent-color: #f08824; // Red
@@ -18,13 +17,19 @@ body {
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Merriweather', serif;
   color: $primary-color;
 }
 
 .container-fluid {
   padding: 0 50px;
+
   @media (max-width: 768px) {
     padding: 0 20px;
   }
@@ -69,7 +74,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 160px;
   height: 160px;
   margin-bottom: 1.5rem;
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -84,7 +89,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes spin {
-  100% { transform: rotate(360deg); }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .chairman-img {
@@ -93,7 +100,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 50%;
   object-fit: fill;
   border: 4px solid #fff;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .quote-text {
@@ -126,7 +133,7 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #ffffff;
   border: none;
   transition: all 0.3s ease;
-  
+
   &:hover {
     box-shadow: $hover-shadow;
   }
@@ -140,7 +147,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 30px;
   position: relative;
   margin-bottom: 2rem;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .btn-toggle {
@@ -161,7 +168,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #fff;
     box-shadow: 0 4px 10px rgba($primary-color, 0.3);
   }
-  
+
   &:hover:not(.active) {
     color: $primary-color;
   }
@@ -182,7 +189,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .input-with-icon {
   position: relative;
-  
+
   .input-icon {
     position: absolute;
     left: 16px;
@@ -192,7 +199,7 @@ h1, h2, h3, h4, h5, h6 {
     transition: color 0.3s ease;
     z-index: 2;
   }
-  
+
   .form-input {
     padding: 12px 16px 12px 45px;
     border-radius: 10px;
@@ -200,18 +207,19 @@ h1, h2, h3, h4, h5, h6 {
     background: #fcfcfc;
     transition: all 0.3s ease;
     font-size: 0.95rem;
-    
+
     &:focus {
       border-color: $accent-color;
       background: #fff;
       box-shadow: 0 0 0 4px rgba($accent-color, 0.1);
-      
-      & + .input-icon { // This selector won't work because icon is before input in HTML usually, need to check HTML structure
+
+      &+.input-icon {
+        // This selector won't work because icon is before input in HTML usually, need to check HTML structure
         color: $accent-color;
       }
     }
   }
-  
+
   /* Fix for icon color on focus if icon is before input */
   &:focus-within .input-icon {
     color: $accent-color;
@@ -228,13 +236,13 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.5px;
   box-shadow: 0 4px 15px rgba($accent-color, 0.3);
   transition: all 0.3s ease;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba($accent-color, 0.4);
     background: linear-gradient(135deg, darken($accent-color, 5%) 0%, darken($accent-color, 15%) 100%);
   }
-  
+
   &:disabled {
     background: #ccc;
     transform: none;
@@ -246,19 +254,20 @@ h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(135deg, $green-color 0%, darken($green-color, 10%) 100%);
   border: none;
   box-shadow: 0 4px 15px rgba($green-color, 0.3);
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba($green-color, 0.4);
   }
 }
 
-.forget-password-btn, .already-registered-btn {
+.forget-password-btn,
+.already-registered-btn {
   color: $text-muted;
   font-size: 0.9rem;
   text-decoration: none;
   transition: color 0.3s;
-  
+
   &:hover {
     color: $accent-color;
     text-decoration: underline;
@@ -277,7 +286,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .progress-track {
   position: absolute;
-  top: 20px; /* Center vertically relative to step-circle (40px height) */
+  top: 20px;
+  /* Center vertically relative to step-circle (40px height) */
   left: 0;
   right: 0;
   height: 4px;
@@ -300,7 +310,7 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  
+
   /* Active Step Animation */
   &.active {
     .step-circle {
@@ -310,13 +320,13 @@ h1, h2, h3, h4, h5, h6 {
       box-shadow: 0 0 0 5px rgba($primary-color, 0.1);
       transform: scale(1.1);
     }
-    
+
     .step-label {
       color: $primary-color;
       font-weight: 700;
     }
   }
-  
+
   /* Completed Step Style */
   &.completed {
     .step-circle {
@@ -325,7 +335,7 @@ h1, h2, h3, h4, h5, h6 {
       color: #fff;
       transform: scale(1.05);
     }
-    
+
     .step-label {
       color: $green-color;
       font-weight: 600;
@@ -344,9 +354,10 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   color: $text-muted;
   font-size: 1rem;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy transition */
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Bouncy transition */
   margin-bottom: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .step-label {
@@ -369,12 +380,12 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
   margin-bottom: 3rem;
   font-weight: 700;
-  
+
   .highlight-text {
     color: $accent-color;
     position: relative;
     display: inline-block;
-    
+
     &::after {
       content: '';
       position: absolute;
@@ -400,21 +411,24 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: $border-radius;
   padding: 2rem;
   text-align: center;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   border-bottom: 4px solid transparent;
-  
+
   &:hover {
     transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     border-bottom-color: $accent-color;
-    
+
     .benefit-icon {
       background: $accent-color;
-      i { color: #fff; }
+
+      i {
+        color: #fff;
+      }
     }
   }
-  
+
   .benefit-icon {
     width: 70px;
     height: 70px;
@@ -425,20 +439,20 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: center;
     margin: 0 auto 1.5rem;
     transition: all 0.3s ease;
-    
+
     i {
       font-size: 1.8rem;
       color: $primary-color;
       transition: all 0.3s ease;
     }
   }
-  
+
   h5 {
     font-size: 1.25rem;
     font-weight: 700;
     margin-bottom: 1rem;
   }
-  
+
   p {
     color: $text-muted;
     font-size: 0.95rem;
@@ -457,12 +471,12 @@ h1, h2, h3, h4, h5, h6 {
   background: #fff;
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   margin-bottom: 1rem;
   transition: transform 0.3s ease;
   position: relative;
   overflow: hidden;
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -472,11 +486,11 @@ h1, h2, h3, h4, h5, h6 {
     width: 4px;
     background: $primary-color;
   }
-  
+
   &:hover {
     transform: translateX(10px);
   }
-  
+
   .step-number {
     width: 50px;
     height: 50px;
@@ -492,12 +506,13 @@ h1, h2, h3, h4, h5, h6 {
     flex-shrink: 0;
     box-shadow: 0 4px 10px rgba($primary-color, 0.3);
   }
-  
+
   .step-content {
     h5 {
       margin: 0 0 0.5rem;
       font-weight: 700;
     }
+
     p {
       margin: 0;
       color: $text-muted;
@@ -509,7 +524,8 @@ h1, h2, h3, h4, h5, h6 {
   height: 20px;
   width: 2px;
   background: #e0e0e0;
-  margin-left: 40px; /* Align with step number center approx */
+  margin-left: 40px;
+  /* Align with step number center approx */
   margin-bottom: 1rem;
 }
 
@@ -527,30 +543,30 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
   border: 1px solid #eee;
   transition: all 0.3s ease;
-  
+
   &:hover {
     border-color: $green-color;
     box-shadow: 0 10px 25px rgba($green-color, 0.1);
-    
+
     .tip-icon {
       transform: scale(1.1);
       color: $green-color;
     }
   }
-  
+
   .tip-icon {
     font-size: 2.5rem;
     color: $text-muted;
     margin-bottom: 1rem;
     transition: all 0.3s ease;
   }
-  
+
   h5 {
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 1rem;
   }
-  
+
   p {
     font-size: 0.9rem;
     color: $text-muted;
@@ -579,23 +595,23 @@ h1, h2, h3, h4, h5, h6 {
   .chairman-message-card {
     margin-bottom: 2rem;
   }
-  
+
   .step-card {
     flex-direction: column;
     text-align: center;
-    
+
     .step-number {
       margin-right: 0;
       margin-bottom: 1rem;
     }
-    
+
     &::before {
       width: 100%;
       height: 4px;
       bottom: auto;
     }
   }
-  
+
   .step-connector {
     display: none;
   }
@@ -640,6 +656,7 @@ h1, h2, h3, h4, h5, h6 {
       color: $primary-color;
       transform: scale(1.1);
     }
+
     span {
       color: $primary-color;
     }
@@ -682,16 +699,139 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   IMPACT CALCULATOR SECTION
+   ============================================================ */
+.calculator-card {
+  background: linear-gradient(to right, #ffffff, #f4fdf7);
+}
+
+.calc-title {
+  color: $primary-color;
+}
+
+.calc-icon {
+  color: $green-color;
+}
+
+.calc-accent-icon {
+  color: $accent-color;
+}
+
+.custom-range {
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  appearance: none;
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: $green-color;
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(0, 168, 107, 0.4);
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: scale(1.15);
+      background: darken($green-color, 10%);
+    }
+  }
+}
+
+.carpooler-selector {
+  @media(max-width: 576px) {
+    flex-wrap: wrap;
+  }
+
+  .selector-item {
+    flex: 1;
+    min-width: 90px;
+    background: #ffffff;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+
+    .icon {
+      font-size: 1.5rem;
+      color: $text-muted;
+      transition: color 0.3s ease;
+    }
+
+    .number {
+      font-weight: 600;
+      color: $text-color;
+      font-size: 0.9rem;
+    }
+
+    &:hover {
+      border-color: rgba($green-color, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba($green-color, 0.1);
+    }
+
+    &.selected {
+      border-color: $green-color;
+      background: rgba($green-color, 0.05);
+
+      .icon,
+      .number {
+        color: $green-color;
+      }
+    }
+  }
+}
+
+.calc-results-panel {
+  background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
+  color: white;
+}
+
+.border-end-lg {
+  @media (min-width: 992px) {
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+  }
 }

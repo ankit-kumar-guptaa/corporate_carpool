@@ -26,9 +26,25 @@ export class LoginSignupComponent implements OnInit {
   showOtpModal: boolean = false;
   isEmailOtpMode: boolean = true;
   showImpactScreen: boolean = false;
-  
+
   // Multi-step Wizard State
   currentStep: number = 1; // 1: Verification, 2: Details, 3: Transport Impact
+
+  // Impact Calculator (Standalone Section)
+  commuteDistanceCalc: number = 20; // One-way distance in km
+  carpoolersCalc: number = 2; // Number of people joining the ride (1 to 4)
+
+  get co2SavedMonthly(): number {
+    const workingDays = 22;
+    const dailyEmission = (this.commuteDistanceCalc * 2) * 0.18;
+    const monthlyEmission = dailyEmission * workingDays;
+    const savingRatio = this.carpoolersCalc / (this.carpoolersCalc + 1);
+    return Math.round(monthlyEmission * savingRatio);
+  }
+
+  get treesEquivalent(): number {
+    return Math.round(this.co2SavedMonthly / 2) || 0;
+  }
 
   // Transport Impact Logic (Merged from TransportImpactComponent)
   transportMode: string = '';
@@ -36,10 +52,10 @@ export class LoginSignupComponent implements OnInit {
   fuelType: string = '';
   bikeFuelType: string = '';
   impactCalculated: boolean = false;
-  
+
   // Constants for Office Location (Example: Connaught Place, New Delhi)
-  readonly OFFICE_LAT: number = 28.6304; 
-  readonly OFFICE_LNG: number = 77.2177; 
+  readonly OFFICE_LAT: number = 28.6304;
+  readonly OFFICE_LNG: number = 77.2177;
 
   // Calculation Results
   distanceKm: number = 0;
@@ -92,12 +108,12 @@ export class LoginSignupComponent implements OnInit {
         this._globalService.utilities.notify.warning('Please verify both Email and Phone to proceed.');
       }
     } else if (this.currentStep === 2) {
-       if (this._user.name && this._user.Password && this._user.Address) {
-         this.currentStep = 3;
-         this.updateProgress();
-       } else {
-         this._globalService.utilities.notify.warning('Please fill all details to proceed.');
-       }
+      if (this._user.name && this._user.Password && this._user.Address) {
+        this.currentStep = 3;
+        this.updateProgress();
+      } else {
+        this._globalService.utilities.notify.warning('Please fill all details to proceed.');
+      }
     }
   }
 
@@ -138,34 +154,34 @@ export class LoginSignupComponent implements OnInit {
 
   calculateImpact(): void {
     if (!this._user.Latitude) {
-        this._globalService.utilities.notify.warning('Location not found. Using default.');
-        this.distanceKm = 15; // Default
+      this._globalService.utilities.notify.warning('Location not found. Using default.');
+      this.distanceKm = 15; // Default
     } else {
-        const lat1 = parseFloat(this._user.Latitude);
-        const lon1 = parseFloat(this._user.Longitude);
-        const lat2 = this.OFFICE_LAT;
-        const lon2 = this.OFFICE_LNG;
-    
-        const R = 6371; 
-        const dLat = this.deg2rad(lat2 - lat1);
-        const dLon = this.deg2rad(lon2 - lon1);
-        const a =
-          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-          Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
-          Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        this.distanceKm = R * c; 
+      const lat1 = parseFloat(this._user.Latitude);
+      const lon1 = parseFloat(this._user.Longitude);
+      const lat2 = this.OFFICE_LAT;
+      const lon2 = this.OFFICE_LNG;
+
+      const R = 6371;
+      const dLat = this.deg2rad(lat2 - lat1);
+      const dLon = this.deg2rad(lon2 - lon1);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      this.distanceKm = R * c;
     }
 
     let emissionFactor = 0;
     if (this.transportMode === 'Cab') {
-      emissionFactor = 0.192; 
+      emissionFactor = 0.192;
     } else if (this.transportMode === 'Self') {
       if (this.vehicleType === 'Car') {
         if (this.fuelType === 'Petrol') emissionFactor = 0.192;
         else if (this.fuelType === 'Diesel') emissionFactor = 0.171;
-        else if (this.fuelType === 'CNG') emissionFactor = 0.150; 
-        else if (this.fuelType === 'Electric') emissionFactor = 0.050; 
+        else if (this.fuelType === 'CNG') emissionFactor = 0.150;
+        else if (this.fuelType === 'Electric') emissionFactor = 0.050;
       } else if (this.vehicleType === 'Bike') {
         if (this.bikeFuelType === 'Petrol') emissionFactor = 0.100;
         else if (this.bikeFuelType === 'Electric') emissionFactor = 0.020;
@@ -174,8 +190,8 @@ export class LoginSignupComponent implements OnInit {
 
     const roundTripDistance = this.distanceKm * 2;
     this.currentEmission = roundTripDistance * emissionFactor;
-    this.co2Saved = this.currentEmission * 0.75; 
-    
+    this.co2Saved = this.currentEmission * 0.75;
+
     this.impactCalculated = true;
   }
 
@@ -371,8 +387,8 @@ export class LoginSignupComponent implements OnInit {
       return;
     }
     if (!this._user.Address || !this._user.Latitude) {
-       this._globalService.utilities.notify.error('Please select your Home Location.');
-       return;
+      this._globalService.utilities.notify.error('Please select your Home Location.');
+      return;
     }
     if (!this.impactCalculated && this.currentStep === 3) {
       this._globalService.utilities.notify.error('Please calculate transport impact.');
@@ -391,11 +407,11 @@ export class LoginSignupComponent implements OnInit {
       Latitude: this._user.Latitude,
       Longitude: this._user.Longitude
     };
-    
+
     const helperdata = new helper();
     helperdata.spName = 'CORP_User_Register';
     helperdata.payload = JSON.stringify(param);
-    
+
     this._globalService.ServiceManager.request.post('Ride/GetDataFromServer', helperdata).subscribe(
       (res) => {
         if (res.status === 1 && res.data.dataset.table.length > 0) {
@@ -406,18 +422,18 @@ export class LoginSignupComponent implements OnInit {
         }
       },
       (err) => {
-          console.error(err);
-          this._globalService.utilities.notify.error('Server Error during Registration.');
+        console.error(err);
+        this._globalService.utilities.notify.error('Server Error during Registration.');
       }
     );
   }
 
   finishLogin(userdetails: any): void {
-      this.loginEvent.emit(userdetails.name);
-      this._globalService.utilities.storage.set('UserProfile', JSON.stringify(userdetails));
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('loggedInUserName', userdetails.name);
-      this.router.navigate(['/carpool-search']);
+    this.loginEvent.emit(userdetails.name);
+    this._globalService.utilities.storage.set('UserProfile', JSON.stringify(userdetails));
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('loggedInUserName', userdetails.name);
+    this.router.navigate(['/carpool-search']);
   }
 
 
