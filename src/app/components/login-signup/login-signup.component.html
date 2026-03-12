@@ -4,16 +4,19 @@
     <div class="col-lg-5 col-md-6 mb-4">
       <div class="chairman-message-card h-100">
         <div class="card-body p-4 p-lg-5 text-center d-flex flex-column justify-content-center">
-          <h2 class="card-title fw-bold mb-4">A Message from Our CEO</h2>
+          <h2 class="card-title fw-bold mb-4">A Message from Our Minister for Environment</h2>
           <div class="chairman-img-container mb-4">
-            <img src="chairman.jpg" alt="Director Photo" class="chairman-img" onerror="this.src='https://ui-avatars.com/api/?name=Director&background=0D8ABC&color=fff&size=200'">
+            <img src="chairman.jpg" alt="Director Photo" class="chairman-img"
+              onerror="this.src='https://ui-avatars.com/api/?name=Director&background=0D8ABC&color=fff&size=200'">
           </div>
           <div class="quote-text">
-            "At Delhi Goverment, we are committed to shaping a greener future. Our Corporate Carpool Program is a bold step towards reducing our carbon footprint, easing commutes, and fostering a sense of community among our employees. Together, we can drive change!"
+            "At Delhi Goverment, we are committed to shaping a greener future. Our Corporate Carpool Program is a bold
+            step towards reducing our carbon footprint, easing commutes, and fostering a sense of community among our
+            employees. Together, we can drive change!"
           </div>
           <div class="mt-4">
-            <h5 class="fw-bold mb-0">Mr. Rajiv Arora</h5>
-            <small class="text-muted">CEO, Delhi Goverment</small>
+            <h5 class="fw-bold mb-0">Sardar Manjinder Singh Sirsa Ji</h5>
+            <small class="text-muted">Minister for Environment, Delhi Goverment</small>
           </div>
         </div>
       </div>
@@ -43,23 +46,24 @@
               <label for="login-email" class="form-label">Email Address</label>
               <div class="input-with-icon">
                 <i class="fas fa-envelope input-icon"></i>
-                <input type="email" id="login-email" name="login-email" [(ngModel)]="_user.email" class="form-control form-input"
-                       placeholder="name@delhi.gov.in" required>
+                <input type="email" id="login-email" name="login-email" [(ngModel)]="_user.email"
+                  class="form-control form-input" placeholder="name@delhi.gov.in" required>
               </div>
             </div>
             <div class="mb-4 input-group-custom">
               <label for="login-password" class="form-label">Password</label>
               <div class="input-with-icon">
                 <i class="fas fa-lock input-icon"></i>
-                <input type="password" id="login-password" name="login-password" [(ngModel)]="_user.Password" class="form-control form-input"
-                       placeholder="Your password" required>
+                <input type="password" id="login-password" name="login-password" [(ngModel)]="_user.Password"
+                  class="form-control form-input" placeholder="Your password" required>
               </div>
             </div>
             <div class="d-flex justify-content-end mb-4">
-              <button type="button" class="btn btn-link forget-password-btn" (click)="forgotPassword()">Forgot Password?</button>
+              <button type="button" class="btn btn-link forget-password-btn" (click)="forgotPassword()">Forgot
+                Password?</button>
             </div>
             <button type="button" class="btn btn-primary btn-lg w-100 shadow-sm" (click)="login()"
-                    [disabled]="!_user.email || !_user.Password">
+              [disabled]="!_user.email || !_user.Password">
               <i class="fas fa-sign-in-alt me-2"></i> Login
             </button>
           </div>
@@ -69,9 +73,10 @@
             <!-- Modern Stepper -->
             <div class="signup-stepper mb-4">
               <div class="progress-track">
-                <div class="progress-fill" [style.width]="currentStep === 1 ? '33%' : (currentStep === 2 ? '66%' : '100%')"></div>
+                <div class="progress-fill"
+                  [style.width]="currentStep === 1 ? '33%' : (currentStep === 2 ? '66%' : '100%')"></div>
               </div>
-              
+
               <!-- Step 1: Verification -->
               <div class="step-item" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
                 <div class="step-circle">
@@ -98,7 +103,7 @@
             </div>
 
             <form #signupForm="ngForm" class="signup-form">
-              
+
               <!-- STEP 1: VERIFICATION -->
               <div *ngIf="currentStep === 1" class="animate-slide-up">
                 <div class="mb-4 input-group-custom">
@@ -106,14 +111,15 @@
                   <div class="input-with-icon">
                     <i class="fas fa-envelope input-icon"></i>
                     <input type="email" id="signup-email" name="signup-email" class="form-control form-input"
-                           placeholder="name@delhi.gov.in" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
-                           [disabled]="isEmailVerified">
+                      placeholder="name@delhi.gov.in" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
+                      [disabled]="isEmailVerified">
                   </div>
-                  <button type="button" class="btn btn-warning btn-sm mt-2 w-100" (click)="sendOtp()" *ngIf="!isEmailVerified"
-                          [disabled]="!isEmailSent || isEmailVerified">
+                  <button type="button" class="btn btn-warning btn-sm mt-2 w-100" (click)="sendOtp()"
+                    *ngIf="!isEmailVerified" [disabled]="!isEmailSent || isEmailVerified">
                     Verify Email
                   </button>
-                  <span class="text-success d-block mt-2" *ngIf="isEmailVerified"><i class="fas fa-check-circle me-1"></i> Email Verified</span>
+                  <span class="text-success d-block mt-2" *ngIf="isEmailVerified"><i
+                      class="fas fa-check-circle me-1"></i> Email Verified</span>
                 </div>
 
                 <div class="mb-4 input-group-custom">
@@ -121,23 +127,26 @@
                   <div class="input-with-icon">
                     <i class="fas fa-phone input-icon"></i>
                     <input type="tel" id="signup-phone" name="signup-phone" class="form-control form-input"
-                           placeholder="Enter your 10-digit phone number" [(ngModel)]="_user.mobile_No" (input)="onPhoneInput($event)" required
-                           [disabled]="isPhoneVerified">
+                      placeholder="Enter your 10-digit phone number" [(ngModel)]="_user.mobile_No"
+                      (input)="onPhoneInput($event)" required [disabled]="isPhoneVerified">
                   </div>
                   <div class="mt-2">
-                    <button type="button" class="btn btn-warning btn-sm w-100" (click)="sendPhoneOtp()" *ngIf="!isPhoneVerified"
-                            [disabled]="!_user.mobile_No || _user.mobile_No.length !== 10 || isPhoneVerified">
+                    <button type="button" class="btn btn-warning btn-sm w-100" (click)="sendPhoneOtp()"
+                      *ngIf="!isPhoneVerified"
+                      [disabled]="!_user.mobile_No || _user.mobile_No.length !== 10 || isPhoneVerified">
                       Verify Phone
                     </button>
-                    <button type="button" class="btn btn-secondary btn-sm w-100 mt-2" (click)="editPhone()" *ngIf="isPhoneVerified">
+                    <button type="button" class="btn btn-secondary btn-sm w-100 mt-2" (click)="editPhone()"
+                      *ngIf="isPhoneVerified">
                       Edit Phone
                     </button>
-                    <span class="text-success d-block mt-2" *ngIf="isPhoneVerified"><i class="fas fa-check-circle me-1"></i> Phone Verified</span>
+                    <span class="text-success d-block mt-2" *ngIf="isPhoneVerified"><i
+                        class="fas fa-check-circle me-1"></i> Phone Verified</span>
                   </div>
                 </div>
 
                 <button type="button" class="btn btn-primary btn-lg w-100 shadow-sm" (click)="nextStep()"
-                        [disabled]="!isEmailVerified || !isPhoneVerified">
+                  [disabled]="!isEmailVerified || !isPhoneVerified">
                   Next: Enter Details <i class="fas fa-arrow-right ms-2"></i>
                 </button>
               </div>
@@ -148,8 +157,8 @@
                   <label for="signup-name" class="form-label">Full Name</label>
                   <div class="input-with-icon">
                     <i class="fas fa-user input-icon"></i>
-                    <input type="text" id="signup-name" name="signup-name" class="form-control form-input" placeholder="Your full name"
-                           [(ngModel)]="_user.name" required>
+                    <input type="text" id="signup-name" name="signup-name" class="form-control form-input"
+                      placeholder="Your full name" [(ngModel)]="_user.name" required>
                   </div>
                 </div>
 
@@ -158,7 +167,7 @@
                   <div class="input-with-icon">
                     <i class="fas fa-lock input-icon"></i>
                     <input type="password" id="signup-password" name="signup-password" class="form-control form-input"
-                           placeholder="Create a password" [(ngModel)]="_user.Password" required> 
+                      placeholder="Create a password" [(ngModel)]="_user.Password" required>
                   </div>
                 </div>
 
@@ -167,7 +176,8 @@
                   <div class="input-with-icon">
                     <i class="fas fa-map-marker-alt input-icon"></i>
                     <div class="flex-grow-1" style="margin-left: 2.8rem;">
-                      <AutocompleteComponent (setAddress)="handleAddress($event)" [autocompleteInput]="_user.Address" [showIcon]="false"></AutocompleteComponent>
+                      <AutocompleteComponent (setAddress)="handleAddress($event)" [autocompleteInput]="_user.Address"
+                        [showIcon]="false"></AutocompleteComponent>
                     </div>
                   </div>
                 </div>
@@ -177,7 +187,7 @@
                     Back
                   </button>
                   <button type="button" class="btn btn-primary btn-lg flex-grow-1" (click)="nextStep()"
-                          [disabled]="!_user.name || !_user.Password || !_user.Address">
+                    [disabled]="!_user.name || !_user.Password || !_user.Address">
                     Next: Transport <i class="fas fa-arrow-right ms-2"></i>
                   </button>
                 </div>
@@ -186,93 +196,87 @@
               <!-- STEP 3: TRANSPORT IMPACT -->
               <div *ngIf="currentStep === 3" class="animate-slide-up">
                 <div class="mb-3">
-                    <label class="form-label fw-bold small text-muted text-uppercase">Current Commute Mode</label>
-                    <div class="row g-2">
-                      <div class="col-6">
-                        <div class="selection-card p-2 text-center border rounded cursor-pointer" 
-                             [class.bg-primary]="transportMode === 'Self'" 
-                             [class.text-white]="transportMode === 'Self'"
-                             (click)="selectTransport('Self')">
-                          <i class="fas fa-car-side mb-1"></i>
-                          <div class="small fw-bold">Self Driven</div>
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="selection-card p-2 text-center border rounded cursor-pointer" 
-                             [class.bg-primary]="transportMode === 'Cab'"
-                             [class.text-white]="transportMode === 'Cab'"
-                             (click)="selectTransport('Cab')">
-                          <i class="fas fa-taxi mb-1"></i>
-                          <div class="small fw-bold">Cab / Taxi</div>
-                        </div>
+                  <label class="form-label fw-bold small text-muted text-uppercase">Current Commute Mode</label>
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <div class="selection-card p-2 text-center border rounded cursor-pointer"
+                        [class.bg-primary]="transportMode === 'Self'" [class.text-white]="transportMode === 'Self'"
+                        (click)="selectTransport('Self')">
+                        <i class="fas fa-car-side mb-1"></i>
+                        <div class="small fw-bold">Self Driven</div>
                       </div>
                     </div>
+                    <div class="col-6">
+                      <div class="selection-card p-2 text-center border rounded cursor-pointer"
+                        [class.bg-primary]="transportMode === 'Cab'" [class.text-white]="transportMode === 'Cab'"
+                        (click)="selectTransport('Cab')">
+                        <i class="fas fa-taxi mb-1"></i>
+                        <div class="small fw-bold">Cab / Taxi</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <!-- Vehicle Type (If Self) -->
                 <div class="mb-3 animate-slide-up" *ngIf="transportMode === 'Self'">
-                    <label class="form-label fw-bold small text-muted text-uppercase">Vehicle Type</label>
-                    <div class="row g-2">
-                        <div class="col-6">
-                        <div class="selection-card p-2 text-center border rounded cursor-pointer" 
-                             [class.bg-primary]="vehicleType === 'Car'"
-                             [class.text-white]="vehicleType === 'Car'"
-                             (click)="selectVehicle('Car')">
-                            <i class="fas fa-car mb-1"></i>
-                            <div class="small fw-bold">Car</div>
-                        </div>
-                        </div>
-                        <div class="col-6">
-                        <div class="selection-card p-2 text-center border rounded cursor-pointer" 
-                             [class.bg-primary]="vehicleType === 'Bike'"
-                             [class.text-white]="vehicleType === 'Bike'"
-                             (click)="selectVehicle('Bike')">
-                            <i class="fas fa-motorcycle mb-1"></i>
-                            <div class="small fw-bold">Bike</div>
-                        </div>
-                        </div>
+                  <label class="form-label fw-bold small text-muted text-uppercase">Vehicle Type</label>
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <div class="selection-card p-2 text-center border rounded cursor-pointer"
+                        [class.bg-primary]="vehicleType === 'Car'" [class.text-white]="vehicleType === 'Car'"
+                        (click)="selectVehicle('Car')">
+                        <i class="fas fa-car mb-1"></i>
+                        <div class="small fw-bold">Car</div>
+                      </div>
                     </div>
+                    <div class="col-6">
+                      <div class="selection-card p-2 text-center border rounded cursor-pointer"
+                        [class.bg-primary]="vehicleType === 'Bike'" [class.text-white]="vehicleType === 'Bike'"
+                        (click)="selectVehicle('Bike')">
+                        <i class="fas fa-motorcycle mb-1"></i>
+                        <div class="small fw-bold">Bike</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <!-- Fuel Type -->
                 <div class="mb-3 animate-slide-up" *ngIf="transportMode === 'Self' && vehicleType">
-                    <label class="form-label fw-bold small text-muted text-uppercase">Fuel Type</label>
-                    <div class="row g-2">
-                        <ng-container *ngIf="vehicleType === 'Car'">
-                            <div class="col-6" *ngFor="let fuel of ['Petrol', 'Diesel', 'CNG', 'Electric']">
-                                <div class="selection-card p-2 text-center border rounded cursor-pointer"
-                                     [class.bg-primary]="fuelType === fuel"
-                                     [class.text-white]="fuelType === fuel"
-                                     (click)="selectFuel(fuel)">
-                                    <div class="small fw-bold">{{fuel}}</div>
-                                </div>
-                            </div>
-                        </ng-container>
-                        <ng-container *ngIf="vehicleType === 'Bike'">
-                            <div class="col-6" *ngFor="let fuel of ['Petrol', 'Electric']">
-                                <div class="selection-card p-2 text-center border rounded cursor-pointer"
-                                     [class.bg-primary]="bikeFuelType === fuel"
-                                     [class.text-white]="bikeFuelType === fuel"
-                                     (click)="selectFuel(fuel)">
-                                    <div class="small fw-bold">{{fuel}}</div>
-                                </div>
-                            </div>
-                        </ng-container>
-                    </div>
+                  <label class="form-label fw-bold small text-muted text-uppercase">Fuel Type</label>
+                  <div class="row g-2">
+                    <ng-container *ngIf="vehicleType === 'Car'">
+                      <div class="col-6" *ngFor="let fuel of ['Petrol', 'Diesel', 'CNG', 'Electric']">
+                        <div class="selection-card p-2 text-center border rounded cursor-pointer"
+                          [class.bg-primary]="fuelType === fuel" [class.text-white]="fuelType === fuel"
+                          (click)="selectFuel(fuel)">
+                          <div class="small fw-bold">{{fuel}}</div>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="vehicleType === 'Bike'">
+                      <div class="col-6" *ngFor="let fuel of ['Petrol', 'Electric']">
+                        <div class="selection-card p-2 text-center border rounded cursor-pointer"
+                          [class.bg-primary]="bikeFuelType === fuel" [class.text-white]="bikeFuelType === fuel"
+                          (click)="selectFuel(fuel)">
+                          <div class="small fw-bold">{{fuel}}</div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
                 </div>
 
                 <!-- Impact Result Mini-Card -->
                 <div class="impact-result-card p-3 bg-light rounded mb-4 border" *ngIf="impactCalculated">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <small class="text-muted d-block">Distance</small>
-                            <span class="fw-bold">{{ distanceKm | number:'1.1-1' }} km</span>
-                        </div>
-                        <div class="text-end">
-                            <small class="text-muted d-block">Potential Savings</small>
-                            <span class="fw-bold text-success">{{ co2Saved | number:'1.2-2' }} kg CO2</span>
-                        </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <small class="text-muted d-block">Distance</small>
+                      <span class="fw-bold">{{ distanceKm | number:'1.1-1' }} km</span>
                     </div>
+                    <div class="text-end">
+                      <small class="text-muted d-block">Potential Savings</small>
+                      <span class="fw-bold text-success">{{ co2Saved | number:'1.2-2' }} kg CO2</span>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="d-flex gap-2">
@@ -280,7 +284,7 @@
                     Back
                   </button>
                   <button type="button" class="btn btn-success btn-lg flex-grow-1 shadow-sm" (click)="signup()"
-                          [disabled]="!impactCalculated">
+                    [disabled]="!impactCalculated">
                     <i class="fas fa-check-circle me-2"></i> Create Account
                   </button>
                 </div>
@@ -301,7 +305,7 @@
 
     <!-- OTP Modal -->
     <div class="modal fade" [class.show]="showOtpModal" [style.display]="showOtpModal ? 'block' : 'none'" tabindex="-1"
-         aria-labelledby="otpModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+      aria-labelledby="otpModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content shadow-lg">
           <div class="modal-header">
@@ -310,21 +314,24 @@
           </div>
           <div class="modal-body text-center p-4">
             <div class="mb-4">
-                <i class="fas fa-shield-alt fa-3x text-primary"></i>
+              <i class="fas fa-shield-alt fa-3x text-primary"></i>
             </div>
-            <p class="text-muted mb-4">Enter the 6-digit OTP sent to <br><strong>{{ isEmailOtpMode ? _user.email : _user.mobile_No }}</strong></p>
+            <p class="text-muted mb-4">Enter the 6-digit OTP sent to <br><strong>{{ isEmailOtpMode ? _user.email :
+                _user.mobile_No }}</strong></p>
             <div class="mb-3">
               <input type="text" class="form-control form-input text-center fs-4 letter-spacing-2" placeholder="000000"
-                     maxlength="6" [(ngModel)]="currentOtp" (input)="onOtpInput($event)" required style="letter-spacing: 5px;">
+                maxlength="6" [(ngModel)]="currentOtp" (input)="onOtpInput($event)" required
+                style="letter-spacing: 5px;">
             </div>
             <div class="resend-otp-section">
-              <p class="text-muted mb-2">Didn't receive code? 
+              <p class="text-muted mb-2">Didn't receive code?
                 <button type="button" class="btn btn-link resend-otp-btn p-0" [disabled]="resendTimer > 0"
-                        (click)="resendOtp()">
+                  (click)="resendOtp()">
                   Resend OTP
                 </button>
               </p>
-              <p class="text-muted small" *ngIf="resendTimer > 0">Resend in <span class="fw-bold">{{ resendTimer }}s</span></p>
+              <p class="text-muted small" *ngIf="resendTimer > 0">Resend in <span class="fw-bold">{{ resendTimer
+                  }}s</span></p>
             </div>
           </div>
           <div class="modal-footer justify-content-center pb-4 border-0">
@@ -392,17 +399,21 @@
             </div>
 
             <!-- Right Side: Results -->
-            <div class="col-lg-5 p-4 p-md-5 calc-results-panel d-flex flex-column justify-content-center align-items-center text-center">
-              <h4 class="fw-medium mb-5 opacity-90 text-white"><i class="fas fa-globe-asia me-2"></i>Your Monthly Impact</h4>
+            <div
+              class="col-lg-5 p-4 p-md-5 calc-results-panel d-flex flex-column justify-content-center align-items-center text-center">
+              <h4 class="fw-medium mb-5 opacity-90 text-white"><i class="fas fa-globe-asia me-2"></i>Your Monthly Impact
+              </h4>
 
               <div class="d-flex flex-column gap-5 w-100">
                 <div class="result-block">
-                  <div class="display-3 fw-bold mb-1 text-white">{{ co2SavedMonthly }} <span class="fs-5 fw-normal opacity-75">kg CO₂</span></div>
+                  <div class="display-3 fw-bold mb-1 text-white">{{ co2SavedMonthly }} <span
+                      class="fs-5 fw-normal opacity-75">kg CO₂</span></div>
                   <div class="fs-5 text-white opacity-90">Emissions Prevented</div>
                 </div>
 
                 <div class="result-block">
-                  <div class="display-3 fw-bold mb-1 text-white">{{ treesEquivalent }} <i class="fas fa-tree ms-2 opacity-75" style="color: #00a86b;"></i></div>
+                  <div class="display-3 fw-bold mb-1 text-white">{{ treesEquivalent }} <i
+                      class="fas fa-tree ms-2 opacity-75" style="color: #00a86b;"></i></div>
                   <div class="fs-5 text-white opacity-90">Trees Equivalent Absorbed</div>
                 </div>
               </div>
