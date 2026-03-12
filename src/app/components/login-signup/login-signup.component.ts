@@ -18,7 +18,7 @@ export class LoginSignupComponent implements OnInit {
   progress: number = 0;
   resendTimer: number = 0;
   currentOtp: string = '';
-  domain: string = 'elitecorporatesolutions.com';
+  domain: string = 'delhi.gov.in';
   serverOTP: string = '';
   serverPhoneOTP: string = '';
   _user: UserModel = new UserModel();

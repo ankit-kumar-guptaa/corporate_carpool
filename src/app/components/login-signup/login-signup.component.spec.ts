@@ -21,7 +21,7 @@ export class LoginSignupComponent {
   onEmailInput(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     const email = inputElement.value.trim();
-    const officialEmailPattern = /^[a-zA-Z0-9._%+-]+@elitecorporate\.com$/;
+    const officialEmailPattern = /^[a-zA-Z0-9._%+-]+@delhi\.gov\.in$/;
 
     this.isOtpButtonVisible = officialEmailPattern.test(email);
   }
@@ -44,7 +44,7 @@ export class LoginSignupComponent {
     const email = (document.getElementById('login-email') as HTMLInputElement).value;
     const password = (document.getElementById('login-password') as HTMLInputElement).value;
 
-    if (email === 'ankit@elitecorporate.com' && password === 'password123') {
+    if (email === 'ankit@delhi.gov.in' && password === 'password123') {
       this.loginEvent.emit('Ankit'); 
     } else {
       alert('Invalid credentials. Please try again.');
