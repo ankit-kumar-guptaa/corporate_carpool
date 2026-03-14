@@ -36,10 +36,12 @@ export class LoginSignupComponent implements OnInit {
 
   get co2SavedMonthly(): number {
     const workingDays = 22;
-    const dailyEmission = (this.commuteDistanceCalc * 2) * 0.18;
+    const dailyEmission = (this.commuteDistanceCalc * 2) * 0.18; // 180g CO2 per km
     const monthlyEmission = dailyEmission * workingDays;
-    const savingRatio = this.carpoolersCalc / (this.carpoolersCalc + 1);
-    return Math.round(monthlyEmission * savingRatio);
+    
+    // If you drive alone, no savings. If you bring 1 carpooler, you save 1 car's worth of emissions.
+    // If you bring 2 carpoolers, you save 2 cars' worth of emissions.
+    return Math.round(monthlyEmission * this.carpoolersCalc);
   }
 
   get treesEquivalent(): number {
