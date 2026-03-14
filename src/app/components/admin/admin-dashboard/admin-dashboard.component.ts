@@ -1,55 +1,93 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AdminService } from '../../../services/admin.service';
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss']
 })
-export class AdminDashboardComponent {
+export class AdminDashboardComponent implements OnInit {
   
+  totalRides: number = 0;
+  totalRequests: number = 0;
+  totalUsers: number = 0;
+  totalFuelSaved: number = 0;
+  isLoadingStats: boolean = true;
+
+  constructor(private adminService: AdminService) {}
+
+  ngOnInit() {
+    this.loadStats();
+  }
+
+  loadStats() {
+    this.isLoadingStats = true;
+    
+    // Fetch top-level stats
+    this.adminService.getDashboardStats(this.currentFilter).subscribe({
+      next: (res: any) => {
+        if (res && res.status === 1 && res.data) {
+           this.totalRides = res.data.totalRides;
+           this.totalRequests = res.data.totalRequests;
+           this.totalUsers = res.data.totalUsers;
+           this.totalFuelSaved = res.data.totalFuelSaved || 0;
+        }
+      },
+      error: (err) => console.error('Error fetching stats', err)
+    });
+
+    // Fetch chart data
+    this.adminService.getDashboardChartData().subscribe({
+        next: (res: any) => {
+            if (res && res.status === 1 && res.data) {
+                if (res.data.monthlyStats && res.data.monthlyStats.length > 0) {
+                    this.monthlyStats = res.data.monthlyStats;
+                }
+                if (res.data.weeklyStats && res.data.weeklyStats.length > 0) {
+                    this.weeklyStats = res.data.weeklyStats;
+                }
+                if (res.data.dailyStats && res.data.dailyStats.length > 0) {
+                    this.dailyStats = res.data.dailyStats;
+                }
+                if (res.data.rideStatusStats && res.data.rideStatusStats.length > 0) {
+                    this.rideStatusStats = res.data.rideStatusStats;
+                }
+            }
+        },
+        error: (err) => console.error('Error fetching chart data', err)
+    });
+
+    // Fetch Top Employees
+    this.adminService.getAllEmployees().subscribe({
+        next: (res: any) => {
+            if (res && res.status === 1 && res.data) {
+                // Grab top 5 by rides
+                this.topEmployees = res.data.slice(0, 5).map((e: any) => ({
+                    name: e.name,
+                    dept: 'Corporate', // Fallback or could add to API
+                    role: e.role,
+                    rides: e.rides,
+                    distance: e.distance,
+                    co2: e.co2
+                }));
+            }
+            this.isLoadingStats = false;
+        },
+        error: (err) => {
+            console.error('Error fetching employees for dashboard top list', err);
+            this.isLoadingStats = false;
+        }
+    });
+
+  }
+
   // Stats for Charts
   currentFilter: string = 'Monthly';
 
-  monthlyStats = [
-      { label: 'Jan', rides: 450, co2: 200 },
-      { label: 'Feb', rides: 520, co2: 250 },
-      { label: 'Mar', rides: 600, co2: 300 },
-      { label: 'Apr', rides: 750, co2: 380 },
-      { label: 'May', rides: 800, co2: 420 },
-      { label: 'Jun', rides: 950, co2: 500 },
-      { label: 'Jul', rides: 1100, co2: 600 },
-      { label: 'Aug', rides: 850, co2: 480 },
-      { label: 'Sep', rides: 900, co2: 520 },
-      { label: 'Oct', rides: 1000, co2: 580 },
-      { label: 'Nov', rides: 1200, co2: 700 },
-      { label: 'Dec', rides: 1150, co2: 650 },
-  ];
-
-  weeklyStats = [
-      { label: 'Mon', rides: 120, co2: 45 },
-      { label: 'Tue', rides: 145, co2: 55 },
-      { label: 'Wed', rides: 160, co2: 65 },
-      { label: 'Thu', rides: 135, co2: 50 },
-      { label: 'Fri', rides: 180, co2: 75 },
-      { label: 'Sat', rides: 90, co2: 30 },
-      { label: 'Sun', rides: 60, co2: 20 },
-  ];
-
-  dailyStats = [
-      { label: '00-04', rides: 15, co2: 5 },
-      { label: '04-08', rides: 45, co2: 15 },
-      { label: '08-12', rides: 180, co2: 70 },
-      { label: '12-16', rides: 120, co2: 45 },
-      { label: '16-20', rides: 210, co2: 85 },
-      { label: '20-24', rides: 60, co2: 25 },
-  ];
-
-  // Ride Status for Donut Chart
-  rideStatusStats = [
-      { label: 'Completed', value: 65, color: '#0d6efd' }, // Primary Blue
-      { label: 'Scheduled', value: 25, color: '#0dcaf0' }, // Info Cyan
-      { label: 'Cancelled', value: 10, color: '#dc3545' }  // Danger Red
-  ];
+  monthlyStats: any[] = [];
+  weeklyStats: any[] = [];
+  dailyStats: any[] = [];
+  rideStatusStats: any[] = [];
 
   get currentStats() {
     switch (this.currentFilter) {
@@ -61,6 +99,7 @@ export class AdminDashboardComponent {
 
   setFilter(filter: string) {
     this.currentFilter = filter;
+    this.loadStats(); // Re-fetch the stats dynamically with the new filter
   }
 
   // Helper for Chart Scaling
@@ -91,11 +130,5 @@ export class AdminDashboardComponent {
   }
 
   // Top Employees with Role
-  topEmployees = [
-    { name: 'Rahul Sharma', dept: 'IT Engineering', role: 'Pooler', rides: 145, distance: '2,340', co2: 450 },
-    { name: 'Priya Verma', dept: 'HR', role: 'Seeker', rides: 132, distance: '1,980', co2: 380 },
-    { name: 'Amit Singh', dept: 'Marketing', role: 'Pooler', rides: 120, distance: '1,500', co2: 310 },
-    { name: 'Sneha Gupta', dept: 'Finance', role: 'Seeker', rides: 98, distance: '1,200', co2: 240 },
-    { name: 'Vikram Malhotra', dept: 'Operations', role: 'Pooler', rides: 85, distance: '980', co2: 190 },
-  ];
+  topEmployees: any[] = [];
 }

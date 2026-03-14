@@ -15,7 +15,25 @@
     </div>
 
     <div class="card border-0 shadow-sm rounded-4 mb-4 animate-slide-up">
-        <div class="card-body p-4">
+        <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+            <ul class="nav nav-tabs border-bottom-0 custom-tabs">
+                <li class="nav-item">
+                    <a class="nav-link fw-bold px-4 py-3 cursor-pointer" 
+                       [class.active]="activeTab === 'rides'" 
+                       (click)="setActiveTab('rides')">
+                        <i class="fas fa-car-side me-2"></i> Posted Rides
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-bold px-4 py-3 cursor-pointer" 
+                       [class.active]="activeTab === 'requests'" 
+                       (click)="setActiveTab('requests')">
+                        <i class="fas fa-hand-paper me-2"></i> Ride Requests
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body p-4 border-top">
             <!-- Filters -->
             <div class="row g-3 mb-4">
                 <div class="col-md-3">
@@ -48,51 +66,108 @@
                 </div>
             </div>
 
-            <!-- Table -->
-            <div class="table-responsive">
-                <table class="table table-hover align-middle custom-table">
+            <!-- Content Area -->
+            
+            <!-- Rides Table -->
+            <div class="table-responsive" *ngIf="activeTab === 'rides'">
+                <div class="text-center py-5" *ngIf="isLoadingRides">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <div class="mt-2 text-muted fw-bold">Loading rides...</div>
+                </div>
+                <table class="table table-hover align-middle custom-table" *ngIf="!isLoadingRides">
                     <thead class="bg-light">
                         <tr>
                             <th class="border-0 ps-4 text-secondary text-uppercase small letter-spacing-1 py-3">Ride ID</th>
                             <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Employee</th>
                             <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Route</th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Distance</th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">CO₂ Saved</th>
+                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Type</th>
                             <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Date</th>
                             <th class="border-0 text-end pe-4 text-secondary text-uppercase small letter-spacing-1 py-3">Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let ride of rides" class="table-row-hover">
-                            <td class="ps-4 fw-bold text-primary">#{{ride.id}}</td>
+                            <td class="ps-4 fw-bold text-primary">#{{ride.rideID}}</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="avatar-xs bg-soft-primary rounded-circle me-2 d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 30px; height: 30px;">
-                                        {{ride.employee.charAt(0)}}
+                                    <div *ngIf="!ride.userPhoto" class="avatar-xs bg-soft-primary rounded-circle me-2 d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 30px; height: 30px;">
+                                        {{ride.userName ? ride.userName.charAt(0) : 'U'}}
                                     </div>
-                                    <span class="fw-bold text-dark">{{ride.employee}}</span>
+                                    <img *ngIf="ride.userPhoto" [src]="ride.userPhoto" class="rounded-circle me-2 object-fit-cover" style="width: 30px; height: 30px;" alt="User">
+                                    <span class="fw-bold text-dark">{{ride.userName || 'Unknown'}}</span>
                                 </div>
                             </td>
                             <td>
                                 <div class="small">
-                                    <span class="text-muted">{{ride.from}}</span>
-                                    <i class="fas fa-long-arrow-alt-right mx-2 text-primary"></i>
-                                    <span class="text-muted">{{ride.to}}</span>
+                                    <span class="text-muted d-block text-truncate" style="max-width: 150px;" title="{{ride.from_Address}}">{{ride.from_Address}}</span>
+                                    <i class="fas fa-long-arrow-alt-down my-1 text-primary ps-2"></i>
+                                    <span class="text-muted d-block text-truncate" style="max-width: 150px;" title="{{ride.to_Address}}">{{ride.to_Address}}</span>
                                 </div>
                             </td>
-                            <td class="fw-bold">{{ride.distance}} km</td>
                             <td>
-                                <span class="badge bg-soft-success text-success rounded-pill px-3">
-                                    <i class="fas fa-leaf me-1"></i> {{ride.co2}} kg
+                                <span class="badge bg-soft-info text-info rounded-pill px-3">
+                                    {{ride.ride_Type}} <span *ngIf="ride.ride_Frequency">({{ride.ride_Frequency}})</span>
                                 </span>
                             </td>
-                            <td class="text-muted">{{ride.date | date:'mediumDate'}}</td>
+                            <td class="text-muted">{{ride.ride_Date | date:'mediumDate'}}</td>
                             <td class="text-end pe-4">
                                 <span class="badge rounded-pill px-3 py-1" 
-                                    [ngClass]="{'bg-success': ride.status === 'Completed', 'bg-danger': ride.status === 'Cancelled', 'bg-info': ride.status === 'Ongoing'}">
-                                    {{ride.status}}
+                                    [ngClass]="ride.isActive ? 'bg-success' : 'bg-secondary'">
+                                    {{ride.isActive ? 'Active' : 'Inactive'}}
                                 </span>
                             </td>
+                        </tr>
+                        <tr *ngIf="rides.length === 0 && !isLoadingRides">
+                            <td colspan="6" class="text-center py-4 text-muted">No rides found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Requests Table -->
+            <div class="table-responsive" *ngIf="activeTab === 'requests'">
+                <div class="text-center py-5" *ngIf="isLoadingRequests">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <div class="mt-2 text-muted fw-bold">Loading requests...</div>
+                </div>
+                <table class="table table-hover align-middle custom-table" *ngIf="!isLoadingRequests">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="border-0 ps-4 text-secondary text-uppercase small letter-spacing-1 py-3">Req ID</th>
+                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Requester</th>
+                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Ride Owner</th>
+                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Route</th>
+                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Date</th>
+                            <th class="border-0 text-end pe-4 text-secondary text-uppercase small letter-spacing-1 py-3">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let req of requests" class="table-row-hover">
+                            <td class="ps-4 fw-bold text-primary">#{{req.requestId}}</td>
+                            <td>
+                                <div class="fw-bold text-dark">{{req.requesterName || 'Unknown'}}</div>
+                                <div class="small text-muted">{{req.requesterEmail}}</div>
+                            </td>
+                            <td>
+                                <div class="fw-bold text-dark">{{req.rideOwnerName || 'Unknown'}}</div>
+                                <div class="small text-muted">{{req.rideOwnerEmail}}</div>
+                            </td>
+                            <td>
+                                <div class="small">
+                                    <span class="text-muted d-block text-truncate" style="max-width: 150px;" title="{{req.from_Address}}">{{req.from_Address}}</span>
+                                    <i class="fas fa-long-arrow-alt-down my-1 text-primary ps-2"></i>
+                                    <span class="text-muted d-block text-truncate" style="max-width: 150px;" title="{{req.to_Address}}">{{req.to_Address}}</span>
+                                </div>
+                            </td>
+                            <td class="text-muted">{{req.ride_Date | date:'mediumDate'}}</td>
+                            <td class="text-end pe-4">
+                                <span *ngIf="req.isAccept" class="badge bg-success rounded-pill px-3 py-1">Accepted</span>
+                                <span *ngIf="req.isReject" class="badge bg-danger rounded-pill px-3 py-1">Rejected</span>
+                                <span *ngIf="!req.isAccept && !req.isReject" class="badge bg-warning text-dark rounded-pill px-3 py-1">Pending</span>
+                            </td>
+                        </tr>
+                        <tr *ngIf="requests.length === 0 && !isLoadingRequests">
+                            <td colspan="6" class="text-center py-4 text-muted">No ride requests found.</td>
                         </tr>
                     </tbody>
                 </table>

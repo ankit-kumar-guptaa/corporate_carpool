@@ -1,24 +1,47 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../services/global-service';
+import { AdminService } from '../../../services/admin.service';
 
 @Component({
   selector: 'app-admin-employees',
   templateUrl: './admin-employees.component.html',
   styleUrls: ['./admin-employees.component.scss']
 })
-export class AdminEmployeesComponent {
-  employees = [
-    { id: 1, name: 'Rahul Sharma', email: 'rahul.sharma@company.com', role: 'Pooler', status: 'Active', rides: 145, co2: 450 },
-    { id: 2, name: 'Priya Verma', email: 'priya.verma@company.com', role: 'Seeker', status: 'Active', rides: 132, co2: 380 },
-    { id: 3, name: 'Amit Singh', email: 'amit.singh@company.com', role: 'Pooler', status: 'Pending', rides: 0, co2: 0 },
-    { id: 4, name: 'Sneha Gupta', email: 'sneha.gupta@company.com', role: 'Seeker', status: 'Active', rides: 98, co2: 240 },
-    { id: 5, name: 'Vikram Malhotra', email: 'vikram.m@company.com', role: 'Pooler', status: 'Inactive', rides: 12, co2: 45 },
-    { id: 6, name: 'Anjali Desai', email: 'anjali.d@company.com', role: 'Seeker', status: 'Pending', rides: 0, co2: 0 },
-    { id: 7, name: 'Rohan Mehta', email: 'rohan.mehta@company.com', role: 'Pooler', status: 'Active', rides: 88, co2: 210 },
-    { id: 8, name: 'Kavita Iyer', email: 'kavita.iyer@company.com', role: 'Seeker', status: 'Active', rides: 45, co2: 120 },
-  ];
+export class AdminEmployeesComponent implements OnInit {
+  employees: any[] = [];
+  filteredEmployees: any[] = [];
+  isLoadingData: boolean = true;
+  
+  searchTerm: string = '';
+  statusFilter: string = '';
+  roleFilter: string = '';
 
-  constructor(private _globalService: GlobalService) {}
+  constructor(
+      private _globalService: GlobalService,
+      private adminService: AdminService
+  ) {}
+
+  ngOnInit() {
+      this.loadEmployees();
+  }
+
+  loadEmployees() {
+      this.isLoadingData = true;
+      this.adminService.getAllEmployees().subscribe({
+          next: (res: any) => {
+              if (res && res.status === 1 && res.data) {
+                  this.employees = res.data;
+                  this.filteredEmployees = [...this.employees];
+              }
+              this.isLoadingData = false;
+          },
+          error: (err) => {
+              console.error('Error fetching employees', err);
+              this._globalService.utilities.notify.error('Failed to load employees');
+              this.isLoadingData = false;
+          }
+      });
+  }
 
   inviteEmployee() {
     // This method is now triggered by data-bs-toggle="modal"
@@ -26,19 +49,73 @@ export class AdminEmployeesComponent {
   }
 
   approve(emp: any) {
-    emp.status = 'Active';
-    this._globalService.utilities.notify.success(`Approved ${emp.name}`);
+    if (confirm(`Are you sure you want to activate ${emp.name}?`)) {
+        this.adminService.updateEmployeeStatus({ id: emp.id, status: 'Active' }).subscribe({
+            next: (res: any) => {
+                if (res && res.status === 1) {
+                    emp.status = 'Active';
+                    this.filterData();
+                    this._globalService.utilities.notify.success(`Activated ${emp.name}`);
+                } else {
+                    this._globalService.utilities.notify.error(res.message || 'Failed to activate');
+                }
+            },
+            error: (err) => {
+                this._globalService.utilities.notify.error('Network Error during activation');
+            }
+        });
+    }
   }
 
   reject(emp: any) {
-    this.employees = this.employees.filter(e => e.id !== emp.id);
-    this._globalService.utilities.notify.warning(`Rejected ${emp.name}`);
+    if (confirm(`Are you sure you want to deactivate ${emp.name}?`)) {
+        this.adminService.updateEmployeeStatus({ id: emp.id, status: 'Inactive' }).subscribe({
+            next: (res: any) => {
+                if (res && res.status === 1) {
+                    emp.status = 'Inactive';
+                    this.filterData();
+                    this._globalService.utilities.notify.warning(`Deactivated ${emp.name}`);
+                } else {
+                    this._globalService.utilities.notify.error(res.message || 'Failed to deactivate');
+                }
+            },
+            error: (err) => {
+                this._globalService.utilities.notify.error('Network Error during deactivation');
+            }
+        });
+    }
   }
 
   remove(emp: any) {
-    if (confirm(`Are you sure you want to remove ${emp.name}?`)) {
-        this.employees = this.employees.filter(e => e.id !== emp.id);
-        this._globalService.utilities.notify.success(`Removed ${emp.name}`);
+    if (confirm(`Are you sure you want to permanently delete ${emp.name}? This action cannot be undone.`)) {
+        this.adminService.deleteEmployee(emp.id).subscribe({
+            next: (res: any) => {
+                if (res && res.status === 1) {
+                    this.employees = this.employees.filter(e => e.id !== emp.id);
+                    this.filterData();
+                    this._globalService.utilities.notify.success(`Deleted ${emp.name} successfully`);
+                } else {
+                    this._globalService.utilities.notify.error(res.message || 'Failed to delete employee');
+                }
+            },
+            error: (err) => {
+                this._globalService.utilities.notify.error('Network Error during deletion');
+            }
+        });
     }
+  }
+
+  filterData() {
+    this.filteredEmployees = this.employees.filter(emp => {
+      const matchSearch = !this.searchTerm || 
+          (emp.name && emp.name.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
+          (emp.email && emp.email.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
+          (emp.role && emp.role.toLowerCase().includes(this.searchTerm.toLowerCase()));
+      
+      const matchStatus = !this.statusFilter || emp.status === this.statusFilter;
+      const matchRole = !this.roleFilter || emp.role === this.roleFilter;
+
+      return matchSearch && matchStatus && matchRole;
+    });
   }
 }

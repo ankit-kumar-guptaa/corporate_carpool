@@ -16,11 +16,11 @@
                 <div class="col-md-4">
                     <div class="input-group shadow-sm rounded-3 overflow-hidden">
                         <span class="input-group-text bg-white border-end-0 ps-3"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" class="form-control border-start-0 bg-white py-2" placeholder="Search by name, email or role...">
+                        <input type="text" class="form-control border-start-0 bg-white py-2" placeholder="Search by name, email or role..." [(ngModel)]="searchTerm" (input)="filterData()">
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-select bg-white shadow-sm rounded-3 py-2">
+                    <select class="form-select bg-white shadow-sm rounded-3 py-2" [(ngModel)]="statusFilter" (change)="filterData()">
                         <option value="">All Statuses</option>
                         <option value="Active">Active</option>
                         <option value="Pending">Pending</option>
@@ -28,7 +28,7 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-select bg-white shadow-sm rounded-3 py-2">
+                    <select class="form-select bg-white shadow-sm rounded-3 py-2" [(ngModel)]="roleFilter" (change)="filterData()">
                         <option value="">All Roles</option>
                         <option value="Pooler">Pooler (Driver)</option>
                         <option value="Seeker">Seeker (Passenger)</option>
@@ -38,7 +38,11 @@
 
             <!-- Table -->
             <div class="table-responsive">
-                <table class="table table-hover align-middle custom-table">
+                <div class="text-center py-5" *ngIf="isLoadingData">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <div class="mt-2 text-muted fw-bold">Loading employees...</div>
+                </div>
+                <table class="table table-hover align-middle custom-table" *ngIf="!isLoadingData">
                     <thead class="bg-light">
                         <tr>
                             <th class="border-0 ps-4 text-secondary text-uppercase small letter-spacing-1 py-3">Employee</th>
@@ -46,19 +50,20 @@
                             <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Status</th>
                             <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Total Rides</th>
                             <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">CO₂ Saved</th>
+                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Distance</th>
                             <th class="border-0 text-end pe-4 text-secondary text-uppercase small letter-spacing-1 py-3">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let emp of employees" class="table-row-hover">
+                        <tr *ngFor="let emp of filteredEmployees" class="table-row-hover">
                             <td class="ps-4">
                                 <div class="d-flex align-items-center py-2">
                                     <div class="avatar-sm bg-soft-info rounded-circle me-3 d-flex align-items-center justify-content-center text-info fw-bold shadow-sm" style="width: 40px; height: 40px;">
-                                        {{emp.name.charAt(0)}}
+                                        {{emp.name ? emp.name.charAt(0) : 'U'}}
                                     </div>
                                     <div>
-                                        <h6 class="mb-0 fw-bold text-dark">{{emp.name}}</h6>
-                                        <small class="text-muted">{{emp.email}}</small>
+                                        <h6 class="mb-0 fw-bold text-dark">{{emp.name || 'Unknown User'}}</h6>
+                                        <small class="text-muted">{{emp.email || 'No Email Provided'}}</small>
                                     </div>
                                 </div>
                             </td>
@@ -76,35 +81,15 @@
                             </td>
                             <td class="fw-bold text-dark">{{emp.rides}}</td>
                             <td class="fw-bold text-success">{{emp.co2}} kg</td>
+                            <td class="fw-bold text-dark">{{emp.distance}} km</td>
                             <td class="text-end pe-4">
-                                <div class="dropdown">
-                                    <button class="btn btn-icon btn-sm btn-light rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v text-muted"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3 p-2">
-                                        <li *ngIf="emp.status === 'Pending'">
-                                            <a class="dropdown-item rounded-2 text-success fw-bold" href="javascript:void(0)" (click)="approve(emp)">
-                                                <i class="fas fa-check me-2"></i> Approve
-                                            </a>
-                                        </li>
-                                        <li *ngIf="emp.status === 'Pending'">
-                                            <a class="dropdown-item rounded-2 text-danger fw-bold" href="javascript:void(0)" (click)="reject(emp)">
-                                                <i class="fas fa-times me-2"></i> Reject
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item rounded-2" href="javascript:void(0)">
-                                                <i class="fas fa-edit me-2 text-muted"></i> Edit Details
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item rounded-2 text-danger" href="javascript:void(0)" (click)="remove(emp)">
-                                                <i class="fas fa-trash-alt me-2"></i> Remove
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <button *ngIf="emp.status !== 'Active'" class="btn btn-sm btn-outline-success rounded-pill me-2 px-3" (click)="approve(emp)">Activate</button>
+                                <button *ngIf="emp.status === 'Active'" class="btn btn-sm btn-outline-warning rounded-pill me-2 px-3" (click)="reject(emp)">Deactivate</button>
+                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" (click)="remove(emp)"><i class="fas fa-trash"></i></button>
                             </td>
+                        </tr>
+                        <tr *ngIf="employees.length === 0 && !isLoadingData">
+                            <td colspan="6" class="text-center py-4 text-muted">No employees found in the corporate network.</td>
                         </tr>
                     </tbody>
                 </table>

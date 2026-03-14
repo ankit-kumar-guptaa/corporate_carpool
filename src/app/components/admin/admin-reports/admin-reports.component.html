@@ -15,9 +15,12 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm bg-gradient-primary text-white h-100">
                 <div class="card-body">
-                    <h6 class="text-uppercase opacity-75">Monthly CO₂ Saving</h6>
-                    <h3 class="display-6 fw-bold mb-0">12.5 Tons</h3>
-                    <small><i class="fas fa-arrow-up"></i> 8% from last month</small>
+                    <h6 class="text-uppercase opacity-75">Total CO₂ Saving</h6>
+                    <h3 class="display-6 fw-bold mb-0">
+                        <span *ngIf="isLoadingData" class="spinner-border spinner-border-sm" role="status"></span>
+                        <span *ngIf="!isLoadingData">{{totalCO2 | number:'1.2-2'}} kg</span>
+                    </h3>
+                    <small><i class="fas fa-check-circle"></i> Across all recorded rides</small>
                 </div>
             </div>
         </div>
@@ -25,13 +28,19 @@
             <div class="card border-0 shadow-sm bg-white h-100">
                 <div class="card-body">
                     <h6 class="text-uppercase text-muted">Top Green Employee</h6>
-                    <div class="d-flex align-items-center mt-2">
-                        <div class="avatar-sm bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-size: 1.2rem;">R</div>
+                    <div class="text-center py-2" *ngIf="isLoadingData">
+                        <div class="spinner-border spinner-border-sm text-success" role="status"></div>
+                    </div>
+                    <div class="d-flex align-items-center mt-2" *ngIf="!isLoadingData && topEmployee">
+                        <div class="avatar-sm bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-size: 1.2rem;">
+                            {{topEmployee.name.charAt(0)}}
+                        </div>
                         <div>
-                            <h5 class="fw-bold mb-0">Rahul Sharma</h5>
-                            <small class="text-success fw-bold">450 kg CO₂ Saved</small>
+                            <h5 class="fw-bold mb-0">{{topEmployee.name}}</h5>
+                            <small class="text-success fw-bold">{{topEmployee.co2}} kg CO₂ Saved</small>
                         </div>
                     </div>
+                    <div class="text-muted small mt-2" *ngIf="!isLoadingData && !topEmployee">No data available yet</div>
                 </div>
             </div>
         </div>
@@ -67,7 +76,11 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
+                <div class="text-center py-5" *ngIf="isLoadingData">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <div class="mt-2 text-muted fw-bold">Loading reports...</div>
+                </div>
+                <table class="table table-striped table-hover align-middle" *ngIf="!isLoadingData">
                     <thead class="bg-primary text-white">
                         <tr>
                             <th class="border-0 rounded-start">Ride ID</th>
@@ -80,12 +93,22 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let report of reports">
-                            <td class="font-monospace">#{{report.rideId}}</td>
-                            <td>{{report.date}}</td>
-                            <td class="fw-bold">{{report.employee}}</td>
+                            <td class="font-monospace text-primary fw-bold">#{{report.rideID}}</td>
+                            <td>{{report.ride_Date | date:'mediumDate'}}</td>
+                            <td>
+                                <div class="fw-bold">{{report.userName || 'Unknown'}}</div>
+                                <div class="small text-muted">{{report.userType || 'N/A'}}</div>
+                            </td>
                             <td>{{report.distance}} km</td>
                             <td class="text-success fw-bold">{{report.co2}} kg</td>
-                            <td><span class="badge bg-success rounded-pill">Completed</span></td>
+                            <td>
+                                <span class="badge rounded-pill" [ngClass]="report.isActive ? 'bg-success' : 'bg-secondary'">
+                                    {{report.isActive ? 'Active' : 'Completed'}}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr *ngIf="reports.length === 0 && !isLoadingData">
+                            <td colspan="6" class="text-center py-4 text-muted">No reports found for the selected criteria.</td>
                         </tr>
                     </tbody>
                 </table>

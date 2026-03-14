@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,10 +6,23 @@ import { Router } from '@angular/router';
   templateUrl: './admin-layout.component.html',
   styleUrls: ['./admin-layout.component.scss']
 })
-export class AdminLayoutComponent {
+export class AdminLayoutComponent implements OnInit {
   isSidebarToggled = false;
+  adminName: string = 'Admin';
 
   constructor(private router: Router) {}
+
+  ngOnInit() {
+      const userStr = localStorage.getItem('adminUser');
+      if (userStr) {
+          try {
+              const userObj = JSON.parse(userStr);
+              if (userObj && userObj.username) {
+                  this.adminName = userObj.username;
+              }
+          } catch(e) {}
+      }
+  }
 
   toggleSidebar() {
     this.isSidebarToggled = !this.isSidebarToggled;
