@@ -33,23 +33,32 @@ export class DashboardComponent implements OnInit {
   updatedEmail: string = '';
   notifications: { message: string, type: string, timestamp: Date }[] = [];
 
-  // Impact Analysis Data
+  // Carpool Confirmation
+  isCarpoolConfirmModalVisible: boolean = false;
+  carpoolPartnerName: string = '';
+  carpoolDate: string = new Date().toISOString().split('T')[0];
+  carpoolType: string = 'Passenger';
+  carpoolHistory: any[] = [];
+  todayConfirmed: boolean = false;
+
+  // Impact Analysis Data (dynamic)
   impactStats = {
     beforeMode: 'Solo Car (Petrol)',
-    currentMode: 'Carpool (Passenger)',
-    beforeEmission: 12.5, // kg/day
-    currentEmission: 3.2, // kg/day
-    saved: 9.3,
-    reductionPercent: 74,
-    treesPlanted: 12
+    currentMode: 'Solo',
+    beforeEmission: 8.5,
+    currentEmission: 8.5,
+    saved: 0,
+    reductionPercent: 0,
+    treesPlanted: 0,
+    totalCarpools: 0
   };
 
   constructor(private _globalService: GlobalService) {}
 
   ngOnInit(): void {
     this.loggedInUserName = localStorage.getItem('loggedInUserName') || '';
+    this.loadCarpoolHistory();
     this.loadData();
-    // Simulate fetching impact data
     this.calculateImpact();
   }
 
@@ -82,17 +91,38 @@ export class DashboardComponent implements OnInit {
   }
 
   calculateImpact() {
-    // In a real app, this would come from the backend based on their "Transport Impact" submission
-    // For now, we simulate a realistic improvement scenario
-    this.impactStats = {
+    const totalCarpools = this.carpoolHistory.length;
+    const soloEmissionPerDay = 8.5; // kg CO₂ per day solo driving
+    const carpoolEmissionPerDay = 2.1; // kg CO₂ per day carpooling
+
+    if (totalCarpools > 0) {
+      const totalSaved = parseFloat((totalCarpools * (soloEmissionPerDay - carpoolEmissionPerDay)).toFixed(1));
+      const avgSavedPerDay = parseFloat(((soloEmissionPerDay - carpoolEmissionPerDay)).toFixed(1));
+      const reductionPercent = Math.round(((soloEmissionPerDay - carpoolEmissionPerDay) / soloEmissionPerDay) * 100);
+      const treesEquivalent = Math.max(1, Math.floor(totalSaved / 21)); // ~21kg CO₂ per tree/year
+
+      this.impactStats = {
         beforeMode: 'Solo Car (Petrol)',
         currentMode: 'Carpool',
-        beforeEmission: 8.5,
-        currentEmission: 2.1,
-        saved: 6.4,
-        reductionPercent: 75,
-        treesPlanted: Math.floor(this.totalRidesCount / 5) + 2 // Mock logic
-    };
+        beforeEmission: soloEmissionPerDay,
+        currentEmission: carpoolEmissionPerDay,
+        saved: avgSavedPerDay,
+        reductionPercent: reductionPercent,
+        treesPlanted: treesEquivalent,
+        totalCarpools: totalCarpools
+      };
+    } else {
+      this.impactStats = {
+        beforeMode: 'Solo Car (Petrol)',
+        currentMode: 'Solo',
+        beforeEmission: soloEmissionPerDay,
+        currentEmission: soloEmissionPerDay,
+        saved: 0,
+        reductionPercent: 0,
+        treesPlanted: 0,
+        totalCarpools: 0
+      };
+    }
   }
 
   // Handle ride request acceptance
@@ -213,6 +243,93 @@ export class DashboardComponent implements OnInit {
   clearNotifications(): void {
     this.notifications = [];
     this._globalService.utilities.notify.success('Recent Activity Cleared');
+  }
+
+  // Carpool Confirmation Methods
+  openCarpoolConfirmModal(): void {
+    this.carpoolDate = new Date().toISOString().split('T')[0];
+    this.carpoolPartnerName = '';
+    this.carpoolType = 'Passenger';
+    this.isCarpoolConfirmModalVisible = true;
+  }
+
+  closeCarpoolConfirmModal(event?: MouseEvent): void {
+    if (event) event.stopPropagation();
+    this.isCarpoolConfirmModalVisible = false;
+  }
+
+  getAcceptedConnections(): any[] {
+    // Combine accepted connections from inbox & sent requests
+    const accepted: any[] = [];
+    if (this.connections?.length) {
+      this.connections.filter((c: any) => c.isaccept).forEach((c: any) => {
+        if (!accepted.find((a: any) => a.name === c.name)) accepted.push(c);
+      });
+    }
+    if (this.MySendRequests?.length) {
+      this.MySendRequests.filter((c: any) => c.isaccept).forEach((c: any) => {
+        if (!accepted.find((a: any) => a.name === c.name)) accepted.push(c);
+      });
+    }
+    return accepted;
+  }
+
+  submitCarpoolConfirmation(): void {
+    if (!this.carpoolPartnerName) {
+      this._globalService.utilities.notify.error('Please select your carpool partner');
+      return;
+    }
+    if (!this.carpoolDate) {
+      this._globalService.utilities.notify.error('Please select the date');
+      return;
+    }
+
+    const confirmation = {
+      partnerName: this.carpoolPartnerName,
+      date: this.carpoolDate,
+      type: this.carpoolType,
+      confirmedAt: new Date().toISOString(),
+      userName: this.loggedInUserName
+    };
+
+    this.carpoolHistory.unshift(confirmation);
+    localStorage.setItem('carpoolHistory_' + this.userId, JSON.stringify(this.carpoolHistory));
+    this.checkTodayConfirmed();
+    this.calculateImpact();
+    this._globalService.utilities.notify.success('🎉 Carpool confirmed! Thank you for going green!');
+    this.closeCarpoolConfirmModal();
+
+    // Add to notifications
+    this.notifications.unshift({
+      message: `You carpooled with ${this.carpoolPartnerName} as ${this.carpoolType}`,
+      type: 'accept',
+      timestamp: new Date()
+    });
+  }
+
+  loadCarpoolHistory(): void {
+    const stored = localStorage.getItem('carpoolHistory_' + this.userId);
+    if (stored) {
+      try {
+        this.carpoolHistory = JSON.parse(stored);
+      } catch {
+        this.carpoolHistory = [];
+      }
+    }
+    this.checkTodayConfirmed();
+  }
+
+  checkTodayConfirmed(): void {
+    const today = new Date().toISOString().split('T')[0];
+    this.todayConfirmed = this.carpoolHistory.some((c: any) => c.date === today);
+  }
+
+  deleteCarpoolEntry(index: number): void {
+    this.carpoolHistory.splice(index, 1);
+    localStorage.setItem('carpoolHistory_' + this.userId, JSON.stringify(this.carpoolHistory));
+    this.checkTodayConfirmed();
+    this.calculateImpact();
+    this._globalService.utilities.notify.success('Entry removed');
   }
 
   // Prevent modal close on content click

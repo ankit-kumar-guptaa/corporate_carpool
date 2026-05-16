@@ -11,7 +11,7 @@ export const environment = {
   bannerclass: 'topbanner_dev1',
   appinsightkey: '',
   base: 'http://localhost:5122/api',
-  base___: 'http://localhost:5000/api',
+  base___: 'http://localhost:5122/api',
   lang: 'en-us',
   salt: '@exam@',
   con: '',
