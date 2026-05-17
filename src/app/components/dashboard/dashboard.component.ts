@@ -33,13 +33,11 @@ export class DashboardComponent implements OnInit {
   updatedEmail: string = '';
   notifications: { message: string, type: string, timestamp: Date }[] = [];
 
-  // Carpool Confirmation
-  isCarpoolConfirmModalVisible: boolean = false;
-  carpoolPartnerName: string = '';
-  carpoolDate: string = new Date().toISOString().split('T')[0];
-  carpoolType: string = 'Passenger';
-  carpoolHistory: any[] = [];
-  todayConfirmed: boolean = false;
+  // Monthly Carpool Tracker
+  monthlyData: any[] = [];
+  currentMonth: number = new Date().getMonth();
+  currentYear: number = new Date().getFullYear();
+  normalCO2PerDay: number = 8.5; // Default, updated from user registration data
 
   // Impact Analysis Data (dynamic)
   impactStats = {
@@ -57,9 +55,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedInUserName = localStorage.getItem('loggedInUserName') || '';
-    this.loadCarpoolHistory();
     this.loadData();
-    this.calculateImpact();
   }
 
   // Fetch all dashboard data
@@ -86,43 +82,185 @@ export class DashboardComponent implements OnInit {
         this.submittedRides = res.data.dataset.table2 || [];
         this.totalRidesCount = this.submittedRides.length;
         this.loadNotifications();
+        this.loadNormalCO2FromProfile();
+        this.generateMonthlyData();
+        this.calculateImpact();
       }
     });
   }
 
-  calculateImpact() {
-    const totalCarpools = this.carpoolHistory.length;
-    const soloEmissionPerDay = 8.5; // kg CO₂ per day solo driving
-    const carpoolEmissionPerDay = 2.1; // kg CO₂ per day carpooling
+  // Load Normal CO2 from user's registration profile (distance * emission factor)
+  loadNormalCO2FromProfile(): void {
+    try {
+      const userProfile = this._globalService.utilities.storage.get('UserProfile') || '{}';
+      const parsed = JSON.parse(userProfile);
+      // If the profile has co2 or distance data from registration
+      if (parsed?.currentEmission) {
+        this.normalCO2PerDay = parseFloat(parsed.currentEmission);
+      } else if (parsed?.distanceKm) {
+        // Recalculate: roundTrip * avg emission factor (0.192 for petrol car)
+        this.normalCO2PerDay = parseFloat((parsed.distanceKm * 2 * 0.192).toFixed(2));
+      } else {
+        this.normalCO2PerDay = 8.5; // Default fallback
+      }
+    } catch {
+      this.normalCO2PerDay = 8.5;
+    }
+  }
+
+  // Generate monthly data table
+  generateMonthlyData(): void {
+    const storageKey = `carpoolMonthly_${this.userId}_${this.currentYear}_${this.currentMonth}`;
+    const stored = localStorage.getItem(storageKey);
+    if (stored) {
+      try {
+        this.monthlyData = JSON.parse(stored);
+        return;
+      } catch {}
+    }
+
+    const daysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+    this.monthlyData = [];
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(this.currentYear, this.currentMonth, d);
+      const dayOfWeek = date.getDay();
+      // Skip weekends (0=Sun, 6=Sat)
+      if (dayOfWeek === 0 || dayOfWeek === 6) continue;
+      this.monthlyData.push({
+        date: date.toISOString().split('T')[0],
+        dateDisplay: `${String(d).padStart(2, '0')}-${date.toLocaleString('en', { month: 'short' })}`,
+        carpooled: false,
+        partnerName: '',
+        members: 2,
+        normalCO2: this.normalCO2PerDay,
+        co2Savings: 0
+      });
+    }
+  }
+
+  // Toggle carpool for a day
+  onCarpoolToggle(row: any): void {
+    if (!row.carpooled) {
+      row.partnerName = '';
+      row.members = 2;
+      row.co2Savings = 0;
+    } else {
+      this.recalculateRow(row);
+    }
+    this.saveMonthlyData();
+    this.calculateImpact();
+  }
+
+  // Recalculate CO2 savings for a row
+  recalculateRow(row: any): void {
+    if (row.carpooled && row.members >= 2) {
+      // CO2 Savings = Normal - (Normal / members)
+      row.co2Savings = parseFloat((row.normalCO2 - (row.normalCO2 / row.members)).toFixed(2));
+    } else {
+      row.co2Savings = 0;
+    }
+  }
+
+  // On partner or members change
+  onRowChange(row: any): void {
+    this.recalculateRow(row);
+    this.saveMonthlyData();
+    this.calculateImpact();
+  }
+
+  // Save monthly data to localStorage
+  saveMonthlyData(): void {
+    const storageKey = `carpoolMonthly_${this.userId}_${this.currentYear}_${this.currentMonth}`;
+    localStorage.setItem(storageKey, JSON.stringify(this.monthlyData));
+  }
+
+  // Navigate months
+  prevMonth(): void {
+    if (this.currentMonth === 0) {
+      this.currentMonth = 11;
+      this.currentYear--;
+    } else {
+      this.currentMonth--;
+    }
+    this.generateMonthlyData();
+    this.calculateImpact();
+  }
+
+  nextMonth(): void {
+    if (this.currentMonth === 11) {
+      this.currentMonth = 0;
+      this.currentYear++;
+    } else {
+      this.currentMonth++;
+    }
+    this.generateMonthlyData();
+    this.calculateImpact();
+  }
+
+  getMonthName(): string {
+    return new Date(this.currentYear, this.currentMonth).toLocaleString('en', { month: 'long', year: 'numeric' });
+  }
+
+  // Get accepted connections for partner dropdown
+  getAcceptedConnections(): any[] {
+    const accepted: any[] = [];
+    if (this.connections?.length) {
+      this.connections.filter((c: any) => c.isaccept).forEach((c: any) => {
+        if (!accepted.find((a: any) => a.name === c.name)) accepted.push(c);
+      });
+    }
+    if (this.MySendRequests?.length) {
+      this.MySendRequests.filter((c: any) => c.isaccept).forEach((c: any) => {
+        if (!accepted.find((a: any) => a.name === c.name)) accepted.push(c);
+      });
+    }
+    return accepted;
+  }
+
+  // Dynamic impact calculation from monthly data
+  calculateImpact(): void {
+    const carpoolDays = this.monthlyData.filter((d: any) => d.carpooled);
+    const totalCarpools = carpoolDays.length;
+    const totalSaved = carpoolDays.reduce((sum: number, d: any) => sum + (d.co2Savings || 0), 0);
+    const totalNormal = carpoolDays.reduce((sum: number, d: any) => sum + (d.normalCO2 || 0), 0);
 
     if (totalCarpools > 0) {
-      const totalSaved = parseFloat((totalCarpools * (soloEmissionPerDay - carpoolEmissionPerDay)).toFixed(1));
-      const avgSavedPerDay = parseFloat(((soloEmissionPerDay - carpoolEmissionPerDay)).toFixed(1));
-      const reductionPercent = Math.round(((soloEmissionPerDay - carpoolEmissionPerDay) / soloEmissionPerDay) * 100);
-      const treesEquivalent = Math.max(1, Math.floor(totalSaved / 21)); // ~21kg CO₂ per tree/year
+      const avgSavedPerDay = parseFloat((totalSaved / totalCarpools).toFixed(1));
+      const reductionPercent = totalNormal > 0 ? Math.round((totalSaved / totalNormal) * 100) : 0;
+      const treesEquivalent = Math.max(1, Math.floor(totalSaved / 21));
 
       this.impactStats = {
-        beforeMode: 'Solo Car (Petrol)',
+        beforeMode: 'Solo Car',
         currentMode: 'Carpool',
-        beforeEmission: soloEmissionPerDay,
-        currentEmission: carpoolEmissionPerDay,
-        saved: avgSavedPerDay,
+        beforeEmission: this.normalCO2PerDay,
+        currentEmission: parseFloat((this.normalCO2PerDay - avgSavedPerDay).toFixed(1)),
+        saved: parseFloat(totalSaved.toFixed(1)),
         reductionPercent: reductionPercent,
         treesPlanted: treesEquivalent,
         totalCarpools: totalCarpools
       };
     } else {
       this.impactStats = {
-        beforeMode: 'Solo Car (Petrol)',
+        beforeMode: 'Solo Car',
         currentMode: 'Solo',
-        beforeEmission: soloEmissionPerDay,
-        currentEmission: soloEmissionPerDay,
+        beforeEmission: this.normalCO2PerDay,
+        currentEmission: this.normalCO2PerDay,
         saved: 0,
         reductionPercent: 0,
         treesPlanted: 0,
         totalCarpools: 0
       };
     }
+  }
+
+  // Check if a date is today
+  isToday(dateStr: string): boolean {
+    return dateStr === new Date().toISOString().split('T')[0];
+  }
+
+  // Check if date is in the past (including today = editable)
+  isPastOrToday(dateStr: string): boolean {
+    return dateStr <= new Date().toISOString().split('T')[0];
   }
 
   // Handle ride request acceptance
@@ -243,93 +381,6 @@ export class DashboardComponent implements OnInit {
   clearNotifications(): void {
     this.notifications = [];
     this._globalService.utilities.notify.success('Recent Activity Cleared');
-  }
-
-  // Carpool Confirmation Methods
-  openCarpoolConfirmModal(): void {
-    this.carpoolDate = new Date().toISOString().split('T')[0];
-    this.carpoolPartnerName = '';
-    this.carpoolType = 'Passenger';
-    this.isCarpoolConfirmModalVisible = true;
-  }
-
-  closeCarpoolConfirmModal(event?: MouseEvent): void {
-    if (event) event.stopPropagation();
-    this.isCarpoolConfirmModalVisible = false;
-  }
-
-  getAcceptedConnections(): any[] {
-    // Combine accepted connections from inbox & sent requests
-    const accepted: any[] = [];
-    if (this.connections?.length) {
-      this.connections.filter((c: any) => c.isaccept).forEach((c: any) => {
-        if (!accepted.find((a: any) => a.name === c.name)) accepted.push(c);
-      });
-    }
-    if (this.MySendRequests?.length) {
-      this.MySendRequests.filter((c: any) => c.isaccept).forEach((c: any) => {
-        if (!accepted.find((a: any) => a.name === c.name)) accepted.push(c);
-      });
-    }
-    return accepted;
-  }
-
-  submitCarpoolConfirmation(): void {
-    if (!this.carpoolPartnerName) {
-      this._globalService.utilities.notify.error('Please select your carpool partner');
-      return;
-    }
-    if (!this.carpoolDate) {
-      this._globalService.utilities.notify.error('Please select the date');
-      return;
-    }
-
-    const confirmation = {
-      partnerName: this.carpoolPartnerName,
-      date: this.carpoolDate,
-      type: this.carpoolType,
-      confirmedAt: new Date().toISOString(),
-      userName: this.loggedInUserName
-    };
-
-    this.carpoolHistory.unshift(confirmation);
-    localStorage.setItem('carpoolHistory_' + this.userId, JSON.stringify(this.carpoolHistory));
-    this.checkTodayConfirmed();
-    this.calculateImpact();
-    this._globalService.utilities.notify.success('🎉 Carpool confirmed! Thank you for going green!');
-    this.closeCarpoolConfirmModal();
-
-    // Add to notifications
-    this.notifications.unshift({
-      message: `You carpooled with ${this.carpoolPartnerName} as ${this.carpoolType}`,
-      type: 'accept',
-      timestamp: new Date()
-    });
-  }
-
-  loadCarpoolHistory(): void {
-    const stored = localStorage.getItem('carpoolHistory_' + this.userId);
-    if (stored) {
-      try {
-        this.carpoolHistory = JSON.parse(stored);
-      } catch {
-        this.carpoolHistory = [];
-      }
-    }
-    this.checkTodayConfirmed();
-  }
-
-  checkTodayConfirmed(): void {
-    const today = new Date().toISOString().split('T')[0];
-    this.todayConfirmed = this.carpoolHistory.some((c: any) => c.date === today);
-  }
-
-  deleteCarpoolEntry(index: number): void {
-    this.carpoolHistory.splice(index, 1);
-    localStorage.setItem('carpoolHistory_' + this.userId, JSON.stringify(this.carpoolHistory));
-    this.checkTodayConfirmed();
-    this.calculateImpact();
-    this._globalService.utilities.notify.success('Entry removed');
   }
 
   // Prevent modal close on content click
