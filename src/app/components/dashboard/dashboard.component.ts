@@ -145,6 +145,13 @@ export class DashboardComponent implements OnInit {
       row.members = 2;
       row.co2Savings = 0;
     } else {
+      // Auto-fill partner from the last selected partner (look backwards)
+      if (!row.partnerName) {
+        const lastPartner = this.getLastSelectedPartner(row);
+        if (lastPartner) {
+          row.partnerName = lastPartner;
+        }
+      }
       this.recalculateRow(row);
     }
     this.saveMonthlyData();
@@ -161,11 +168,39 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // On partner or members change
+  // On partner or members change — propagate partner to future days
   onRowChange(row: any): void {
     this.recalculateRow(row);
+    // Propagate selected partner to all future carpooled rows that don't have a partner set yet
+    if (row.partnerName) {
+      this.propagatePartnerToFutureDays(row);
+    }
     this.saveMonthlyData();
     this.calculateImpact();
+  }
+
+  // Get the last selected partner by looking backwards from the given row
+  getLastSelectedPartner(currentRow: any): string {
+    const currentIndex = this.monthlyData.indexOf(currentRow);
+    for (let i = currentIndex - 1; i >= 0; i--) {
+      if (this.monthlyData[i].carpooled && this.monthlyData[i].partnerName) {
+        return this.monthlyData[i].partnerName;
+      }
+    }
+    return '';
+  }
+
+  // Propagate partner selection to future days that are carpooled but have no partner set
+  propagatePartnerToFutureDays(currentRow: any): void {
+    const currentIndex = this.monthlyData.indexOf(currentRow);
+    for (let i = currentIndex + 1; i < this.monthlyData.length; i++) {
+      const futureRow = this.monthlyData[i];
+      // Only auto-fill if the future row is carpooled and has no partner selected yet
+      if (futureRow.carpooled && !futureRow.partnerName) {
+        futureRow.partnerName = currentRow.partnerName;
+        this.recalculateRow(futureRow);
+      }
+    }
   }
 
   // Save monthly data to localStorage
