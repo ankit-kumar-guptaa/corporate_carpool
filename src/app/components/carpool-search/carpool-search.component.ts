@@ -25,9 +25,9 @@ export class CarpoolSearchComponent {
   transportMode: string = '';
   transportOptions: string[] = ['Cab', 'Bus', 'Own Car', 'Own Bike'];
 
-  readonly OFFICE_ADDRESS = 'B2, Plot 2 Tower 1, Nr Indus Valley School, Block B, Industrial Area, Sector 62, Noida, Uttar Pradesh 201309';
-  readonly OFFICE_LAT = '28.560965';
-  readonly OFFICE_LNG = '77.370719';
+  readonly OFFICE_ADDRESS = 'OXYGEN BUSINESS PARK, Sector 144, Noida, Uttar Pradesh 201304';
+  readonly OFFICE_LAT = '28.4977536';
+  readonly OFFICE_LNG = '77.4350798';
 
   constructor(private _globalService: GlobalService) {
     // Fetch user profile and email on component initialization
