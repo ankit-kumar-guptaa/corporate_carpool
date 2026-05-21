@@ -11,19 +11,31 @@
 }
 
 .card-header-custom {
-    background: #123454; /* Solid Primary Color */
+    background: linear-gradient(135deg, #123454 0%, #1a4a75 100%);
     position: relative;
     overflow: hidden;
 }
 
-.card-header-custom::before {
+.bg-shape {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.bg-shape::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    /* Removed gradient overlay */
+    bottom: -80px;
+    left: -100px;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 50%;
 }
 
 .letter-spacing-1 {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalService } from '../../services/global-service';
 import { helper } from '../../models/helper';
@@ -33,17 +33,29 @@ export class LoginSignupComponent implements OnInit {
   // Impact Calculator (Standalone Section)
   commuteDistanceCalc: number = 20; // One-way distance in km
   carpoolersCalc: number = 2; // Number of people joining the ride (1 to 4)
-
   get co2SavedMonthly(): number {
     const workingDays = 22;
-    const dailyEmission = (this.commuteDistanceCalc * 2) * 0.18;
-    const monthlyEmission = dailyEmission * workingDays;
-    const savingRatio = this.carpoolersCalc / (this.carpoolersCalc + 1);
-    return Math.round(monthlyEmission * savingRatio);
+    // Driver's monthly CO2 in grams: distance * 180g * 22 days (no * 2 multiplier as requested)
+    const driverMonthlyCo2Grams = this.commuteDistanceCalc * 180 * workingDays;
+    
+    // Grams per km based on total people in the car
+    const totalPeople = this.carpoolersCalc + 1; // driver + carpoolers
+    const carpoolGramsPerKm = 180 / totalPeople;
+    
+    // Carpool's monthly CO2 per person in grams
+    const carpoolMonthlyCo2Grams = this.commuteDistanceCalc * carpoolGramsPerKm * workingDays;
+    
+    // Prevented CO2 in grams
+    const preventedGrams = driverMonthlyCo2Grams - carpoolMonthlyCo2Grams;
+    
+    // Convert to KG
+    const preventedKg = preventedGrams / 1000;
+    return Math.round(preventedKg * 100) / 100;
   }
 
   get treesEquivalent(): number {
-    return Math.round(this.co2SavedMonthly / 2) || 0;
+    // Equivalent to tree = prevented KG / 4 (rounded to nearest whole number as per the table)
+    return Math.round(this.co2SavedMonthly / 4);
   }
 
   // Transport Impact Logic (Merged from TransportImpactComponent)
@@ -62,7 +74,7 @@ export class LoginSignupComponent implements OnInit {
   currentEmission: number = 0;
   co2Saved: number = 0;
 
-  constructor(private router: Router, private _globalService: GlobalService) { }
+  constructor(private router: Router, private _globalService: GlobalService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     const userProfile = this._globalService.utilities.storage.get('UserProfile');
@@ -181,10 +193,10 @@ export class LoginSignupComponent implements OnInit {
         if (this.fuelType === 'Petrol') emissionFactor = 0.192;
         else if (this.fuelType === 'Diesel') emissionFactor = 0.171;
         else if (this.fuelType === 'CNG') emissionFactor = 0.150;
-        else if (this.fuelType === 'Electric') emissionFactor = 0.050;
+        else if (this.fuelType === 'Electric') emissionFactor = 0; // 0 CO2 for EVs
       } else if (this.vehicleType === 'Bike') {
         if (this.bikeFuelType === 'Petrol') emissionFactor = 0.100;
-        else if (this.bikeFuelType === 'Electric') emissionFactor = 0.020;
+        else if (this.bikeFuelType === 'Electric') emissionFactor = 0; // 0 CO2 for EVs
       }
     }
 
@@ -358,6 +370,7 @@ export class LoginSignupComponent implements OnInit {
     this._user.Latitude = place.geometry.location.lat().toString();
     this._user.Longitude = place.geometry.location.lng().toString();
     this.updateProgress();
+    this.cdr.detectChanges(); // Trigger change detection to immediately enable Next button
   }
 
   login(): void {

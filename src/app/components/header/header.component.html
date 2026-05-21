@@ -1,6 +1,7 @@
 <header class="header py-2 sticky-top bg-white">
-  <div class="container-fluid d-flex justify-content-between align-items-center position-relative" style="min-height: 60px;">
-    
+  <div class="container-fluid d-flex justify-content-between align-items-center position-relative"
+    style="min-height: 60px;">
+
     <!-- Left Section: Text (Visible on larger screens) -->
     <div class="header-left d-none d-lg-flex align-items-center">
       <div class="esg-badge">
@@ -15,43 +16,35 @@
       <div class="logo-pill bg-white rounded-pill px-3 py-1 shadow-sm d-flex align-items-center justify-content-center">
         <img src="https://greencar.ngo/assets/logo.png" alt="GreenCar Carpool" class="logo-img">
       </div>
-      
+
       <!-- Separator -->
       <div class="vr bg-secondary opacity-25 mx-2 d-none d-sm-block" style="height: 25px;"></div>
-      
+
       <!-- Air Liquide Logo -->
       <div class="logo-pill bg-white rounded-pill px-3 py-1 shadow-sm d-flex align-items-center justify-content-center">
-        <img src="https://www.airliquide.com/sites/airliquide.com/files/air-liquide_0.svg" alt="Air Liquide" class="logo-img">
+        <img src="https://www.airliquide.com/sites/airliquide.com/files/air-liquide_0.svg" alt="Air Liquide"
+          class="logo-img">
       </div>
     </div>
 
     <!-- Right Section: Login/Profile -->
     <div class="header-right d-flex align-items-center">
-      
+
       <!-- Profile Dropdown -->
       <div *ngIf="isLoggedIn" class="profile-section d-flex align-items-center">
-        <img
-          src="https://www.pngall.com/wp-content/uploads/5/Profile-Transparent.png"
-          alt="Profile"
-          class="profile-img me-2"
-        />
+        <img src="https://www.pngall.com/wp-content/uploads/5/Profile-Transparent.png" alt="Profile"
+          class="profile-img me-2" />
         <div class="dropdown">
-          <button
-            class="btn dropdown-toggle dropdown-toggle-animated"
-            type="button"
-            id="dropdownMenuButton"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
+          <button class="btn dropdown-toggle dropdown-toggle-animated" type="button" id="dropdownMenuButton"
+            data-bs-toggle="dropdown" aria-expanded="false">
             <span class="text-truncate d-inline-block user-name-span">{{ userName }}</span>
           </button>
-          <ul
-            class="dropdown-menu mt-4 dropdown-menu-end animate-dropdown"
-            aria-labelledby="dropdownMenuButton"
-          >
+          <ul class="dropdown-menu mt-4 dropdown-menu-end animate-dropdown" aria-labelledby="dropdownMenuButton">
             <li><a class="dropdown-item" [routerLink]="isAdmin ? '/admin/dashboard' : '/dashboard'">Dashboard</a></li>
             <li *ngIf="!isAdmin"><a class="dropdown-item" routerLink="/carpool-search">Carpool Search</a></li>
-            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
             <li><button class="dropdown-item text-danger" (click)="logout()">Logout</button></li>
           </ul>
         </div>
@@ -62,9 +55,9 @@
         <a routerLink="/" class="btn btn-outline-primary rounded-pill px-3 fw-bold employee-btn">
           <i class="fas fa-user-tie me-1 d-none d-sm-inline"></i> Employee
         </a>
-        <a routerLink="/admin/login" class="btn btn-primary rounded-pill px-3 fw-bold admin-btn">
+        <!-- <a routerLink="/admin/login" class="btn btn-primary rounded-pill px-3 fw-bold admin-btn">
           <i class="fas fa-user-shield me-1 d-none d-sm-inline"></i> Admin
-        </a>
+        </a> -->
       </div>
     </div>
 

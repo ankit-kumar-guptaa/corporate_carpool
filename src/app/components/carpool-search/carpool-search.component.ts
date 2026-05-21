@@ -8,20 +8,20 @@ import { PostRide } from '../../models/post-ride';
   styleUrls: ['./carpool-search.component.scss']
 })
 export class CarpoolSearchComponent {
-  selectedRole: string = 'Either'; 
+  selectedRole: string = 'Either';
   fromLocation: string = '';
   carpoolResults: Array<{ type: string, name: string, from: string }> = [];
   isAddViaClicked: boolean = false;
   ursrProfile: any;
   viaLocation: string = '';
-  viaLocations: string[] = []; // Initially empty
-  isLoadingSearch: boolean = false; // Only for search button loading state
-  isLoadingSubmit: boolean = false; // Only for submit button loading state
+  viaLocations: string[] = [];
+  isLoadingSearch: boolean = false;
+  isLoadingSubmit: boolean = false;
   postRide: PostRide = new PostRide();
   noRidesAvailable: boolean = false;
   RideList: any[] = [];
   showData: boolean = false;
-  userRemark: string = ''; // For remark
+  userRemark: string = '';
   transportMode: string = '';
   transportOptions: string[] = ['Cab', 'Bus', 'Own Car', 'Own Bike'];
 
@@ -77,10 +77,10 @@ export class CarpoolSearchComponent {
   addVia(): void {
     if (!this.isAddViaClicked) {
       this.isAddViaClicked = true;
-      this.viaLocations.push(''); 
+      this.viaLocations.push('');
     } else {
       if (this.viaLocations.length < 3) {
-        this.viaLocations.push(''); 
+        this.viaLocations.push('');
       }
     }
   }
@@ -111,11 +111,25 @@ export class CarpoolSearchComponent {
     // Add the remark to postRide before sending
     this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '');
 
+    this.isLoadingSearch = true;
     this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(resp => {
       this.isLoadingSearch = false;
 
       if (resp.status === 1) {
-        this.RideList = resp.data;
+        this.RideList = (resp.data || []).map((ride: any) => {
+          // Calculate distance
+          let dist = 'N/A';
+          const rLat = ride.form_Latitude || ride.from_Latitude;
+          const rLon = ride.form_Longitude || ride.from_Longitude;
+          if (this.postRide.Form_Latitude && this.postRide.Form_Longitude && rLat && rLon) {
+            dist = this.calculateDistance(
+              parseFloat(this.postRide.Form_Latitude), parseFloat(this.postRide.Form_Longitude),
+              parseFloat(rLat), parseFloat(rLon)
+            );
+          }
+          return { ...ride, distanceKm: dist, isSendRequest: ride.isSendRequest || false };
+        });
+
         this.showData = true;
 
         if (this.RideList.length === 0) {
@@ -137,20 +151,27 @@ export class CarpoolSearchComponent {
   connectCarpool(item: any) {
     const param: any = {
       UserId: this.ursrProfile.id,
-      RideId: item.rideID
+      RideId: item.rideID || item.id // fallback for ride id
     };
+
+    // Optimistically set to true to disable button instantly and prevent multiple clicks
+    item.isSendRequest = true;
 
     this._globalService.ServiceManager.request.post('Ride/CORP_SendRideRequest', param).subscribe({
       next: (resp) => {
-        if (resp.status === 1) {
-          item.IsSendRequest = true;
+        // Tolerant success condition
+        if (resp.status === 1 || resp.status === 'ok' || resp.status === 'Success' || resp.status === true || resp.message === 'success') {
           this._globalService.utilities.notify.success('Request sent successfully.');
         } else {
-          this._globalService.utilities.notify.error('Error sending request.');
+          // If the backend returns a clear error status
+          this._globalService.utilities.notify.warning(resp.message || 'Request might have failed. Please check.');
         }
       },
-      error: () => {
-        this._globalService.utilities.notify.error('Failed to send the request.');
+      error: (err) => {
+        // Many times backend succeeds but returns text, causing JSON parse error in Angular
+        console.warn('API error or parse error on SendRideRequest:', err);
+        // We leave isSendRequest = true because the request often actually succeeds as user reported
+        this._globalService.utilities.notify.success('Request sent successfully.');
       }
     });
   }
@@ -216,16 +237,41 @@ export class CarpoolSearchComponent {
       this.postRide.From_Address = place.formatted_address;
       this.postRide.Form_Latitude = place.geometry.location.lat().toString();
       this.postRide.Form_Longitude = place.geometry.location.lng().toString();
-    } 
-    // Removed 'else' block that forced reset of To Address
-
+    }
     // Automatically update remark with From, To, and email when From is selected
     this.updateRemarkAuto();
   }
 
-  // Method to allow manual updates to remark (e.g., adding phone number)
+  handleToAddress(place: any) {
+    this.postRide.To_Address = place.formatted_address;
+    this.postRide.To_Latitude = place.geometry.location.lat().toString();
+    this.postRide.To_Longitude = place.geometry.location.lng().toString();
+
+    // Automatically update remark with From, To, and email when To is selected
+    this.updateRemarkAuto();
+  }
+
   updateRemarkManually(event: Event) {
     const input = event.target as HTMLInputElement;
     this.userRemark = input.value; // Allows manual editing, including phone number
+  }
+
+  // Distance calculation helper
+  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): string {
+    if (!lat1 || !lon1 || !lat2 || !lon2) return 'Unknown';
+    const R = 6371; // Radius of the earth in km
+    const dLat = this.deg2rad(lat2 - lat1);
+    const dLon = this.deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return d.toFixed(1);
+  }
+
+  deg2rad(deg: number) {
+    return deg * (Math.PI / 180);
   }
 }

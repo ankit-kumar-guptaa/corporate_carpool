@@ -5,14 +5,16 @@
             <p class="text-muted mb-0">Analyze rides and environmental impact</p>
         </div>
         <div class="btn-group">
-            <button class="btn btn-outline-primary shadow-sm" (click)="export('PDF')"><i class="fas fa-file-pdf me-2"></i> Download PDF</button>
-            <button class="btn btn-outline-success shadow-sm" (click)="export('Excel')"><i class="fas fa-file-excel me-2"></i> Download Excel</button>
+            <button class="btn btn-outline-primary shadow-sm" (click)="export('PDF')"><i
+                    class="fas fa-file-pdf me-2"></i> Download PDF</button>
+            <button class="btn btn-outline-success shadow-sm" (click)="export('Excel')"><i
+                    class="fas fa-file-excel me-2"></i> Download Excel</button>
         </div>
     </div>
 
     <!-- Analytics Summary -->
     <div class="row g-4 mb-4">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card border-0 shadow-sm bg-gradient-primary text-white h-100">
                 <div class="card-body">
                     <h6 class="text-uppercase opacity-75">Total CO₂ Saving</h6>
@@ -24,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card border-0 shadow-sm bg-white h-100">
                 <div class="card-body">
                     <h6 class="text-uppercase text-muted">Top Green Employee</h6>
@@ -32,7 +34,8 @@
                         <div class="spinner-border spinner-border-sm text-success" role="status"></div>
                     </div>
                     <div class="d-flex align-items-center mt-2" *ngIf="!isLoadingData && topEmployee">
-                        <div class="avatar-sm bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-size: 1.2rem;">
+                        <div class="avatar-sm bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                            style="width: 45px; height: 45px; font-size: 1.2rem;">
                             {{topEmployee.name.charAt(0)}}
                         </div>
                         <div>
@@ -40,18 +43,21 @@
                             <small class="text-success fw-bold">{{topEmployee.co2}} kg CO₂ Saved</small>
                         </div>
                     </div>
-                    <div class="text-muted small mt-2" *ngIf="!isLoadingData && !topEmployee">No data available yet</div>
+                    <div class="text-muted small mt-2" *ngIf="!isLoadingData && !topEmployee">No data available yet
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
             <div class="card border-0 shadow-sm bg-white h-100">
                 <div class="card-body d-flex flex-column justify-content-center">
-                    <button class="btn btn-success w-100 mb-2"><i class="fas fa-leaf me-2"></i> Generate ESG Report</button>
-                    <!-- <button class="btn btn-outline-dark w-100"><i class="fas fa-certificate me-2"></i> Download Certificates</button> -->
+                    <button class="btn btn-success w-100 mb-2"><i class="fas fa-leaf me-2"></i> Generate ESG
+                        Report</button>
+                    <button class="btn btn-outline-dark w-100"><i class="fas fa-certificate me-2"></i> Download
+                        Certificates</button>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- Filters & Table -->
@@ -102,13 +108,15 @@
                             <td>{{report.distance}} km</td>
                             <td class="text-success fw-bold">{{report.co2}} kg</td>
                             <td>
-                                <span class="badge rounded-pill" [ngClass]="report.isActive ? 'bg-success' : 'bg-secondary'">
+                                <span class="badge rounded-pill"
+                                    [ngClass]="report.isActive ? 'bg-success' : 'bg-secondary'">
                                     {{report.isActive ? 'Active' : 'Completed'}}
                                 </span>
                             </td>
                         </tr>
                         <tr *ngIf="reports.length === 0 && !isLoadingData">
-                            <td colspan="6" class="text-center py-4 text-muted">No reports found for the selected criteria.</td>
+                            <td colspan="6" class="text-center py-4 text-muted">No reports found for the selected
+                                criteria.</td>
                         </tr>
                     </tbody>
                 </table>

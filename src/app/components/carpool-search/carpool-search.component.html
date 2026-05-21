@@ -2,9 +2,12 @@
   <section class="card mb-5 shadow-lg border-0 search-carpool-card animate-card">
     <div class="card-body p-0">
       <!-- Header Section -->
-      <div class="card-header-custom py-5 px-4 text-center text-white">
-        <h2 class="font-weight-bold mb-2 text-uppercase letter-spacing-1">Corporate Ride Finder</h2>
-        <p class="mb-0 opacity-90 font-italic">Connect with colleagues for a smarter, greener commute</p>
+      <div class="card-header-custom py-5 px-4 text-center text-white position-relative">
+        <div class="bg-shape"></div>
+        <h2 class="font-weight-bold mb-2 text-uppercase letter-spacing-1 position-relative z-1" style="font-size: 2.2rem; text-shadow: 1px 2px 4px rgba(0,0,0,0.2);">
+          <i class="fas fa-car-alt me-2 text-warning"></i>Corporate Ride Finder
+        </h2>
+        <p class="mb-0 opacity-90 font-italic position-relative z-1 fs-5">Connect with colleagues for a smarter, greener commute</p>
       </div>
 
       <div class="p-5">
@@ -52,13 +55,11 @@
              </button>
           </div>
 
-          <!-- To Location (Readonly) -->
+          <!-- To Location (Autocomplete) -->
           <div class="col-lg-5 col-md-5">
             <label class="form-label fw-bold text-danger small text-uppercase mb-2">To Location</label>
-            <div class="input-group shadow-sm rounded-pill overflow-hidden border-red bg-light">
-              <span class="input-group-text bg-transparent border-0 ps-3"><i class="fas fa-building text-danger"></i></span>
-              <input type="text" class="form-control border-0 bg-transparent py-2 fw-bold text-muted" 
-                     [(ngModel)]="postRide.To_Address" readonly title="{{postRide.To_Address}}">
+            <div class="autocomplete-wrapper border-red shadow-sm rounded-pill overflow-hidden">
+               <AutocompleteComponent (setAddress)="handleToAddress($event)" [autocompleteInput]="postRide.To_Address"></AutocompleteComponent>
             </div>
           </div>
 
@@ -155,22 +156,30 @@
                     <div class="icon-box bg-white shadow-sm text-danger rounded-circle me-3">
                         <i class="fas fa-map-marker-alt"></i>
                     </div>
-                    <span class="text-dark fw-medium text-truncate">{{ carpool.from_Address }}</span>
+                    <div class="d-flex flex-column w-100 overflow-hidden">
+                      <span class="text-dark fw-medium text-truncate" title="{{ carpool.from_Address }}"><small class="text-muted fw-bold d-block mb-1">Pickup Point:</small>{{ carpool.from_Address }}</span>
+                      <span class="badge bg-light text-dark border border-secondary border-opacity-25 mt-2 px-2 py-1 shadow-sm" style="width: fit-content; font-size: 0.75rem;" *ngIf="carpool.distanceKm !== 'N/A'">
+                        <i class="fas fa-location-arrow text-primary me-1"></i> {{ carpool.distanceKm }} km from your pickup
+                      </span>
+                    </div>
                 </div>
                 <div class="timeline-connector"></div>
                 <div class="d-flex align-items-center">
                     <div class="icon-box bg-white shadow-sm text-primary rounded-circle me-3">
                         <i class="fas fa-building"></i>
                     </div>
-                    <span class="text-dark fw-medium text-truncate">Sector 62, Noida</span>
+                    <div class="d-flex flex-column w-100 overflow-hidden">
+                        <span class="text-dark fw-medium text-truncate" title="{{ postRide.To_Address || 'Destination' }}"><small class="text-muted fw-bold d-block mb-1">Drop Point:</small>{{ postRide.To_Address || 'Destination' }}</span>
+                    </div>
                 </div>
             </div>
 
             <button [disabled]="carpool.isSendRequest" 
-                    class="btn w-100 rounded-pill fw-bold shadow-sm position-relative z-1" 
-                    [ngClass]="{'btn-outline-primary': carpool.userType === 'Pooler', 'btn-outline-danger': carpool.userType === 'Seeker'}"
+                    class="btn w-100 rounded-pill fw-bold shadow-sm position-relative z-1 transition-all" 
+                    [ngClass]="{'btn-outline-primary': carpool.userType === 'Pooler' && !carpool.isSendRequest, 'btn-outline-danger': carpool.userType === 'Seeker' && !carpool.isSendRequest, 'btn-secondary text-white border-0 opacity-75': carpool.isSendRequest}"
                     (click)="connectCarpool(carpool)">
-              <i class="fas fa-link me-2"></i> Connect
+              <i class="fas" [ngClass]="{'fa-link': !carpool.isSendRequest, 'fa-check-circle text-success': carpool.isSendRequest}"></i> 
+              <span class="ms-2">{{ carpool.isSendRequest ? 'Request Sent' : 'Connect' }}</span>
             </button>
           </div>
         </div>
