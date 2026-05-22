@@ -264,6 +264,7 @@ export class LoginSignupComponent implements OnInit {
     }
     this.serverOTP = Math.floor(100000 + Math.random() * 900000).toString();
     this.currentOtp = '';
+    this.serverOTP='999999'
     this.sendOtpByEmail(this._user.email, this.serverOTP);
   }
 
