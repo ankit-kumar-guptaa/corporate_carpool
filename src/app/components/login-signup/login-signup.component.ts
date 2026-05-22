@@ -18,6 +18,7 @@ export class LoginSignupComponent implements OnInit {
   progress: number = 0;
   resendTimer: number = 0;
   currentOtp: string = '';
+  accessCode: string = '';
   domain: string = 'airliquide.com';
   serverOTP: string = '';
   serverPhoneOTP: string = '';
@@ -96,6 +97,7 @@ export class LoginSignupComponent implements OnInit {
     this.isPhoneVerified = false;
     this.progress = 0;
     this.currentOtp = '';
+    this.accessCode = '';
     this.serverOTP = '';
     this.serverPhoneOTP = '';
     this.resendTimer = 0;
@@ -113,14 +115,14 @@ export class LoginSignupComponent implements OnInit {
   // Step Navigation
   nextStep(): void {
     if (this.currentStep === 1) {
-      if (this.isEmailVerified && this.isPhoneVerified) {
+      if (this.accessCode === '123456') {
         this.currentStep = 2;
         this.updateProgress();
       } else {
-        this._globalService.utilities.notify.warning('Please verify both Email and Phone to proceed.');
+        this._globalService.utilities.notify.warning('Invalid Access Code. Please enter the correct 6-digit code.');
       }
     } else if (this.currentStep === 2) {
-      if (this._user.name && this._user.Password && this._user.Address) {
+      if (this._user.name && this._user.email && this._user.mobile_No && this._user.Password && this._user.Address) {
         this.currentStep = 3;
         this.updateProgress();
       } else {
@@ -238,14 +240,10 @@ export class LoginSignupComponent implements OnInit {
   }
 
   updateProgress(): void {
-    if (this.isEmailVerified && this.isPhoneVerified && this._user.name && this._user.Password && this._user.Address) {
+    if (this.accessCode === '123456' && this._user.name && this._user.Password && this._user.Address && this._user.email && this._user.mobile_No) {
       this.progress = 100;
-    } else if (this.isEmailVerified && this._user.mobile_No) {
-      this.progress = 75;
-    } else if (this.isEmailVerified) {
+    } else if (this.accessCode === '123456') {
       this.progress = 50;
-    } else if (this.isEmailSent) {
-      this.progress = 25;
     } else {
       this.progress = 0;
     }
@@ -393,6 +391,10 @@ export class LoginSignupComponent implements OnInit {
         }
       }
     );
+  }
+
+  loginWithOkta(): void {
+    this._globalService.utilities.notify.info('Login with OKTA will be implemented soon.');
   }
 
   signup(): void {

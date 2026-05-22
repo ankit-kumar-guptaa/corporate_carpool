@@ -43,11 +43,11 @@
           <!-- Login Form -->
           <div *ngIf="isLoginActive && !showImpactScreen" class="form-section animate-fade-in">
             <div class="mb-4 input-group-custom">
-              <label for="login-email" class="form-label">Email Address</label>
+              <label for="login-email" class="form-label">Username / Email Address</label>
               <div class="input-with-icon">
-                <i class="fas fa-envelope input-icon"></i>
-                <input type="email" id="login-email" name="login-email" [(ngModel)]="_user.email"
-                  class="form-control form-input" placeholder="name@airliquide.com" required>
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="login-email" name="login-email" [(ngModel)]="_user.email"
+                  class="form-control form-input" placeholder="Your Username or Email" required>
               </div>
             </div>
             <div class="mb-4 input-group-custom">
@@ -62,9 +62,15 @@
               <button type="button" class="btn btn-link forget-password-btn" (click)="forgotPassword()">Forgot
                 Password?</button>
             </div>
-            <button type="button" class="btn btn-primary btn-lg w-100 shadow-sm" (click)="login()"
+            <button type="button" class="btn btn-primary btn-lg w-100 shadow-sm mb-3" (click)="login()"
               [disabled]="!_user.email || !_user.Password">
               <i class="fas fa-sign-in-alt me-2"></i> Login
+            </button>
+            <div class="text-center mb-3">
+              <span class="text-muted">OR</span>
+            </div>
+            <button type="button" class="btn btn-outline-dark btn-lg w-100 shadow-sm" (click)="loginWithOkta()">
+              <img src="https://www.okta.com/sites/default/files/Okta_Logo_BrightBlue_Medium.png" alt="Okta" style="height: 20px; margin-right: 8px;"> Login with OKTA
             </button>
           </div>
 
@@ -82,7 +88,7 @@
                 <div class="step-circle">
                   <i class="fas" [class.fa-shield-alt]="currentStep === 1" [class.fa-check]="currentStep > 1"></i>
                 </div>
-                <span class="step-label">Verify</span>
+                <span class="step-label">Access</span>
               </div>
 
               <!-- Step 2: Details -->
@@ -104,49 +110,20 @@
 
             <form #signupForm="ngForm" class="signup-form">
 
-              <!-- STEP 1: VERIFICATION -->
+              <!-- STEP 1: ACCESS CODE -->
               <div *ngIf="currentStep === 1" class="animate-slide-up">
                 <div class="mb-4 input-group-custom">
-                  <label for="signup-email" class="form-label">Email Address</label>
+                  <label for="access-code" class="form-label">Access Code</label>
                   <div class="input-with-icon">
-                    <i class="fas fa-envelope input-icon"></i>
-                    <input type="email" id="signup-email" name="signup-email" class="form-control form-input"
-                      placeholder="name@airliquide.com" [(ngModel)]="_user.email" (input)="onEmailInput($event)" required
-                      [disabled]="isEmailVerified">
+                    <i class="fas fa-key input-icon"></i>
+                    <input type="text" id="access-code" name="access-code" class="form-control form-input"
+                      placeholder="Enter 6-digit access code" [(ngModel)]="accessCode" maxlength="6" required>
                   </div>
-                  <button type="button" class="btn btn-warning btn-sm mt-2 w-100" (click)="sendOtp()"
-                    *ngIf="!isEmailVerified" [disabled]="!isEmailSent || isEmailVerified">
-                    Verify Email
-                  </button>
-                  <span class="text-success d-block mt-2" *ngIf="isEmailVerified"><i
-                      class="fas fa-check-circle me-1"></i> Email Verified</span>
-                </div>
-
-                <div class="mb-4 input-group-custom">
-                  <label for="signup-phone" class="form-label">Phone Number</label>
-                  <div class="input-with-icon">
-                    <i class="fas fa-phone input-icon"></i>
-                    <input type="tel" id="signup-phone" name="signup-phone" class="form-control form-input"
-                      placeholder="Enter your 10-digit phone number" [(ngModel)]="_user.mobile_No"
-                      (input)="onPhoneInput($event)" required [disabled]="isPhoneVerified">
-                  </div>
-                  <div class="mt-2">
-                    <button type="button" class="btn btn-warning btn-sm w-100" (click)="sendPhoneOtp()"
-                      *ngIf="!isPhoneVerified"
-                      [disabled]="!_user.mobile_No || _user.mobile_No.length !== 10 || isPhoneVerified">
-                      Verify Phone
-                    </button>
-                    <button type="button" class="btn btn-secondary btn-sm w-100 mt-2" (click)="editPhone()"
-                      *ngIf="isPhoneVerified">
-                      Edit Phone
-                    </button>
-                    <span class="text-success d-block mt-2" *ngIf="isPhoneVerified"><i
-                        class="fas fa-check-circle me-1"></i> Phone Verified</span>
-                  </div>
+                  <small class="text-muted mt-2 d-block">Please enter the access code provided to you.</small>
                 </div>
 
                 <button type="button" class="btn btn-primary btn-lg w-100 shadow-sm" (click)="nextStep()"
-                  [disabled]="!isEmailVerified || !isPhoneVerified">
+                  [disabled]="!accessCode || accessCode.length !== 6">
                   Next: Enter Details <i class="fas fa-arrow-right ms-2"></i>
                 </button>
               </div>
@@ -154,11 +131,29 @@
               <!-- STEP 2: DETAILS -->
               <div *ngIf="currentStep === 2" class="animate-slide-up">
                 <div class="mb-4 input-group-custom">
-                  <label for="signup-name" class="form-label">Full Name</label>
+                  <label for="signup-name" class="form-label">Full Name / Username</label>
                   <div class="input-with-icon">
                     <i class="fas fa-user input-icon"></i>
                     <input type="text" id="signup-name" name="signup-name" class="form-control form-input"
                       placeholder="Your full name" [(ngModel)]="_user.name" required>
+                  </div>
+                </div>
+
+                <div class="mb-4 input-group-custom">
+                  <label for="signup-email" class="form-label">Email Address</label>
+                  <div class="input-with-icon">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" id="signup-email" name="signup-email" class="form-control form-input"
+                      placeholder="name@airliquide.com" [(ngModel)]="_user.email" required>
+                  </div>
+                </div>
+
+                <div class="mb-4 input-group-custom">
+                  <label for="signup-phone" class="form-label">Phone Number</label>
+                  <div class="input-with-icon">
+                    <i class="fas fa-phone input-icon"></i>
+                    <input type="tel" id="signup-phone" name="signup-phone" class="form-control form-input"
+                      placeholder="10-digit phone number" [(ngModel)]="_user.mobile_No" required>
                   </div>
                 </div>
 
@@ -187,7 +182,7 @@
                     Back
                   </button>
                   <button type="button" class="btn btn-primary btn-lg flex-grow-1" (click)="nextStep()"
-                    [disabled]="!_user.name || !_user.Password || !_user.Address">
+                    [disabled]="!_user.name || !_user.email || !_user.mobile_No || !_user.Password || !_user.Address">
                     Next: Transport <i class="fas fa-arrow-right ms-2"></i>
                   </button>
                 </div>
