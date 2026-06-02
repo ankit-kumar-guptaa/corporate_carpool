@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit {
     totalCarpools: 0
   };
 
-  constructor(private _globalService: GlobalService) {}
+  constructor(private _globalService: GlobalService) { }
 
   ngOnInit(): void {
     this.loggedInUserName = localStorage.getItem('loggedInUserName') || '';
@@ -67,7 +67,7 @@ export class DashboardComponent implements OnInit {
       this.loggedInUserEmail = parsedProfile?.email || '';
       this.updatedName = this.loggedInUserName;
       this.updatedEmail = this.loggedInUserEmail;
-    } catch {}
+    } catch { }
 
     const param: any = {};
     const helperdata = new helper();
@@ -116,7 +116,7 @@ export class DashboardComponent implements OnInit {
       try {
         this.monthlyData = JSON.parse(stored);
         return;
-      } catch {}
+      } catch { }
     }
 
     const daysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
@@ -373,14 +373,14 @@ export class DashboardComponent implements OnInit {
     localStorage.removeItem('loggedInUserName');
     this._globalService.utilities.notify.success('Logged Out Successfully');
     // Add navigation to login page if needed
-    
+
   }
 
   // Load dynamic notifications with timestamps
   loadNotifications(): void {
     this.notifications = [];
     const now = new Date();
-    
+
     if (this.connections.length > 0) {
       this.connections.forEach((conn: any, index: number) => {
         if (!conn.isaccept) {
