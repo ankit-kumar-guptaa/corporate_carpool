@@ -21,6 +21,14 @@ export class AdminEmployeesComponent implements OnInit {
       private adminService: AdminService
   ) {}
 
+  newUser: any = {
+    name: '',
+    email: '',
+    password: ''
+  };
+
+  isAdding: boolean = false;
+
   ngOnInit() {
       this.loadEmployees();
   }
@@ -44,8 +52,49 @@ export class AdminEmployeesComponent implements OnInit {
   }
 
   inviteEmployee() {
-    // This method is now triggered by data-bs-toggle="modal"
-    // We can keep it empty or use it for analytics if needed
+    this.newUser = { name: '', email: '', password: '' };
+  }
+
+  addEmployee() {
+    if (!this.newUser.name || !this.newUser.email || !this.newUser.password) {
+      this._globalService.utilities.notify.warning('Please fill all fields');
+      return;
+    }
+    
+    this.isAdding = true;
+    const param: any = {
+      email: this.newUser.email,
+      mobile_No: '0000000000', // Default
+      Password: this.newUser.password,
+      name: this.newUser.name,
+      domain: 'airliquide.com',
+      VehicleType: 'None',
+      Address: 'Added by Admin',
+      Latitude: '28.6304',
+      Longitude: '77.2177'
+    };
+
+    const helperdata = {
+      spName: 'CORP_User_Register',
+      payload: JSON.stringify(param)
+    };
+
+    this._globalService.ServiceManager.request.post('Ride/GetDataFromServer', helperdata).subscribe({
+      next: (res: any) => {
+        this.isAdding = false;
+        if (res && res.status === 1 && res.data && res.data.dataset && res.data.dataset.table.length > 0) {
+          this._globalService.utilities.notify.success('User created successfully');
+          this.loadEmployees();
+          document.getElementById('closeInviteModal')?.click();
+        } else {
+          this._globalService.utilities.notify.error('Failed to create user (may already exist)');
+        }
+      },
+      error: () => {
+        this.isAdding = false;
+        this._globalService.utilities.notify.error('Network Error');
+      }
+    });
   }
 
   approve(emp: any) {

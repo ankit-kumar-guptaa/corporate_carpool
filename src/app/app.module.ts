@@ -27,6 +27,7 @@ import { AdminReportsComponent } from './components/admin/admin-reports/admin-re
 import { AdminRidesComponent } from './components/admin/admin-rides/admin-rides.component';
 import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layout.component';
 import { TransportImpactComponent } from './components/transport-impact/transport-impact.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
 
 
@@ -47,7 +48,8 @@ import { TransportImpactComponent } from './components/transport-impact/transpor
     AdminEmployeesComponent,
     AdminReportsComponent,
     AdminRidesComponent,
-    AdminLayoutComponent
+    AdminLayoutComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

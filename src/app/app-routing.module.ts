@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CarpoolSearchComponent } from './components/carpool-search/carpool-search.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminLoginComponent } from './components/admin/admin-login/admin-login.component';
 import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layout.component';
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'carpool-search', component: CarpoolSearchComponent, canActivate: [AuthGuard] },
+  { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
   { path: 'transport-impact', component: TransportImpactComponent, canActivate: [AuthGuard] },
   
   // Admin Routes

@@ -42,6 +42,7 @@
           <ul class="dropdown-menu mt-4 dropdown-menu-end animate-dropdown" aria-labelledby="dropdownMenuButton">
             <li><a class="dropdown-item" [routerLink]="isAdmin ? '/admin/dashboard' : '/dashboard'">Dashboard</a></li>
             <li *ngIf="!isAdmin"><a class="dropdown-item" routerLink="/carpool-search">Carpool Search</a></li>
+            <li><a class="dropdown-item" routerLink="/change-password">Change Password</a></li>
             <li>
               <hr class="dropdown-divider" />
             </li>
