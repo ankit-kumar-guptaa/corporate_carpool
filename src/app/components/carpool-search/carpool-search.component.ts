@@ -64,7 +64,7 @@ export class CarpoolSearchComponent {
 
   // Fetch user profile and email
   loadUserProfile() {
-    const userProfile = this._globalService.utilities.storage.get('UserProfile') || '{}';
+    const userProfile = localStorage.getItem('UserProfile') || '{}';
     try {
       this.ursrProfile = JSON.parse(userProfile);
     } catch (error) {
@@ -89,7 +89,7 @@ export class CarpoolSearchComponent {
   searchCarpool(): void {
     // Note: postRide.To_Address is already set (default or swapped)
 
-    this.ursrProfile = JSON.parse(this._globalService.utilities.storage.get('UserProfile')) || undefined;
+    this.ursrProfile = JSON.parse(localStorage.getItem('UserProfile') || '{}');
 
     // Validate 'From' and 'To' addresses
     if (!this.postRide.From_Address) {
@@ -104,7 +104,7 @@ export class CarpoolSearchComponent {
 
     this.noRidesAvailable = false;
 
-    this.postRide.UserId = this.ursrProfile.id;
+    this.postRide.UserId = this.ursrProfile.userId;
     this.postRide.UserName = this.ursrProfile.name;
     this.postRide.IsSearch = 0;
 
@@ -150,7 +150,7 @@ export class CarpoolSearchComponent {
 
   connectCarpool(item: any) {
     const param: any = {
-      UserId: this.ursrProfile.id,
+      UserId: this.ursrProfile.userId,
       RideId: item.rideID || item.id // fallback for ride id
     };
 
@@ -179,7 +179,7 @@ export class CarpoolSearchComponent {
   submitRequest(): void {
     // Note: postRide.To_Address is already set (default or swapped)
 
-    this.ursrProfile = JSON.parse(this._globalService.utilities.storage.get('UserProfile')) || undefined;
+    this.ursrProfile = JSON.parse(localStorage.getItem('UserProfile') || '{}');
 
     // Validate "From" address
     if (!this.postRide.From_Address) {
@@ -200,7 +200,7 @@ export class CarpoolSearchComponent {
 
     this.isLoadingSubmit = true;
 
-    this.postRide.UserId = this.ursrProfile.id;
+    this.postRide.UserId = this.ursrProfile.userId;
     this.postRide.UserName = this.ursrProfile.name;
     this.postRide.IsSearch = 1;
 

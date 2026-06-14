@@ -4,7 +4,8 @@ import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CarpoolSearchComponent } from './components/carpool-search/carpool-search.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
-import { AuthGuard } from './guards/auth.guard';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { AuthGuard } from './core/guards/auth.guard';
 import { AdminLoginComponent } from './components/admin/admin-login/admin-login.component';
 import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layout.component';
 import { AdminDashboardComponent } from './components/admin/admin-dashboard/admin-dashboard.component';
@@ -15,6 +16,7 @@ import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { TransportImpactComponent } from './components/transport-impact/transport-impact.component';
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: 'reset-password', component: ResetPasswordComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'carpool-search', component: CarpoolSearchComponent, canActivate: [AuthGuard] },
   { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },

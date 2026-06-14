@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { GlobalService } from '../../services/global-service';
+import { AuthService } from '../../core/services/auth.service';
 import { helper } from '../../models/helper';
 import { trigger, transition, style, animate } from '@angular/animations';
 
@@ -51,7 +53,11 @@ export class DashboardComponent implements OnInit {
     totalCarpools: 0
   };
 
-  constructor(private _globalService: GlobalService) { }
+  constructor(
+    private _globalService: GlobalService,
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.loggedInUserName = localStorage.getItem('loggedInUserName') || '';
@@ -60,10 +66,10 @@ export class DashboardComponent implements OnInit {
 
   // Fetch all dashboard data
   loadData() {
-    const userProfile = this._globalService.utilities.storage.get('UserProfile') || '{}';
+    const userProfile = localStorage.getItem('UserProfile') || '{}';
     try {
       const parsedProfile = JSON.parse(userProfile);
-      this.userId = parsedProfile?.id;
+      this.userId = parsedProfile?.userId || 0;
       this.loggedInUserEmail = parsedProfile?.email || '';
       this.updatedName = this.loggedInUserName;
       this.updatedEmail = this.loggedInUserEmail;
@@ -92,7 +98,7 @@ export class DashboardComponent implements OnInit {
   // Load Normal CO2 from user's registration profile (distance * emission factor)
   loadNormalCO2FromProfile(): void {
     try {
-      const userProfile = this._globalService.utilities.storage.get('UserProfile') || '{}';
+      const userProfile = localStorage.getItem('UserProfile') || '{}';
       const parsed = JSON.parse(userProfile);
       // If the profile has co2 or distance data from registration
       if (parsed?.currentEmission) {
@@ -356,8 +362,8 @@ export class DashboardComponent implements OnInit {
       this.loggedInUserName = this.updatedName;
       this.loggedInUserEmail = this.updatedEmail;
       localStorage.setItem('loggedInUserName', this.updatedName);
-      this._globalService.utilities.storage.set('UserProfile', JSON.stringify({
-        id: this.userId,
+      localStorage.setItem('UserProfile', JSON.stringify({
+        userId: this.userId,
         email: this.updatedEmail
       }));
       this._globalService.utilities.notify.success('Profile Updated Successfully');
@@ -367,13 +373,9 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // Logout user
+  // Logout user — clears JWT/local/session storage and hard-redirects to '/'.
   logout(): void {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('loggedInUserName');
-    this._globalService.utilities.notify.success('Logged Out Successfully');
-    // Add navigation to login page if needed
-
+    this.authService.logout(true, '/');
   }
 
   // Load dynamic notifications with timestamps

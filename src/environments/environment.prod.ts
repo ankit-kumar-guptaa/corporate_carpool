@@ -10,7 +10,7 @@ export const environment = {
   name: 'Dev',
   bannerclass: 'topbanner_dev1',
   appinsightkey: '',
-  base: 'https://api.greencar.ngo/api',
+  base: 'https://corp-api.greencar.ngo/api',
   base_:'https://cliflyerapitest.azurewebsites.net/api',
   lang: 'en-us',
   salt: '@exam@',

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { GlobalService } from '../../../services/global-service';
-import { AdminService } from '../../../services/admin.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-admin-login',
@@ -14,34 +15,59 @@ export class AdminLoginComponent {
   isLoading = false;
 
   constructor(
-      private router: Router, 
-      private _globalService: GlobalService,
-      private adminService: AdminService
+    private router: Router,
+    private _globalService: GlobalService,
+    private authService: AuthService
   ) {}
 
   login() {
-    this.isLoading = true;
-    
-    const loginData = {
-        MobileNo: this.username,
-        Password: this.password
-    };
+    if (!this.username || !this.password) {
+      this._globalService.utilities.notify.error('Please enter username/email and password.');
+      return;
+    }
 
-    this.adminService.adminLogin(loginData).subscribe({
+    if (this.isLoading) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.authService.login(this.username, this.password).subscribe({
       next: (res: any) => {
-        if (res && res.status === 1 && res.data) {
-          localStorage.setItem('adminUser', JSON.stringify({ username: res.data.username, role: res.data.role }));
-          this._globalService.utilities.notify.success('Login Successful');
-          this.router.navigate(['/admin/dashboard']);
-        } else {
-          this._globalService.utilities.notify.error(res.message || 'Invalid Credentials');
-        }
         this.isLoading = false;
+
+        const isSuccess = res?.status === true || res?.status === 1;
+        const token = res?.data?.token || this.authService.getToken();
+
+        if (isSuccess && token) {
+          // AuthService already persisted token/userId/name/email/orgId.
+          // Keep legacy adminUser entry so existing admin guard/layout works.
+          localStorage.setItem(
+            'adminUser',
+            JSON.stringify({
+              username: res?.data?.email || this.username,
+              name: res?.data?.name || '',
+              role: 'admin'
+            })
+          );
+
+          this._globalService.utilities.notify.success(
+            res?.message || 'Login Successful'
+          );
+          this.router.navigateByUrl('/admin/dashboard');
+        } else {
+          this._globalService.utilities.notify.error(
+            res?.message || 'Invalid Credentials'
+          );
+        }
       },
       error: (err) => {
-        console.error('Login Error', err);
-        this._globalService.utilities.notify.error('Login Failed');
         this.isLoading = false;
+        const message =
+          (err && err.message) ||
+          (err && err.raw && err.raw.message) ||
+          'Login Failed';
+        this._globalService.utilities.notify.error(message);
       }
     });
   }

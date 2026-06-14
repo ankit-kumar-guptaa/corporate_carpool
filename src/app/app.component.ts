@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
+import { AuthService } from './core/services/auth.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,7 +13,7 @@ export class AppComponent implements OnInit {
   isAdmin: boolean = false;
   loggedInUserName: string = '';
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService) {
     // Subscribe to router events to update auth state on navigation
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -25,28 +27,42 @@ export class AppComponent implements OnInit {
   }
 
   checkLoginStatus() {
-    const loggedIn = localStorage.getItem('isLoggedIn');
-    const userName = localStorage.getItem('loggedInUserName');
-    const adminUser = localStorage.getItem('adminUser');
+    // JWT token is the source of truth for "is the user logged in".
+    const hasToken = this.authService.isLoggedIn();
+    const adminUserRaw = localStorage.getItem('adminUser');
 
-    if (adminUser) {
-      const admin = JSON.parse(adminUser);
-      this.isLoggedIn = true;
-      this.isAdmin = true;
-      this.loggedInUserName = admin.username || 'Admin';
-    } else if (loggedIn === 'true' && userName) {
-      this.isLoggedIn = true;
-      this.isAdmin = false;
-      this.loggedInUserName = userName;
-    } else {
+    if (!hasToken) {
       this.isLoggedIn = false;
       this.isAdmin = false;
       this.loggedInUserName = '';
+      return;
     }
+
+    if (adminUserRaw) {
+      try {
+        const admin = JSON.parse(adminUserRaw);
+        if (admin && admin.role === 'admin') {
+          this.isLoggedIn = true;
+          this.isAdmin = true;
+          this.loggedInUserName =
+            admin.name || admin.username || this.authService.getUserName() || 'Admin';
+          return;
+        }
+      } catch {
+        // fall through to regular-user branch
+      }
+    }
+
+    this.isLoggedIn = true;
+    this.isAdmin = false;
+    this.loggedInUserName =
+      this.authService.getUserName() ||
+      localStorage.getItem('loggedInUserName') ||
+      'User';
   }
 
   onLogin(userName: string): void {
-    // This might still be called if referenced elsewhere, but primary logic is now in checkLoginStatus
+    // Kept for backward compatibility — primary state is driven by checkLoginStatus.
     this.isLoggedIn = true;
     this.isAdmin = false;
     this.loggedInUserName = userName;
@@ -60,11 +76,7 @@ export class AppComponent implements OnInit {
     this.isAdmin = false;
     this.loggedInUserName = '';
 
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('loggedInUserName');
-    localStorage.removeItem('adminUser');
-
-    // Redirect to the home page after logout
-    this.router.navigate(['/']);
+    // Clears ALL localStorage + sessionStorage and hard-redirects to '/'.
+    this.authService.logout(true, '/');
   }
 }

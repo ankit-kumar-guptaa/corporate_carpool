@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { AuthService } from '../../../core/services/auth.service';
+
 @Component({
   selector: 'app-admin-layout',
   templateUrl: './admin-layout.component.html',
@@ -10,18 +12,20 @@ export class AdminLayoutComponent implements OnInit {
   isSidebarToggled = false;
   adminName: string = 'Admin';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
-      const userStr = localStorage.getItem('adminUser');
-      if (userStr) {
-          try {
-              const userObj = JSON.parse(userStr);
-              if (userObj && userObj.username) {
-                  this.adminName = userObj.username;
-              }
-          } catch(e) {}
-      }
+    const userStr = localStorage.getItem('adminUser');
+    if (userStr) {
+      try {
+        const userObj = JSON.parse(userStr);
+        if (userObj && (userObj.name || userObj.username)) {
+          this.adminName = userObj.name || userObj.username;
+        }
+      } catch (e) { /* ignore */ }
+    } else if (this.authService.getUserName()) {
+      this.adminName = this.authService.getUserName();
+    }
   }
 
   toggleSidebar() {
@@ -33,7 +37,7 @@ export class AdminLayoutComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem('adminUser');
-    this.router.navigate(['/admin/login']);
+    // Wipes localStorage + sessionStorage and hard-redirects to admin login.
+    this.authService.logout(true, '/admin/login');
   }
 }

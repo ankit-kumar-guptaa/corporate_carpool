@@ -15,6 +15,7 @@ import { ENVIRONMENTER } from '../environments/environmenter.token';
 import { environment } from '../environments/environment';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoadingInterceptor } from './Interceptor/loading.interceptor';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './Shared/shared.module';
@@ -28,6 +29,7 @@ import { AdminRidesComponent } from './components/admin/admin-rides/admin-rides.
 import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layout.component';
 import { TransportImpactComponent } from './components/transport-impact/transport-impact.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 
 
@@ -49,7 +51,8 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     AdminReportsComponent,
     AdminRidesComponent,
     AdminLayoutComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +67,7 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
   ],
   providers: [
     { provide: ENVIRONMENTER, useValue: environment },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
     
   ],

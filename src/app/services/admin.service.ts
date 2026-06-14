@@ -21,7 +21,7 @@ export class AdminService {
   }
 
   adminLogin(data: any) {
-    return this.globalService.ServiceManager.request.post('Ride/CORP_AdminLogin', data);
+    return this.globalService.ServiceManager.request.post('Corporate/CORP_AdminLogin', data);
   }
 
   getAllEmployees() {

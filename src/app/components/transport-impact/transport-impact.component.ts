@@ -46,7 +46,7 @@ export class TransportImpactComponent implements OnInit {
       this.userLongitude = this.signupData.Longitude;
     } else {
       // Existing User Flow (Edit Profile)
-      const userProfile = this._globalService.utilities.storage.get('UserProfile');
+      const userProfile =localStorage.getItem('UserProfile');
       if (userProfile) {
         const user = typeof userProfile === 'string' ? JSON.parse(userProfile) : userProfile;
         this.userLatitude = user.Latitude;

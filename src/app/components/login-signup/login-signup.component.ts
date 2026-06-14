@@ -1,8 +1,9 @@
 ﻿import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { GlobalService } from '../../services/global-service';
-import { helper } from '../../models/helper';
 import { UserModel } from '../../models/user-login.model';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login-signup',
@@ -14,18 +15,22 @@ export class LoginSignupComponent implements OnInit {
   _user: UserModel = new UserModel();
   @Output() loginEvent = new EventEmitter<string>();
   showImpactScreen: boolean = false;
+  isSubmitting: boolean = false;
 
-  constructor(private router: Router, private _globalService: GlobalService) { }
+  constructor(
+    private router: Router,
+    private _globalService: GlobalService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    const userProfile = this._globalService.utilities.storage.get('UserProfile');
-    if (userProfile) {
-      this.router.navigate(['/carpool-search']);
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/dashboard']);
     }
   }
 
-  toggleForm(isLogin: boolean): void {
-    this.isLoginActive = true; // Force login only
+  toggleForm(_isLogin: boolean): void {
+    this.isLoginActive = true;
   }
 
   login(): void {
@@ -33,31 +38,46 @@ export class LoginSignupComponent implements OnInit {
       this._globalService.utilities.notify.error('Please Enter Email and Password.');
       return;
     }
-    const param: any = { email: this._user.email, Password: this._user.Password };
-    const helperdata = new helper();
-    helperdata.spName = 'CORP_Login';
-    helperdata.payload = JSON.stringify(param);
-    this._globalService.ServiceManager.request.post('Ride/GetDataFromServer', helperdata).subscribe(
-      (res: any) => {
-        if (res.status === 1 && res.data.dataset.table.length > 0) {
-          const userdetails = JSON.parse(res.data.dataset.table1[0].userdetails)[0];
-          this.finishLogin(userdetails);
-        } else {
-          this._globalService.utilities.notify.error('Invalid Login Details.');
-        }
-      }
-    );
-  }
 
-  finishLogin(userdetails: any): void {
-    this.loginEvent.emit(userdetails.name);
-    this._globalService.utilities.storage.set('UserProfile', JSON.stringify(userdetails));
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('loggedInUserName', userdetails.name);
-    this.router.navigate(['/carpool-search']);
+    if (this.isSubmitting) {
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    this.authService.login(this._user.email, this._user.Password).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+
+        if (!response || response.status !== true || !response.data?.token) {
+          this._globalService.utilities.notify.error(
+            response?.message || 'Invalid Login Details.'
+          );
+          return;
+        }
+
+        this.loginEvent.emit(response.data.name);
+        this._globalService.utilities.notify.success(
+          response.message || 'Login successful.'
+        );
+
+        if (response.data.isResetPassword === false) {
+          this.router.navigate(['/reset-password']);
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        const message = (err && err.message) || 'Invalid Login Details.';
+        this._globalService.utilities.notify.error(message);
+      }
+    });
   }
 
   forgotPassword(): void {
-    this._globalService.utilities.notify.info('Forgot Password feature is not yet implemented.');
+    this._globalService.utilities.notify.info(
+      'Forgot Password feature is not yet implemented.'
+    );
   }
 }
