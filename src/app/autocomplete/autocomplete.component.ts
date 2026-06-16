@@ -62,12 +62,19 @@ export class AutocompleteComponent implements OnInit, AfterViewInit {
     }
 
     private getPlaceAutocomplete() {
-        const autocomplete = new google.maps.places.Autocomplete(this.addresstext.nativeElement,
-            {
-                componentRestrictions: { country: 'IN' },
-                types: [this.adressType]  // 'establishment' / 'address' / 'geocode'
-            });
-              google.maps.event.addListener(autocomplete, 'place_changed', () => {
+        const options: any = {
+            componentRestrictions: { country: 'IN' }
+        };
+        
+        // Only restrict types if explicitly asked to something other than the default 'geocode'
+        // By omitting 'types', it allows searching for establishments, businesses, landmarks, etc.
+        if (this.adressType && this.adressType !== 'geocode') {
+            options.types = [this.adressType];
+        }
+
+        const autocomplete = new google.maps.places.Autocomplete(this.addresstext.nativeElement, options);
+        
+        google.maps.event.addListener(autocomplete, 'place_changed', () => {
             const place = autocomplete.getPlace();
             this.invokeEvent(place);
         });

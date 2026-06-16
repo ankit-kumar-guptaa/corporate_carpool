@@ -142,24 +142,26 @@
 
 // ── Modal Form ──
 .modern-input-group {
-    border-radius: 12px;
+    border-radius: 10px;
     background: #fff;
-    border: 1.5px solid #e2e5ea;
+    border: 1px solid #e2e5ea;
     transition: all 0.25s ease;
 
     .input-group-text {
         background: transparent;
         border: none;
         color: #adb5bd;
-        padding-left: 1rem;
+        padding-left: 0.75rem;
         padding-right: 0.5rem;
+        font-size: 0.85rem;
     }
 
     .form-control, .form-select {
         border: none;
         background: transparent;
-        padding: 0.75rem 1rem 0.75rem 0.2rem;
+        padding: 0.4rem 0.75rem 0.4rem 0.2rem;
         font-weight: 500;
+        font-size: 0.85rem;
 
         &:focus {
             box-shadow: none;
@@ -173,7 +175,7 @@
 
     &:focus-within {
         border-color: #0d6efd;
-        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1) !important;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1) !important;
 
         .input-group-text {
             color: #0d6efd;
