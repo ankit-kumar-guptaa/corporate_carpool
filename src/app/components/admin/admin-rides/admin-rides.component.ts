@@ -14,15 +14,37 @@ import { saveAs } from 'file-saver';
   providers: [DatePipe]
 })
 export class AdminRidesComponent implements OnInit {
-  
+
   activeTab: 'rides' | 'requests' = 'rides';
-  
+
+  // Raw data from API
+  allRides: any[] = [];
+  allRequests: any[] = [];
+
+  // Filtered data for display
   rides: any[] = [];
   requests: any[] = [];
-  
+
   isLoadingRides: boolean = false;
   isLoadingRequests: boolean = false;
   isExporting: boolean = false;
+
+  // ── Filter Models ──
+  filterDateFrom: string = '';
+  filterDateTo: string = '';
+  filterEmployee: string = '';
+  filterStatus: string = '';
+
+  // ── Pagination ──
+  currentPage: number = 1;
+  pageSize: number = 8;
+
+  // ── Quick Stats ──
+  get totalActiveRides(): number { return this.allRides.filter(r => r.isActive).length; }
+  get totalInactiveRides(): number { return this.allRides.filter(r => !r.isActive).length; }
+  get totalAccepted(): number { return this.allRequests.filter(r => r.isAccept).length; }
+  get totalRejected(): number { return this.allRequests.filter(r => r.isReject).length; }
+  get totalPending(): number { return this.allRequests.filter(r => !r.isAccept && !r.isReject).length; }
 
   constructor(
       private _globalService: GlobalService,
@@ -40,7 +62,8 @@ export class AdminRidesComponent implements OnInit {
       this.adminService.getAllRides().subscribe({
           next: (res: any) => {
               if (res && res.status === 1) {
-                  this.rides = res.data;
+                  this.allRides = res.data || [];
+                  this.applyFilters();
               }
               this.isLoadingRides = false;
           },
@@ -56,7 +79,8 @@ export class AdminRidesComponent implements OnInit {
       this.adminService.getAllRideRequests().subscribe({
           next: (res: any) => {
                if (res && res.status === 1) {
-                  this.requests = res.data;
+                  this.allRequests = res.data || [];
+                  this.applyFilters();
               }
               this.isLoadingRequests = false;
           },
@@ -69,8 +93,196 @@ export class AdminRidesComponent implements OnInit {
 
   setActiveTab(tab: 'rides' | 'requests') {
       this.activeTab = tab;
+      this.currentPage = 1;
+      this.applyFilters();
   }
 
+  // ═══════════════════════════════════════════
+  //  FILTERS — Working Logic
+  // ═══════════════════════════════════════════
+  applyFilters() {
+    this.currentPage = 1;
+
+    if (this.activeTab === 'rides') {
+      let filtered = [...this.allRides];
+
+      // Date From filter
+      if (this.filterDateFrom) {
+        const from = new Date(this.filterDateFrom);
+        from.setHours(0, 0, 0, 0);
+        filtered = filtered.filter(r => {
+          const rDate = new Date(r.ride_Date);
+          return rDate >= from;
+        });
+      }
+
+      // Date To filter
+      if (this.filterDateTo) {
+        const to = new Date(this.filterDateTo);
+        to.setHours(23, 59, 59, 999);
+        filtered = filtered.filter(r => {
+          const rDate = new Date(r.ride_Date);
+          return rDate <= to;
+        });
+      }
+
+      // Employee name filter
+      if (this.filterEmployee && this.filterEmployee.trim()) {
+        const search = this.filterEmployee.toLowerCase().trim();
+        filtered = filtered.filter(r =>
+          (r.userName || '').toLowerCase().includes(search)
+        );
+      }
+
+      // Status filter
+      if (this.filterStatus) {
+        if (this.filterStatus === 'Active') {
+          filtered = filtered.filter(r => r.isActive);
+        } else if (this.filterStatus === 'Inactive') {
+          filtered = filtered.filter(r => !r.isActive);
+        }
+      }
+
+      this.rides = filtered;
+    } else {
+      let filtered = [...this.allRequests];
+
+      // Date From filter
+      if (this.filterDateFrom) {
+        const from = new Date(this.filterDateFrom);
+        from.setHours(0, 0, 0, 0);
+        filtered = filtered.filter(r => {
+          const rDate = new Date(r.ride_Date);
+          return rDate >= from;
+        });
+      }
+
+      // Date To filter
+      if (this.filterDateTo) {
+        const to = new Date(this.filterDateTo);
+        to.setHours(23, 59, 59, 999);
+        filtered = filtered.filter(r => {
+          const rDate = new Date(r.ride_Date);
+          return rDate <= to;
+        });
+      }
+
+      // Employee name filter (search requester or ride owner)
+      if (this.filterEmployee && this.filterEmployee.trim()) {
+        const search = this.filterEmployee.toLowerCase().trim();
+        filtered = filtered.filter(r =>
+          (r.requesterName || '').toLowerCase().includes(search) ||
+          (r.rideOwnerName || '').toLowerCase().includes(search)
+        );
+      }
+
+      // Status filter
+      if (this.filterStatus) {
+        if (this.filterStatus === 'Accepted') {
+          filtered = filtered.filter(r => r.isAccept);
+        } else if (this.filterStatus === 'Rejected') {
+          filtered = filtered.filter(r => r.isReject);
+        } else if (this.filterStatus === 'Pending') {
+          filtered = filtered.filter(r => !r.isAccept && !r.isReject);
+        }
+      }
+
+      this.requests = filtered;
+    }
+  }
+
+  clearFilters() {
+    this.filterDateFrom = '';
+    this.filterDateTo = '';
+    this.filterEmployee = '';
+    this.filterStatus = '';
+    this.currentPage = 1;
+    this.applyFilters();
+    this._globalService.utilities.notify.info('Filters cleared');
+  }
+
+  get hasActiveFilters(): boolean {
+    return !!(this.filterDateFrom || this.filterDateTo || this.filterEmployee || this.filterStatus);
+  }
+
+  // Status options change based on active tab
+  get statusOptions(): { value: string; label: string }[] {
+    if (this.activeTab === 'rides') {
+      return [
+        { value: '', label: 'All Status' },
+        { value: 'Active', label: 'Active' },
+        { value: 'Inactive', label: 'Inactive' },
+      ];
+    } else {
+      return [
+        { value: '', label: 'All Status' },
+        { value: 'Accepted', label: 'Accepted' },
+        { value: 'Rejected', label: 'Rejected' },
+        { value: 'Pending', label: 'Pending' },
+      ];
+    }
+  }
+
+  // ═══════════════════════════════════════════
+  //  PAGINATION
+  // ═══════════════════════════════════════════
+  get currentData(): any[] {
+    return this.activeTab === 'rides' ? this.rides : this.requests;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.currentData.length / this.pageSize) || 1;
+  }
+
+  get paginatedData(): any[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.currentData.slice(start, start + this.pageSize);
+  }
+
+  get paginatedRides(): any[] {
+    if (this.activeTab !== 'rides') return [];
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.rides.slice(start, start + this.pageSize);
+  }
+
+  get paginatedRequests(): any[] {
+    if (this.activeTab !== 'requests') return [];
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.requests.slice(start, start + this.pageSize);
+  }
+
+  get showingFrom(): number {
+    if (this.currentData.length === 0) return 0;
+    return (this.currentPage - 1) * this.pageSize + 1;
+  }
+
+  get showingTo(): number {
+    return Math.min(this.currentPage * this.pageSize, this.currentData.length);
+  }
+
+  get pageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxVisible = 5;
+    let start = Math.max(1, this.currentPage - Math.floor(maxVisible / 2));
+    let end = Math.min(this.totalPages, start + maxVisible - 1);
+    if (end - start + 1 < maxVisible) {
+      start = Math.max(1, end - maxVisible + 1);
+    }
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  // ═══════════════════════════════════════════
+  //  EXPORT
+  // ═══════════════════════════════════════════
   export(type: string) {
     const data = this.activeTab === 'rides' ? this.rides : this.requests;
     if (data.length === 0) {
@@ -97,7 +309,9 @@ export class AdminRidesComponent implements OnInit {
   }
 
   filter() {
-    this._globalService.utilities.notify.info('Filters applied');
+    this.applyFilters();
+    const count = this.currentData.length;
+    this._globalService.utilities.notify.success(`Filters applied — ${count} results found`);
   }
 
   // ═══════════════════════════════════════════
@@ -108,7 +322,6 @@ export class AdminRidesComponent implements OnInit {
     const pageWidth = doc.internal.pageSize.getWidth();
     const today = this.datePipe.transform(new Date(), 'dd MMM yyyy, hh:mm a') || '';
 
-    // Header Banner
     doc.setFillColor(13, 110, 253);
     doc.rect(0, 0, pageWidth, 35, 'F');
     doc.setTextColor(255, 255, 255);
@@ -119,7 +332,6 @@ export class AdminRidesComponent implements OnInit {
     doc.setFont('helvetica', 'normal');
     doc.text(`Generated: ${today}  |  Total Rides: ${this.rides.length}`, 14, 24);
 
-    // Summary Cards
     const activeRides = this.rides.filter(r => r.isActive).length;
     const inactiveRides = this.rides.length - activeRides;
     const summaryY = 42;
@@ -141,7 +353,6 @@ export class AdminRidesComponent implements OnInit {
       doc.text(card.value, x + 4, summaryY + 14);
     });
 
-    // Table
     const tableRows = this.rides.map(r => ({
       rideID: `#${r.rideID}`,
       userName: r.userName || 'Unknown',
@@ -189,7 +400,6 @@ export class AdminRidesComponent implements OnInit {
     const pageWidth = doc.internal.pageSize.getWidth();
     const today = this.datePipe.transform(new Date(), 'dd MMM yyyy, hh:mm a') || '';
 
-    // Header Banner
     doc.setFillColor(255, 193, 7);
     doc.rect(0, 0, pageWidth, 35, 'F');
     doc.setTextColor(33, 37, 41);
@@ -200,7 +410,6 @@ export class AdminRidesComponent implements OnInit {
     doc.setFont('helvetica', 'normal');
     doc.text(`Generated: ${today}  |  Total Requests: ${this.requests.length}`, 14, 24);
 
-    // Summary Cards
     const accepted = this.requests.filter(r => r.isAccept).length;
     const rejected = this.requests.filter(r => r.isReject).length;
     const pending = this.requests.filter(r => !r.isAccept && !r.isReject).length;
@@ -216,7 +425,7 @@ export class AdminRidesComponent implements OnInit {
       doc.setFillColor(card.color[0], card.color[1], card.color[2]);
       doc.roundedRect(x, summaryY, 60, 18, 3, 3, 'F');
       doc.setTextColor(255, 255, 255);
-      if (card.color[0] === 255 && card.color[1] === 193) doc.setTextColor(33, 37, 41); // dark text for yellow
+      if (card.color[0] === 255 && card.color[1] === 193) doc.setTextColor(33, 37, 41);
       doc.setFontSize(8);
       doc.setFont('helvetica', 'normal');
       doc.text(card.label, x + 4, summaryY + 7);
@@ -225,7 +434,6 @@ export class AdminRidesComponent implements OnInit {
       doc.text(card.value, x + 4, summaryY + 14);
     });
 
-    // Table
     const tableRows = this.requests.map(r => ({
       reqID: `#${r.requestId}`,
       requester: r.requesterName || 'Unknown',
@@ -288,7 +496,6 @@ export class AdminRidesComponent implements OnInit {
     ];
     XLSX.utils.book_append_sheet(workbook, sheet, 'Rides');
 
-    // Summary sheet
     const activeRides = this.rides.filter(r => r.isActive).length;
     const summarySheet = XLSX.utils.json_to_sheet([
       { 'Metric': 'Total Rides', 'Value': this.rides.length },
@@ -328,7 +535,6 @@ export class AdminRidesComponent implements OnInit {
     ];
     XLSX.utils.book_append_sheet(workbook, sheet, 'Ride Requests');
 
-    // Summary sheet
     const accepted = this.requests.filter(r => r.isAccept).length;
     const rejected = this.requests.filter(r => r.isReject).length;
     const pending = this.requests.filter(r => !r.isAccept && !r.isReject).length;

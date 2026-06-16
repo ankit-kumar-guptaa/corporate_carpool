@@ -1,10 +1,13 @@
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-5 animate-fade-in">
-        <div>
-            <h2 class="fw-bold text-dark mb-1">Rides Management</h2>
+<div class="container-fluid py-4">
+    <!-- ── Header ── -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 animate-fade-in">
+        <div class="mb-3 mb-md-0">
+            <h2 class="fw-bold text-dark mb-1">
+                <i class="fas fa-route text-primary me-2 opacity-75"></i>Rides Management
+            </h2>
             <p class="text-muted mb-0">Track and manage employee rides and CO₂ impact</p>
         </div>
-        <div class="d-flex gap-2">
+        <div class="d-flex gap-2 flex-wrap">
             <button class="btn btn-outline-danger rounded-pill shadow-sm fw-bold px-4" (click)="export('PDF')" [disabled]="isExporting || isLoadingRides || isLoadingRequests">
                 <span *ngIf="isExporting" class="spinner-border spinner-border-sm me-2" role="status"></span>
                 <i class="fas fa-file-pdf me-2" *ngIf="!isExporting"></i> PDF
@@ -16,174 +19,370 @@
         </div>
     </div>
 
-    <div class="card border-0 shadow-sm rounded-4 mb-4 animate-slide-up">
+    <!-- ── Quick Stats Cards ── -->
+    <div class="row g-3 mb-4 animate-slide-up">
+        <!-- Rides Tab Stats -->
+        <ng-container *ngIf="activeTab === 'rides'">
+            <div class="col-6 col-md-3">
+                <div class="stat-card stat-card-primary" (click)="filterStatus = ''; applyFilters()">
+                    <div class="stat-icon"><i class="fas fa-car-side"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">{{allRides.length}}</span>
+                        <span class="stat-label">Total Rides</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card stat-card-success" (click)="filterStatus = 'Active'; applyFilters()">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">{{totalActiveRides}}</span>
+                        <span class="stat-label">Active</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card stat-card-secondary" (click)="filterStatus = 'Inactive'; applyFilters()">
+                    <div class="stat-icon"><i class="fas fa-pause-circle"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">{{totalInactiveRides}}</span>
+                        <span class="stat-label">Inactive</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card stat-card-info">
+                    <div class="stat-icon"><i class="fas fa-filter"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">{{rides.length}}</span>
+                        <span class="stat-label">Showing</span>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- Requests Tab Stats -->
+        <ng-container *ngIf="activeTab === 'requests'">
+            <div class="col-6 col-md-3">
+                <div class="stat-card stat-card-primary" (click)="filterStatus = ''; applyFilters()">
+                    <div class="stat-icon"><i class="fas fa-hand-paper"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">{{allRequests.length}}</span>
+                        <span class="stat-label">Total Requests</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card stat-card-success" (click)="filterStatus = 'Accepted'; applyFilters()">
+                    <div class="stat-icon"><i class="fas fa-check-double"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">{{totalAccepted}}</span>
+                        <span class="stat-label">Accepted</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card stat-card-danger" (click)="filterStatus = 'Rejected'; applyFilters()">
+                    <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">{{totalRejected}}</span>
+                        <span class="stat-label">Rejected</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card stat-card-warning" (click)="filterStatus = 'Pending'; applyFilters()">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">{{totalPending}}</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+    <!-- ── Main Card ── -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4 animate-slide-up" style="animation-delay: 0.1s;">
+        <!-- Tab Header -->
         <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
-            <ul class="nav nav-tabs border-bottom-0 custom-tabs">
-                <li class="nav-item">
-                    <a class="nav-link fw-bold px-4 py-3 cursor-pointer" 
-                       [class.active]="activeTab === 'rides'" 
-                       (click)="setActiveTab('rides')">
-                        <i class="fas fa-car-side me-2"></i> Posted Rides
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link fw-bold px-4 py-3 cursor-pointer" 
-                       [class.active]="activeTab === 'requests'" 
-                       (click)="setActiveTab('requests')">
-                        <i class="fas fa-hand-paper me-2"></i> Ride Requests
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="card-body p-4 border-top">
-            <!-- Filters -->
-            <div class="row g-3 mb-4">
-                <div class="col-md-3">
-                    <label class="form-label small text-muted fw-bold">Date Range</label>
-                    <div class="input-group shadow-sm rounded-3 overflow-hidden">
-                        <span class="input-group-text bg-white border-end-0 ps-3"><i class="far fa-calendar-alt text-muted"></i></span>
-                        <input type="date" class="form-control border-start-0 bg-white py-2">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label small text-muted fw-bold">Employee</label>
-                    <div class="input-group shadow-sm rounded-3 overflow-hidden">
-                        <span class="input-group-text bg-white border-end-0 ps-3"><i class="fas fa-user text-muted"></i></span>
-                        <input type="text" class="form-control border-start-0 bg-white py-2" placeholder="Search employee...">
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label small text-muted fw-bold">Status</label>
-                    <select class="form-select bg-white shadow-sm rounded-3 py-2">
-                        <option value="">All</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Cancelled">Cancelled</option>
-                        <option value="Ongoing">Ongoing</option>
-                    </select>
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button class="btn btn-primary w-100 rounded-pill shadow-sm fw-bold py-2" (click)="filter()">
-                        <i class="fas fa-filter me-2"></i> Apply
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <ul class="nav custom-tabs mb-0">
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold px-4 py-3 d-flex align-items-center gap-2"
+                           [class.active]="activeTab === 'rides'"
+                           (click)="setActiveTab('rides')">
+                            <i class="fas fa-car-side"></i>
+                            <span>Posted Rides</span>
+                            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill ms-1">{{allRides.length}}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold px-4 py-3 d-flex align-items-center gap-2"
+                           [class.active]="activeTab === 'requests'"
+                           (click)="setActiveTab('requests')">
+                            <i class="fas fa-hand-paper"></i>
+                            <span>Ride Requests</span>
+                            <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill ms-1">{{allRequests.length}}</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Active filter indicator -->
+                <div *ngIf="hasActiveFilters" class="d-flex align-items-center">
+                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 me-2">
+                        <i class="fas fa-filter me-1"></i> {{currentData.length}} results
+                    </span>
+                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" (click)="clearFilters()">
+                        <i class="fas fa-times me-1"></i> Clear
                     </button>
                 </div>
             </div>
+        </div>
 
-            <!-- Content Area -->
-            
-            <!-- Rides Table -->
-            <div class="table-responsive" *ngIf="activeTab === 'rides'">
+        <div class="card-body p-4">
+            <!-- ── Filters ── -->
+            <div class="filter-section mb-4">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-3 col-6">
+                        <label class="form-label small text-uppercase fw-bold text-muted ls-1">
+                            <i class="far fa-calendar-alt me-1 text-primary"></i> From Date
+                        </label>
+                        <input type="date" class="form-control form-control-modern"
+                               [(ngModel)]="filterDateFrom"
+                               (change)="applyFilters()">
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <label class="form-label small text-uppercase fw-bold text-muted ls-1">
+                            <i class="far fa-calendar-alt me-1 text-primary"></i> To Date
+                        </label>
+                        <input type="date" class="form-control form-control-modern"
+                               [(ngModel)]="filterDateTo"
+                               (change)="applyFilters()">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small text-uppercase fw-bold text-muted ls-1">
+                            <i class="fas fa-user me-1 text-primary"></i> Employee
+                        </label>
+                        <input type="text" class="form-control form-control-modern"
+                               placeholder="Search by name..."
+                               [(ngModel)]="filterEmployee"
+                               (input)="applyFilters()">
+                    </div>
+                    <div class="col-md-2 col-6">
+                        <label class="form-label small text-uppercase fw-bold text-muted ls-1">
+                            <i class="fas fa-toggle-on me-1 text-primary"></i> Status
+                        </label>
+                        <select class="form-select form-control-modern"
+                                [(ngModel)]="filterStatus"
+                                (change)="applyFilters()">
+                            <option *ngFor="let opt of statusOptions" [value]="opt.value">{{opt.label}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1 col-6 d-flex gap-2">
+                        <button class="btn btn-outline-secondary rounded-3 flex-grow-1" (click)="clearFilters()"
+                                title="Clear Filters" [disabled]="!hasActiveFilters">
+                            <i class="fas fa-undo"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══════ RIDES TABLE ══════ -->
+            <div *ngIf="activeTab === 'rides'">
+                <!-- Loading -->
                 <div class="text-center py-5" *ngIf="isLoadingRides">
-                    <div class="spinner-border text-primary" role="status"></div>
-                    <div class="mt-2 text-muted fw-bold">Loading rides...</div>
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+                    <div class="mt-3 text-muted fw-bold">Loading rides...</div>
                 </div>
-                <table class="table table-hover align-middle custom-table" *ngIf="!isLoadingRides">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="border-0 ps-4 text-secondary text-uppercase small letter-spacing-1 py-3">Ride ID</th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Employee</th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Route</th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Type</th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Date</th>
-                            <th class="border-0 text-end pe-4 text-secondary text-uppercase small letter-spacing-1 py-3">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let ride of rides" class="table-row-hover">
-                            <td class="ps-4 fw-bold text-primary">#{{ride.rideID}}</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div *ngIf="!ride.userPhoto" class="avatar-xs bg-soft-primary rounded-circle me-2 d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 30px; height: 30px;">
-                                        {{ride.userName ? ride.userName.charAt(0) : 'U'}}
+
+                <!-- Empty State -->
+                <div class="empty-state text-center py-5" *ngIf="!isLoadingRides && rides.length === 0">
+                    <div class="empty-icon mb-3">
+                        <i class="fas fa-car-side"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">No rides found</h5>
+                    <p class="text-muted mb-3">Try adjusting your filters or check back later.</p>
+                    <button class="btn btn-primary rounded-pill px-4" (click)="clearFilters()" *ngIf="hasActiveFilters">
+                        <i class="fas fa-undo me-2"></i> Clear Filters
+                    </button>
+                </div>
+
+                <!-- Table -->
+                <div class="table-responsive" *ngIf="!isLoadingRides && rides.length > 0">
+                    <table class="table table-hover align-middle mb-0 rides-table">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">Ride ID</th>
+                                <th>Employee</th>
+                                <th>Route</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th class="text-end pe-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let ride of paginatedRides; let i = index" class="table-row-modern">
+                                <td class="ps-4">
+                                    <span class="ride-id">#{{ride.rideID}}</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div *ngIf="!ride.userPhoto" class="avatar-circle avatar-primary me-3">
+                                            {{ride.userName ? ride.userName.charAt(0) : 'U'}}
+                                        </div>
+                                        <img *ngIf="ride.userPhoto" [src]="ride.userPhoto" class="rounded-circle me-3 object-fit-cover border border-2 border-light" style="width: 36px; height: 36px;" alt="User">
+                                        <span class="fw-bold text-dark">{{ride.userName || 'Unknown'}}</span>
                                     </div>
-                                    <img *ngIf="ride.userPhoto" [src]="ride.userPhoto" class="rounded-circle me-2 object-fit-cover" style="width: 30px; height: 30px;" alt="User">
-                                    <span class="fw-bold text-dark">{{ride.userName || 'Unknown'}}</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="small">
-                                    <span class="text-muted d-block text-truncate" style="max-width: 150px;" title="{{ride.from_Address}}">{{ride.from_Address}}</span>
-                                    <i class="fas fa-long-arrow-alt-down my-1 text-primary ps-2"></i>
-                                    <span class="text-muted d-block text-truncate" style="max-width: 150px;" title="{{ride.to_Address}}">{{ride.to_Address}}</span>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge bg-soft-info text-info rounded-pill px-3">
-                                    {{ride.ride_Type}} <span *ngIf="ride.ride_Frequency">({{ride.ride_Frequency}})</span>
-                                </span>
-                            </td>
-                            <td class="text-muted">{{ride.ride_Date | date:'mediumDate'}}</td>
-                            <td class="text-end pe-4">
-                                <span class="badge rounded-pill px-3 py-1" 
-                                    [ngClass]="ride.isActive ? 'bg-success' : 'bg-secondary'">
-                                    {{ride.isActive ? 'Active' : 'Inactive'}}
-                                </span>
-                            </td>
-                        </tr>
-                        <tr *ngIf="rides.length === 0 && !isLoadingRides">
-                            <td colspan="6" class="text-center py-4 text-muted">No rides found.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Requests Table -->
-            <div class="table-responsive" *ngIf="activeTab === 'requests'">
-                <div class="text-center py-5" *ngIf="isLoadingRequests">
-                    <div class="spinner-border text-primary" role="status"></div>
-                    <div class="mt-2 text-muted fw-bold">Loading requests...</div>
+                                </td>
+                                <td>
+                                    <div class="route-info">
+                                        <div class="route-point">
+                                            <span class="route-dot route-dot-start"></span>
+                                            <span class="route-text" title="{{ride.from_Address}}">{{ride.from_Address}}</span>
+                                        </div>
+                                        <div class="route-line"></div>
+                                        <div class="route-point">
+                                            <span class="route-dot route-dot-end"></span>
+                                            <span class="route-text" title="{{ride.to_Address}}">{{ride.to_Address}}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge badge-type">
+                                        <i class="fas fa-tag me-1 opacity-50"></i>
+                                        {{ride.ride_Type}} <span *ngIf="ride.ride_Frequency" class="opacity-75">· {{ride.ride_Frequency}}</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="text-muted fw-medium">{{ride.ride_Date | date:'mediumDate'}}</span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <span class="badge rounded-pill px-3 py-2 fw-bold"
+                                        [ngClass]="ride.isActive ? 'badge-active' : 'badge-inactive'">
+                                        <i class="fas me-1" [ngClass]="ride.isActive ? 'fa-circle' : 'fa-circle'" style="font-size: 6px; vertical-align: middle;"></i>
+                                        {{ride.isActive ? 'Active' : 'Inactive'}}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <table class="table table-hover align-middle custom-table" *ngIf="!isLoadingRequests">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="border-0 ps-4 text-secondary text-uppercase small letter-spacing-1 py-3">Req ID</th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Requester</th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Ride Owner</th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Route</th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Date</th>
-                            <th class="border-0 text-end pe-4 text-secondary text-uppercase small letter-spacing-1 py-3">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let req of requests" class="table-row-hover">
-                            <td class="ps-4 fw-bold text-primary">#{{req.requestId}}</td>
-                            <td>
-                                <div class="fw-bold text-dark">{{req.requesterName || 'Unknown'}}</div>
-                                <div class="small text-muted">{{req.requesterEmail}}</div>
-                            </td>
-                            <td>
-                                <div class="fw-bold text-dark">{{req.rideOwnerName || 'Unknown'}}</div>
-                                <div class="small text-muted">{{req.rideOwnerEmail}}</div>
-                            </td>
-                            <td>
-                                <div class="small">
-                                    <span class="text-muted d-block text-truncate" style="max-width: 150px;" title="{{req.from_Address}}">{{req.from_Address}}</span>
-                                    <i class="fas fa-long-arrow-alt-down my-1 text-primary ps-2"></i>
-                                    <span class="text-muted d-block text-truncate" style="max-width: 150px;" title="{{req.to_Address}}">{{req.to_Address}}</span>
-                                </div>
-                            </td>
-                            <td class="text-muted">{{req.ride_Date | date:'mediumDate'}}</td>
-                            <td class="text-end pe-4">
-                                <span *ngIf="req.isAccept" class="badge bg-success rounded-pill px-3 py-1">Accepted</span>
-                                <span *ngIf="req.isReject" class="badge bg-danger rounded-pill px-3 py-1">Rejected</span>
-                                <span *ngIf="!req.isAccept && !req.isReject" class="badge bg-warning text-dark rounded-pill px-3 py-1">Pending</span>
-                            </td>
-                        </tr>
-                        <tr *ngIf="requests.length === 0 && !isLoadingRequests">
-                            <td colspan="6" class="text-center py-4 text-muted">No ride requests found.</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
 
-            <!-- Pagination -->
-            <nav class="d-flex justify-content-between align-items-center mt-4 border-top pt-4">
-                <span class="text-muted small">Showing 1 to 8 of 245 entries</span>
+            <!-- ══════ REQUESTS TABLE ══════ -->
+            <div *ngIf="activeTab === 'requests'">
+                <!-- Loading -->
+                <div class="text-center py-5" *ngIf="isLoadingRequests">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+                    <div class="mt-3 text-muted fw-bold">Loading requests...</div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state text-center py-5" *ngIf="!isLoadingRequests && requests.length === 0">
+                    <div class="empty-icon mb-3">
+                        <i class="fas fa-hand-paper"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">No ride requests found</h5>
+                    <p class="text-muted mb-3">Try adjusting your filters or check back later.</p>
+                    <button class="btn btn-primary rounded-pill px-4" (click)="clearFilters()" *ngIf="hasActiveFilters">
+                        <i class="fas fa-undo me-2"></i> Clear Filters
+                    </button>
+                </div>
+
+                <!-- Table -->
+                <div class="table-responsive" *ngIf="!isLoadingRequests && requests.length > 0">
+                    <table class="table table-hover align-middle mb-0 rides-table">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">Req ID</th>
+                                <th>Requester</th>
+                                <th>Ride Owner</th>
+                                <th>Route</th>
+                                <th>Date</th>
+                                <th class="text-end pe-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let req of paginatedRequests; let i = index" class="table-row-modern">
+                                <td class="ps-4">
+                                    <span class="ride-id">#{{req.requestId}}</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle avatar-info me-3">
+                                            {{req.requesterName ? req.requesterName.charAt(0) : 'U'}}
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark">{{req.requesterName || 'Unknown'}}</div>
+                                            <div class="small text-muted text-truncate" style="max-width: 140px;">{{req.requesterEmail}}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle avatar-success me-3">
+                                            {{req.rideOwnerName ? req.rideOwnerName.charAt(0) : 'U'}}
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark">{{req.rideOwnerName || 'Unknown'}}</div>
+                                            <div class="small text-muted text-truncate" style="max-width: 140px;">{{req.rideOwnerEmail}}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="route-info">
+                                        <div class="route-point">
+                                            <span class="route-dot route-dot-start"></span>
+                                            <span class="route-text" title="{{req.from_Address}}">{{req.from_Address}}</span>
+                                        </div>
+                                        <div class="route-line"></div>
+                                        <div class="route-point">
+                                            <span class="route-dot route-dot-end"></span>
+                                            <span class="route-text" title="{{req.to_Address}}">{{req.to_Address}}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-muted fw-medium">{{req.ride_Date | date:'mediumDate'}}</span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <span *ngIf="req.isAccept" class="badge rounded-pill px-3 py-2 fw-bold badge-accepted">
+                                        <i class="fas fa-check me-1"></i> Accepted
+                                    </span>
+                                    <span *ngIf="req.isReject" class="badge rounded-pill px-3 py-2 fw-bold badge-rejected">
+                                        <i class="fas fa-times me-1"></i> Rejected
+                                    </span>
+                                    <span *ngIf="!req.isAccept && !req.isReject" class="badge rounded-pill px-3 py-2 fw-bold badge-pending">
+                                        <i class="fas fa-clock me-1"></i> Pending
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ── Pagination ── -->
+            <nav class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 pt-4 border-top gap-3"
+                 *ngIf="currentData.length > 0">
+                <span class="text-muted small fw-medium">
+                    Showing <strong>{{showingFrom}}</strong> to <strong>{{showingTo}}</strong> of <strong>{{currentData.length}}</strong> entries
+                </span>
                 <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item disabled"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center" href="#" style="width: 32px; height: 32px;"><i class="fas fa-chevron-left"></i></a></li>
-                    <li class="page-item active"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center shadow-sm" href="#" style="width: 32px; height: 32px;">1</a></li>
-                    <li class="page-item"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center" href="#" style="width: 32px; height: 32px;">2</a></li>
-                    <li class="page-item"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center" href="#" style="width: 32px; height: 32px;">3</a></li>
-                    <li class="page-item"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center" href="#" style="width: 32px; height: 32px;"><i class="fas fa-chevron-right"></i></a></li>
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                        <a class="page-link page-link-modern" (click)="goToPage(currentPage - 1)">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item" *ngFor="let page of pageNumbers" [class.active]="page === currentPage">
+                        <a class="page-link page-link-modern" (click)="goToPage(page)">{{page}}</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === totalPages">
+                        <a class="page-link page-link-modern" (click)="goToPage(currentPage + 1)">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
