@@ -3,13 +3,18 @@
     animation: fadeIn 0.5s ease-out;
 }
 
-/* Animations */
+// ── Animations ──
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
 @keyframes slideUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes countUp {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
@@ -20,76 +25,74 @@
 
 .animate-slide-up {
     opacity: 0;
-    animation: slideUp 0.5s ease-out forwards;
+    animation: slideUp 0.6s ease-out forwards;
 }
 
-/* Utils */
-.ls-1 {
-    letter-spacing: 0.05em;
-}
+// ── Utils ──
+.ls-1 { letter-spacing: 0.05em; }
+.fs-sm { font-size: 0.875rem; }
 
-.fs-sm {
-    font-size: 0.875rem;
-}
-
-/* Hover Effects */
+// ── Hover Effects ──
 .hover-lift {
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08) !important;
+    }
 }
 
-.hover-lift:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.1)!important;
-}
-
-.transition-all {
-    transition: all 0.3s ease;
-}
+.transition-all { transition: all 0.3s ease; }
 
 .hover-bg-light {
     transition: background-color 0.2s ease;
+    border-radius: 8px;
+    &:hover { background-color: #f8f9fa; }
 }
 
-.hover-bg-light:hover {
-    background-color: #f8f9fa;
-}
-
+// ── Stat Cards ──
 .hover-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .display-6 {
+        animation: countUp 0.5s ease-out;
+    }
 }
 
-.hover-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05) !important;
-}
-
-/* Colors & Gradients */
 .bg-opacity-10 { --bs-bg-opacity: 0.1; }
 .bg-opacity-20 { --bs-bg-opacity: 0.2; }
 
-/* Icon Box */
+// ── Icon Box ──
 .icon-box {
     width: 48px;
     height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 14px;
 }
 
-/* Chart Styles */
+// ── Chart Styles ──
 .bar {
-    border-radius: 4px 4px 0 0;
+    border-radius: 6px 6px 0 0;
     cursor: pointer;
-}
+    transition: all 0.3s ease;
+    background: linear-gradient(180deg, #4f8cfd 0%, #0d6efd 100%);
 
-.group-hover:hover .bar {
-    opacity: 0.8 !important;
+    &:hover {
+        opacity: 0.85;
+        filter: brightness(1.1);
+    }
 }
 
 .group-hover:hover .tooltip-custom {
     opacity: 1 !important;
-    transform: translate(-50%, -10px) !important;
-    transition: all 0.2s ease;
+    transform: translate(-50%, -8px) !important;
 }
 
 .tooltip-custom {
@@ -97,13 +100,15 @@
     z-index: 100;
     pointer-events: none;
     font-size: 11px;
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     min-width: 60px;
+    border-radius: 10px !important;
+    backdrop-filter: blur(8px);
 }
 
 .arrow-down {
-    width: 0; 
-    height: 0; 
+    width: 0;
+    height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-top: 5px solid #212529;
@@ -113,86 +118,90 @@
     transform: translateX(-50%);
 }
 
-/* Table Styles */
-.custom-table th {
-    font-weight: 600;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
+// ── Table Styles ──
+.custom-table {
+    th {
+        font-weight: 700;
+        font-size: 0.7rem;
+        letter-spacing: 0.06em;
+    }
+
+    td {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        vertical-align: middle;
+    }
 }
 
-.custom-table td {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    vertical-align: middle;
-}
-
-
-/* Soft Backgrounds for Badges */
+// ── Badge Soft Colors ──
 .bg-soft-primary {
-    background-color: rgba(13, 110, 253, 0.1);
+    background-color: rgba(13, 110, 253, 0.08);
     color: #0d6efd;
 }
 
 .bg-soft-success {
-    background-color: rgba(25, 135, 84, 0.1);
+    background-color: rgba(25, 135, 84, 0.08);
     color: #198754;
 }
 
 .bg-soft-info {
-    background-color: rgba(13, 202, 240, 0.1);
-    color: #0dcaf0;
+    background-color: rgba(13, 202, 240, 0.08);
+    color: #0891b2;
 }
 
 .bg-soft-warning {
     background-color: rgba(255, 193, 7, 0.1);
-    color: #ffc107;
+    color: #cc9a06;
 }
 
-/* Rank Styles */
+// ── Rank Styles ──
 .rank-icon {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 12px;
 }
 
-/* Avatar Gradient */
+// ── Avatar Gradient ──
 .avatar-gradient {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    box-shadow: 0 4px 6px rgba(102, 126, 234, 0.25);
+    font-size: 0.85rem;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-/* Table Row Modern Hover */
+// ── Table Row Modern ──
 .table-row-modern {
-    transition: all 0.2s ease;
-    border-radius: 8px;
+    transition: all 0.25s ease;
+    border-radius: 10px;
+
+    td {
+        background: #fff;
+        border-bottom: 1px solid #f1f3f5;
+    }
+
+    td:first-child {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+
+    td:last-child {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    &:hover td {
+        background: #fafbff;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    }
 }
 
-.table-row-modern td:first-child {
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-}
-
-.table-row-modern td:last-child {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-}
-
-.table-row-modern:hover {
-    background-color: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    transform: scale(1.005);
-    z-index: 1;
-    position: relative;
-}
-
-/* Progress Bar in Table */
+// ── Progress Bar ──
 .progress-thin {
-    height: 4px;
-    border-radius: 2px;
+    height: 5px;
+    border-radius: 3px;
     background-color: #e9ecef;
     width: 80px;
     overflow: hidden;
@@ -200,5 +209,32 @@
 
 .progress-bar-custom {
     height: 100%;
-    border-radius: 2px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #0d6efd, #6ea8fe);
+}
+
+// ── Button Icon ──
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: #e9ecef;
+        transform: translateX(2px);
+    }
+}
+
+// ── Card Headers ──
+.card-header {
+    border-radius: 16px 16px 0 0 !important;
+}
+
+// ── Donut Chart Glow ──
+.rounded-circle[style*="conic-gradient"] {
+    box-shadow: 0 8px 30px rgba(13, 110, 253, 0.15);
 }

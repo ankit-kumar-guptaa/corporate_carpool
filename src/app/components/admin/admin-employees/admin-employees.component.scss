@@ -1,61 +1,197 @@
+:host {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slide-up {
+    opacity: 0;
+    animation: slideUp 0.6s ease-out forwards;
+}
+
+// ── Avatar ──
 .avatar-sm {
-    width: 35px;
-    height: 35px;
-    font-size: 14px;
+    width: 40px;
+    height: 40px;
+    font-size: 0.85rem;
+    font-weight: 700;
 }
 
 .bg-soft-info {
-    background-color: rgba(13, 202, 240, 0.15) !important;
+    background: linear-gradient(135deg, rgba(79, 140, 253, 0.12), rgba(13, 110, 253, 0.08)) !important;
 }
 
-.text-info {
-    color: #0dcaf0 !important;
-}
+.text-info { color: #4f8cfd !important; }
 
-/* Modal Styling */
+// ── Modal ──
 .bg-gradient-primary {
-    background: linear-gradient(135deg, #123454, #2a5298);
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1e40af 100%);
 }
 
-.text-secondary {
-    color: #f08824 !important;
-}
+// ── Custom Table ──
+.custom-table {
+    thead th {
+        font-weight: 700;
+        font-size: 0.7rem;
+        letter-spacing: 0.06em;
+        color: #8892a0;
+        padding: 14px 16px;
+        border-bottom: 2px solid #e9ecef;
+        background: #fafbfc;
+        white-space: nowrap;
+    }
 
-.border-secondary {
-    border-color: #f08824 !important;
-}
+    .table-row-hover {
+        transition: all 0.2s ease;
+        border-bottom: 1px solid #f1f3f5;
 
-.btn-primary {
-    background-color: #123454;
-    border-color: #123454;
-    &:hover {
-        background-color: #0e2a42;
-        border-color: #0e2a42;
+        &:hover {
+            background-color: rgba(13, 110, 253, 0.02);
+            transform: scale(1.001);
+        }
+
+        td {
+            padding: 14px 16px;
+            vertical-align: middle;
+        }
     }
 }
 
-.btn-outline-secondary {
+// ── Soft Badge Colors ──
+.bg-soft-primary {
+    background-color: rgba(13, 110, 253, 0.08);
+    color: #0d6efd;
+}
+
+.bg-soft-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #cc9a06;
+}
+
+.border-primary-subtle { border-color: rgba(13, 110, 253, 0.2) !important; }
+.border-warning-subtle { border-color: rgba(255, 193, 7, 0.25) !important; }
+
+// ── Action Buttons ──
+.btn-outline-success,
+.btn-outline-warning,
+.btn-outline-danger {
+    transition: all 0.2s ease;
+    font-size: 0.8rem;
+
+    &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+}
+
+// ── Letter Spacing ──
+.letter-spacing-1 { letter-spacing: 0.05em; }
+.letter-spacing-2 { letter-spacing: 0.1em; }
+
+// ── Pagination ──
+.page-link {
+    border: none;
+    border-radius: 10px !important;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
     color: #6c757d;
-    border-color: #6c757d;
+    transition: all 0.2s ease;
+
     &:hover {
-        background-color: #6c757d;
-        color: white;
+        background: rgba(13, 110, 253, 0.08);
+        color: #0d6efd;
     }
 }
 
-.letter-spacing-1 {
-    letter-spacing: 1px;
+.page-item.active .page-link {
+    background: #0d6efd;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
 }
 
-.letter-spacing-2 {
-    letter-spacing: 2px;
+.page-item.disabled .page-link {
+    opacity: 0.4;
 }
 
+// ── Search Input ──
+.input-group {
+    transition: all 0.25s ease;
+
+    &:focus-within {
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1) !important;
+    }
+}
+
+// ── Modal Form ──
+.modern-input-group {
+    border-radius: 12px;
+    background: #fff;
+    border: 1.5px solid #e2e5ea;
+    transition: all 0.25s ease;
+
+    .input-group-text {
+        background: transparent;
+        border: none;
+        color: #adb5bd;
+        padding-left: 1rem;
+        padding-right: 0.5rem;
+    }
+
+    .form-control, .form-select {
+        border: none;
+        background: transparent;
+        padding: 0.75rem 1rem 0.75rem 0.2rem;
+        font-weight: 500;
+
+        &:focus {
+            box-shadow: none;
+        }
+
+        &::placeholder {
+            color: #adb5bd;
+            font-weight: 400;
+        }
+    }
+
+    &:focus-within {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1) !important;
+
+        .input-group-text {
+            color: #0d6efd;
+        }
+    }
+}
+
+.hover-lift {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+// ── QR & Company ──
 .qr-container {
     transition: transform 0.3s ease;
-    &:hover {
-        transform: scale(1.05);
-    }
+    &:hover { transform: scale(1.05); }
 }
 
 .company-code-section {
@@ -63,5 +199,102 @@
     &:hover {
         box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
         transform: translateY(-3px);
+    }
+}
+
+// ── Filter Section ──
+.filter-section {
+    background: #f8f9fc;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.form-control-modern {
+    border: 1.5px solid #e2e5ea;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.875rem;
+    background-color: #fff;
+    transition: all 0.25s ease;
+
+    &:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    }
+
+    &::placeholder { color: #adb5bd; }
+}
+
+// ── Avatar Circle ──
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+// ── CO2 Badge ──
+.co2-badge {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    background: rgba(25, 135, 84, 0.08);
+    color: #198754;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+}
+
+// ── Status Badges ──
+.badge-active {
+    background: rgba(25, 135, 84, 0.1);
+    color: #198754;
+}
+
+.badge-pending {
+    background: rgba(255, 193, 7, 0.15);
+    color: #cc9a06;
+}
+
+.badge-inactive {
+    background: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+}
+
+// ── Empty State ──
+.empty-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.08), rgba(13, 110, 253, 0.03));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: #0d6efd;
+}
+
+.fw-medium { font-weight: 500; }
+
+// ── Primary Button Override ──
+.btn-primary {
+    background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+    border: none;
+    font-weight: 600;
+    transition: all 0.25s ease;
+
+    &:hover {
+        background: linear-gradient(135deg, #0b5ed7, #0a58ca);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
     }
 }

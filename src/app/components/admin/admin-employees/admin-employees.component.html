@@ -1,7 +1,10 @@
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-5 animate-fade-in">
-        <div>
-            <h2 class="fw-bold text-dark mb-1">Employee Management</h2>
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 animate-fade-in">
+        <div class="mb-3 mb-md-0">
+            <h2 class="fw-bold text-dark mb-1">
+                <i class="fas fa-users text-primary me-2 opacity-75"></i>Employee Management
+            </h2>
             <p class="text-muted mb-0">Manage employee accounts, roles, and access</p>
         </div>
         <button class="btn btn-primary rounded-pill shadow-sm fw-bold px-4" data-bs-toggle="modal" data-bs-target="#inviteEmployeeModal" (click)="inviteEmployee()">
@@ -12,64 +15,65 @@
     <div class="card border-0 shadow-sm rounded-4 mb-4 animate-slide-up">
         <div class="card-body p-4">
             <!-- Filters -->
-            <div class="row g-3 mb-4">
-                <div class="col-md-4">
-                    <div class="input-group shadow-sm rounded-3 overflow-hidden">
-                        <span class="input-group-text bg-white border-end-0 ps-3"><i
-                                class="fas fa-search text-muted"></i></span>
-                        <input type="text" class="form-control border-start-0 bg-white py-2"
+            <div class="filter-section mb-4">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label small text-uppercase fw-bold text-muted" style="letter-spacing: 0.04em;">
+                            <i class="fas fa-search me-1 text-primary"></i> Search
+                        </label>
+                        <input type="text" class="form-control form-control-modern"
                             placeholder="Search by name, email or role..." [(ngModel)]="searchTerm"
                             (input)="filterData()">
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <select class="form-select bg-white shadow-sm rounded-3 py-2" [(ngModel)]="statusFilter"
-                        (change)="filterData()">
-                        <option value="">All Statuses</option>
-                        <option value="Active">Active</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Inactive">Inactive</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <select class="form-select bg-white shadow-sm rounded-3 py-2" [(ngModel)]="roleFilter"
-                        (change)="filterData()">
-                        <option value="">All Roles</option>
-                        <option value="Pooler">Pooler (Driver)</option>
-                        <option value="Seeker">Seeker (Passenger)</option>
-                    </select>
+                    <div class="col-md-3">
+                        <label class="form-label small text-uppercase fw-bold text-muted" style="letter-spacing: 0.04em;">
+                            <i class="fas fa-toggle-on me-1 text-primary"></i> Status
+                        </label>
+                        <select class="form-select form-control-modern" [(ngModel)]="statusFilter"
+                            (change)="filterData()">
+                            <option value="">All Statuses</option>
+                            <option value="Active">Active</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small text-uppercase fw-bold text-muted" style="letter-spacing: 0.04em;">
+                            <i class="fas fa-user-tag me-1 text-primary"></i> Role
+                        </label>
+                        <select class="form-select form-control-modern" [(ngModel)]="roleFilter"
+                            (change)="filterData()">
+                            <option value="">All Roles</option>
+                            <option value="Pooler">Pooler (Driver)</option>
+                            <option value="Seeker">Seeker (Passenger)</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <!-- Table -->
             <div class="table-responsive">
                 <div class="text-center py-5" *ngIf="isLoadingData">
-                    <div class="spinner-border text-primary" role="status"></div>
-                    <div class="mt-2 text-muted fw-bold">Loading employees...</div>
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+                    <div class="mt-3 text-muted fw-bold">Loading employees...</div>
                 </div>
-                <table class="table table-hover align-middle custom-table" *ngIf="!isLoadingData">
-                    <thead class="bg-light">
+                <table class="table table-hover align-middle mb-0 custom-table" *ngIf="!isLoadingData">
+                    <thead>
                         <tr>
-                            <th class="border-0 ps-4 text-secondary text-uppercase small letter-spacing-1 py-3">Employee
-                            </th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Role</th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Status</th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Total Rides
-                            </th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">CO₂ Saved
-                            </th>
-                            <th class="border-0 text-secondary text-uppercase small letter-spacing-1 py-3">Distance</th>
-                            <th
-                                class="border-0 text-end pe-4 text-secondary text-uppercase small letter-spacing-1 py-3">
-                                Actions</th>
+                            <th class="ps-4">Employee</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Total Rides</th>
+                            <th>CO₂ Saved</th>
+                            <th>Distance</th>
+                            <th class="text-end pe-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let emp of pagedEmployees" class="table-row-hover">
                             <td class="ps-4">
-                                <div class="d-flex align-items-center py-2">
-                                    <div class="avatar-sm bg-soft-info rounded-circle me-3 d-flex align-items-center justify-content-center text-info fw-bold shadow-sm"
-                                        style="width: 40px; height: 40px;">
+                                <div class="d-flex align-items-center py-1">
+                                    <div class="avatar-circle me-3">
                                         {{emp.name ? emp.name.charAt(0) : 'U'}}
                                     </div>
                                     <div>
@@ -79,50 +83,61 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="badge rounded-pill px-3 py-2 border"
+                                <span class="badge rounded-pill px-3 py-2 border fw-bold"
                                     [ngClass]="emp.role === 'Pooler' ? 'bg-soft-primary text-primary border-primary-subtle' : 'bg-soft-warning text-warning border-warning-subtle'">
-                                    <i class="fas me-2"
-                                        [ngClass]="emp.role === 'Pooler' ? 'fa-car' : 'fa-walking'"></i>{{emp.role}}
+                                    <i class="fas me-1" [ngClass]="emp.role === 'Pooler' ? 'fa-car' : 'fa-walking'"></i>{{emp.role}}
                                 </span>
                             </td>
                             <td>
-                                <span class="badge rounded-pill px-3 py-1"
-                                    [ngClass]="{'bg-success': emp.status === 'Active', 'bg-warning text-dark': emp.status === 'Pending', 'bg-secondary': emp.status === 'Inactive'}">
+                                <span class="badge rounded-pill px-3 py-2 fw-bold"
+                                    [ngClass]="{'badge-active': emp.status === 'Active', 'badge-pending': emp.status === 'Pending', 'badge-inactive': emp.status === 'Inactive'}">
+                                    <i class="fas me-1" style="font-size: 6px; vertical-align: middle;"
+                                       [ngClass]="{'fa-circle': emp.status === 'Active' || emp.status === 'Inactive', 'fa-clock': emp.status === 'Pending'}"></i>
                                     {{emp.status}}
                                 </span>
                             </td>
                             <td class="fw-bold text-dark">{{emp.rides}}</td>
-                            <td class="fw-bold text-success">{{emp.co2}} kg</td>
+                            <td>
+                                <span class="co2-badge">
+                                    <i class="fas fa-leaf me-1"></i> {{emp.co2}} kg
+                                </span>
+                            </td>
                             <td class="fw-bold text-dark">{{emp.distance}} km</td>
                             <td class="text-end pe-4">
-                                <button *ngIf="emp.status !== 'Active'"
-                                    class="btn btn-sm btn-outline-success rounded-pill me-2 px-3"
-                                    (click)="approve(emp)">Activate</button>
-                                <button *ngIf="emp.status === 'Active'"
-                                    class="btn btn-sm btn-outline-warning rounded-pill me-2 px-3"
-                                    (click)="reject(emp)">Deactivate</button>
-                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" (click)="remove(emp)"><i
-                                        class="fas fa-trash"></i></button>
+                                <div class="d-flex gap-1 justify-content-end">
+                                    <button *ngIf="emp.status !== 'Active'"
+                                        class="btn btn-sm btn-outline-success rounded-pill px-3"
+                                        (click)="approve(emp)">Activate</button>
+                                    <button *ngIf="emp.status === 'Active'"
+                                        class="btn btn-sm btn-outline-warning rounded-pill px-3"
+                                        (click)="reject(emp)">Deactivate</button>
+                                    <button class="btn btn-sm btn-outline-danger rounded-pill px-3" (click)="remove(emp)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         <tr *ngIf="filteredEmployees.length === 0 && !isLoadingData">
-                            <td colspan="7" class="text-center py-4 text-muted">No employees found in the corporate
-                                network.</td>
+                            <td colspan="7" class="text-center py-5">
+                                <div class="empty-icon mb-3"><i class="fas fa-users"></i></div>
+                                <h5 class="fw-bold text-dark">No employees found</h5>
+                                <p class="text-muted mb-0">Try adjusting your search filters.</p>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <!-- Pagination -->
-            <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2"
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 pt-4 border-top gap-3"
                  *ngIf="!isLoadingData && filteredEmployees.length > 0">
-                <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <small class="text-muted mb-0">
-                        Showing {{ pageStart }} to {{ pageEnd }} of {{ totalItems }} entries
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <small class="text-muted fw-medium">
+                        Showing <strong>{{ pageStart }}</strong> to <strong>{{ pageEnd }}</strong> of <strong>{{ totalItems }}</strong> entries
                     </small>
-                    <div class="d-flex align-items-center gap-2 ms-3">
-                        <small class="text-muted">Rows per page:</small>
-                        <select class="form-select form-select-sm shadow-sm rounded-3"
+                    <div class="d-flex align-items-center gap-2">
+                        <small class="text-muted">Rows:</small>
+                        <select class="form-select form-select-sm rounded-3 border"
                                 style="width: auto;"
                                 [(ngModel)]="pageSize"
                                 (change)="onPageSizeChange()">
@@ -130,22 +145,20 @@
                         </select>
                     </div>
                 </div>
-                <nav aria-label="Employees pagination">
+                <nav>
                     <ul class="pagination pagination-sm mb-0">
                         <li class="page-item" [class.disabled]="currentPage === 1">
-                            <button type="button" class="page-link border-0 rounded-circle mx-1"
-                                    (click)="prevPage()" [disabled]="currentPage === 1"
-                                    aria-label="Previous">&laquo;</button>
+                            <button type="button" class="page-link border-0 rounded-3 mx-1"
+                                    (click)="prevPage()" [disabled]="currentPage === 1">&laquo;</button>
                         </li>
                         <li class="page-item" *ngFor="let page of pageNumbers"
                             [class.active]="page === currentPage">
-                            <button type="button" class="page-link border-0 rounded-circle mx-1"
+                            <button type="button" class="page-link border-0 rounded-3 mx-1"
                                     (click)="goToPage(page)">{{ page }}</button>
                         </li>
                         <li class="page-item" [class.disabled]="currentPage === totalPages">
-                            <button type="button" class="page-link border-0 rounded-circle mx-1"
-                                    (click)="nextPage()" [disabled]="currentPage === totalPages"
-                                    aria-label="Next">&raquo;</button>
+                            <button type="button" class="page-link border-0 rounded-3 mx-1"
+                                    (click)="nextPage()" [disabled]="currentPage === totalPages">&raquo;</button>
                         </li>
                     </ul>
                 </nav>
@@ -158,59 +171,67 @@
 <div class="modal fade" id="inviteEmployeeModal" tabindex="-1" aria-labelledby="inviteEmployeeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-            <div class="modal-header bg-gradient-primary text-white border-0 py-3">
-                <h5 class="modal-title fw-bold" id="inviteEmployeeModalLabel">
-                    <i class="fas fa-user-plus me-2"></i> Add New Employee
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" id="closeInviteModal" aria-label="Close"></button>
+            <!-- Header -->
+            <div class="modal-header bg-white border-bottom px-4 pt-4 pb-3">
+                <div class="d-flex align-items-center">
+                    <div class="icon-box bg-soft-primary text-primary me-3" style="width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user-plus fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="inviteEmployeeModalLabel">Add New Employee</h5>
+                        <p class="text-muted small mb-0 mt-1">Create a new carpool account</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeInviteModal" aria-label="Close"></button>
             </div>
-            <div class="modal-body p-4 bg-light-subtle">
+
+            <!-- Body -->
+            <div class="modal-body p-4 bg-light bg-opacity-50">
                 <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold text-muted small">Full Name <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white"><i class="fas fa-user text-primary"></i></span>
+                    <div class="col-12">
+                        <label class="form-label fw-bold text-muted small text-uppercase ls-1">Full Name <span class="text-danger">*</span></label>
+                        <div class="input-group modern-input-group shadow-sm">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
                             <input type="text" class="form-control" placeholder="Enter full name"
                                    [(ngModel)]="newUser.name" name="newUserName">
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold text-muted small">Email Address <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white"><i class="fas fa-envelope text-primary"></i></span>
-                            <input type="email" class="form-control" placeholder="name@airliquide.com"
+                    <div class="col-12">
+                        <label class="form-label fw-bold text-muted small text-uppercase ls-1">Email Address <span class="text-danger">*</span></label>
+                        <div class="input-group modern-input-group shadow-sm">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" class="form-control" placeholder="name@company.com"
                                    [(ngModel)]="newUser.email" name="newUserEmail">
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-bold text-muted small">Domain</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white"><i class="fas fa-globe text-primary"></i></span>
-                            <input type="text" class="form-control" placeholder="airliquide.com"
+                        <label class="form-label fw-bold text-muted small text-uppercase ls-1">Domain</label>
+                        <div class="input-group modern-input-group shadow-sm">
+                            <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                            <input type="text" class="form-control" placeholder="company.com"
                                    [(ngModel)]="newUser.domain" name="newUserDomain">
                         </div>
-                        
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-bold text-muted small">Employee Code</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white"><i class="fas fa-id-badge text-primary"></i></span>
+                        <label class="form-label fw-bold text-muted small text-uppercase ls-1">Employee Code</label>
+                        <div class="input-group modern-input-group shadow-sm">
+                            <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
                             <input type="text" class="form-control" placeholder="EMP-12345"
                                    [(ngModel)]="newUser.employeeCode" name="newUserEmployeeCode">
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-bold text-muted small">Mobile Number</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white"><i class="fas fa-phone text-primary"></i></span>
+                        <label class="form-label fw-bold text-muted small text-uppercase ls-1">Mobile Number</label>
+                        <div class="input-group modern-input-group shadow-sm">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
                             <input type="tel" class="form-control" placeholder="9999999999"
                                    [(ngModel)]="newUser.mobileNo" name="newUserMobileNo">
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-bold text-muted small">Gender</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white"><i class="fas fa-venus-mars text-primary"></i></span>
+                        <label class="form-label fw-bold text-muted small text-uppercase ls-1">Gender</label>
+                        <div class="input-group modern-input-group shadow-sm">
+                            <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
                             <select class="form-select" [(ngModel)]="newUser.gender" name="newUserGender">
                                 <option value="">Select gender</option>
                                 <option value="Male">Male</option>
@@ -220,18 +241,20 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <label class="form-label fw-bold text-muted small">Password <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white"><i class="fas fa-lock text-primary"></i></span>
+                        <label class="form-label fw-bold text-muted small text-uppercase ls-1">Password <span class="text-danger">*</span></label>
+                        <div class="input-group modern-input-group shadow-sm">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
                             <input type="password" class="form-control" placeholder="Create password"
                                    [(ngModel)]="newUser.password" name="newUserPassword">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer border-0 justify-content-end pb-3 pt-0 bg-light-subtle">
-                <button type="button" class="btn btn-outline-secondary rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" (click)="addEmployee()" [disabled]="isAdding">
+
+            <!-- Footer -->
+            <div class="modal-footer border-top bg-white p-4">
+                <button type="button" class="btn btn-light rounded-pill px-4 fw-bold text-muted border-0 shadow-sm hover-lift" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold ms-3 hover-lift shadow-sm" (click)="addEmployee()" [disabled]="isAdding">
                     <i class="fas fa-spinner fa-spin me-2" *ngIf="isAdding"></i>
                     {{ isAdding ? 'Creating...' : 'Create User' }}
                 </button>

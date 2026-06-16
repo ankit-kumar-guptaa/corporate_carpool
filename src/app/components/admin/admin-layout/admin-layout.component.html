@@ -1,45 +1,51 @@
 <div class="d-flex" id="wrapper">
   <!-- Sidebar -->
-  <div class="glass-sidebar border-end" id="sidebar-wrapper">
-    <a class="navbar-brand text-white fw-bold d-flex align-items-center mb-4" href="#">
-      <img class="py-2" src="https://www.airliquide.com/sites/airliquide.com/files/air-liquide_0.svg" alt="Air Liquide"
-        style="position: relative; left: 25px;" height="50">
-    </a>
+  <div class="glass-sidebar" id="sidebar-wrapper">
+    <!-- Logo -->
+    <div class="sidebar-brand">
+      <a class="d-flex align-items-center text-decoration-none" href="#">
+        <img src="https://www.airliquide.com/sites/airliquide.com/files/air-liquide_0.svg" alt="Air Liquide"
+          height="40" class="sidebar-logo">
+      </a>
+    </div>
 
-    <div class="list-group list-group-flush py-3 px-2 gap-2">
-      <a routerLink="/admin/dashboard" routerLinkActive="active"
-        class="list-group-item list-group-item-action rounded-3">
-        <i class="fas fa-th-large me-3"></i>
+    <!-- Navigation -->
+    <div class="sidebar-nav px-3">
+      <p class="sidebar-section-title">MAIN MENU</p>
+      <a routerLink="/admin/dashboard" routerLinkActive="active" class="sidebar-link">
+        <div class="sidebar-link-icon"><i class="fas fa-th-large"></i></div>
         <span>Dashboard</span>
       </a>
-      <a routerLink="/admin/employees" routerLinkActive="active"
-        class="list-group-item list-group-item-action rounded-3">
-        <i class="fas fa-users me-3"></i>
+      <a routerLink="/admin/employees" routerLinkActive="active" class="sidebar-link">
+        <div class="sidebar-link-icon"><i class="fas fa-users"></i></div>
         <span>Employees</span>
       </a>
-      <a routerLink="/admin/rides" routerLinkActive="active" class="list-group-item list-group-item-action rounded-3">
-        <i class="fas fa-car me-3"></i>
+      <a routerLink="/admin/rides" routerLinkActive="active" class="sidebar-link">
+        <div class="sidebar-link-icon"><i class="fas fa-car"></i></div>
         <span>Rides</span>
       </a>
-      <a routerLink="/admin/reports" routerLinkActive="active" class="list-group-item list-group-item-action rounded-3">
-        <i class="fas fa-chart-pie me-3"></i>
+      <a routerLink="/admin/reports" routerLinkActive="active" class="sidebar-link">
+        <div class="sidebar-link-icon"><i class="fas fa-chart-pie"></i></div>
         <span>Analytics</span>
       </a>
     </div>
 
-    <div class="mt-auto p-3">
-      <div class="user-card p-3 rounded-3 mb-3">
+    <!-- User Card & Logout -->
+    <div class="sidebar-footer">
+      <div class="user-card">
         <div class="d-flex align-items-center">
-          <div class="avatar-sm rounded-circle me-2"><img src="assets/admin-avatar.png"
-              onerror="this.src='https://ui-avatars.com/api/?name=Admin&background=random'"
-              class="rounded-circle w-100"></div>
-          <div class="overflow-hidden">
-            <div class="fw-bold text-white text-truncate">{{adminName | titlecase}}</div>
-            <div class="text-white-50 small text-truncate">{{adminName}}&#64;greencar.com</div>
+          <div class="user-avatar">
+            <img src="assets/admin-avatar.png"
+              onerror="this.src='https://ui-avatars.com/api/?name=Admin&background=667eea&color=fff&bold=true'"
+              class="rounded-circle" width="38" height="38">
+          </div>
+          <div class="overflow-hidden ms-3">
+            <div class="fw-bold text-white text-truncate" style="font-size: 0.85rem;">{{adminName | titlecase}}</div>
+            <div class="text-white-50 text-truncate" style="font-size: 0.72rem;">{{adminName}}&#64;greencar.com</div>
           </div>
         </div>
       </div>
-      <a href="javascript:void(0)" (click)="logout()" class="btn btn-danger w-100 rounded-pill">
+      <a href="javascript:void(0)" (click)="logout()" class="logout-btn">
         <i class="fas fa-sign-out-alt me-2"></i> Logout
       </a>
     </div>
@@ -47,25 +53,28 @@
 
   <!-- Page Content -->
   <div id="page-content-wrapper" class="w-100 bg-light-modern">
-    <nav class="navbar navbar-expand-lg navbar-glass sticky-top py-3 px-4 mb-4">
-      <div class="container-fluid">
-        <button class="btn btn-icon-only text-dark" id="menu-toggle" (click)="toggleSidebar()">
-          <i class="fas fa-bars fa-lg"></i>
-        </button>
+    <nav class="top-navbar sticky-top">
+      <div class="container-fluid d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-3">
+          <button class="menu-toggle-btn" id="menu-toggle" (click)="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="d-none d-md-block">
+            <span class="text-muted small fw-medium">Welcome back,</span>
+            <span class="text-dark fw-bold ms-1">{{adminName | titlecase}} 👋</span>
+          </div>
+        </div>
 
-        <div class="d-flex align-items-center ms-auto gap-3">
-          <div class="notification-bell position-relative cursor-pointer">
-            <i class="far fa-bell fa-lg text-secondary"></i>
-            <span
-              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white p-1">
-              <span class="visually-hidden">New alerts</span>
-            </span>
+        <div class="d-flex align-items-center gap-3">
+          <div class="notification-btn position-relative">
+            <i class="far fa-bell"></i>
+            <span class="notification-dot"></span>
           </div>
         </div>
       </div>
     </nav>
 
-    <div class="container-fluid px-4 pb-5 content-container">
+    <div class="content-container px-4 pb-5">
       <router-outlet></router-outlet>
     </div>
   </div>

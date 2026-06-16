@@ -1,8 +1,10 @@
 <div class="container-fluid py-4">
     <!-- Header -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5 animate-fade-in">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-5 animate-fade-in">
         <div class="mb-3 mb-md-0">
-            <h2 class="fw-bold text-dark mb-1">Admin Dashboard</h2>
+            <h2 class="fw-bold text-dark mb-1">
+                <i class="fas fa-th-large text-primary me-2 opacity-75"></i>Admin Dashboard
+            </h2>
             <p class="text-muted mb-0">Overview of your corporate carpool performance</p>
         </div>
         <div class="d-flex gap-3">
@@ -12,17 +14,17 @@
         </div>
     </div>
 
-    <!-- Simple & Attractive Stats Cards -->
+    <!-- Stats Cards -->
     <div class="row g-4 mb-5 animate-slide-up">
         <!-- Total Rides -->
-        <div class="col-md-3">
+        <div class="col-md-3 col-6">
             <div class="card border-0 shadow-sm rounded-4 h-100 hover-card">
                 <div class="card-body p-4 d-flex flex-column justify-content-center">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-4 me-3">
+                        <div class="icon-box bg-soft-primary text-primary me-3">
                             <i class="fas fa-car-side fs-4"></i>
                         </div>
-                        <h6 class="text-muted text-uppercase fw-bold mb-0 ls-1">Total Rides</h6>
+                        <h6 class="text-muted text-uppercase fw-bold mb-0 ls-1" style="font-size: 0.7rem;">Total Rides</h6>
                     </div>
                     <h2 class="fw-bold text-dark mb-0 display-6" *ngIf="!isLoadingStats">{{totalRides}}</h2>
                     <div class="spinner-border spinner-border-sm text-primary" role="status" *ngIf="isLoadingStats"></div>
@@ -31,15 +33,15 @@
             </div>
         </div>
 
-        <!-- CO2 Saved -->
-        <div class="col-md-3">
+        <!-- Ride Requests -->
+        <div class="col-md-3 col-6">
             <div class="card border-0 shadow-sm rounded-4 h-100 hover-card">
                 <div class="card-body p-4 d-flex flex-column justify-content-center">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box bg-success bg-opacity-10 text-success rounded-4 me-3">
-                            <i class="fas fa-leaf fs-4"></i>
+                        <div class="icon-box bg-soft-success text-success me-3">
+                            <i class="fas fa-hand-paper fs-4"></i>
                         </div>
-                        <h6 class="text-muted text-uppercase fw-bold mb-0 ls-1">Ride Requests</h6>
+                        <h6 class="text-muted text-uppercase fw-bold mb-0 ls-1" style="font-size: 0.7rem;">Ride Requests</h6>
                     </div>
                     <h2 class="fw-bold text-dark mb-0 display-6" *ngIf="!isLoadingStats">{{totalRequests}}</h2>
                     <div class="spinner-border spinner-border-sm text-success" role="status" *ngIf="isLoadingStats"></div>
@@ -48,32 +50,32 @@
             </div>
         </div>
 
-        <!-- Active Employees -->
-        <div class="col-md-3">
+        <!-- Employees -->
+        <div class="col-md-3 col-6">
             <div class="card border-0 shadow-sm rounded-4 h-100 hover-card">
                 <div class="card-body p-4 d-flex flex-column justify-content-center">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box bg-info bg-opacity-10 text-info rounded-4 me-3">
+                        <div class="icon-box bg-soft-info text-info me-3">
                             <i class="fas fa-users fs-4"></i>
                         </div>
-                        <h6 class="text-muted text-uppercase fw-bold mb-0 ls-1">Employees</h6>
+                        <h6 class="text-muted text-uppercase fw-bold mb-0 ls-1" style="font-size: 0.7rem;">Employees</h6>
                     </div>
                     <h2 class="fw-bold text-dark mb-0 display-6" *ngIf="!isLoadingStats">{{totalUsers}}</h2>
-                     <div class="spinner-border spinner-border-sm text-info" role="status" *ngIf="isLoadingStats"></div>
+                    <div class="spinner-border spinner-border-sm text-info" role="status" *ngIf="isLoadingStats"></div>
                     <p class="text-success small fw-bold mb-0 mt-2"><i class="fas fa-arrow-up me-1"></i> 24% New Joinees</p>
                 </div>
             </div>
         </div>
 
-        <!-- Fuel Cost Saved -->
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 hover-card bg-primary text-white">
-                <div class="card-body p-4 d-flex flex-column justify-content-center">
+        <!-- Fuel Saved -->
+        <div class="col-md-3 col-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-card" style="background: linear-gradient(135deg, #0d6efd, #0b5ed7);">
+                <div class="card-body p-4 d-flex flex-column justify-content-center text-white">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box bg-white bg-opacity-20 text-white rounded-4 me-3">
+                        <div class="icon-box bg-white bg-opacity-20 text-white me-3">
                             <i class="fas fa-wallet fs-4"></i>
                         </div>
-                        <h6 class="text-white text-opacity-75 text-uppercase fw-bold mb-0 ls-1">Fuel Saved</h6>
+                        <h6 class="text-white text-opacity-75 text-uppercase fw-bold mb-0 ls-1" style="font-size: 0.7rem;">Fuel Saved</h6>
                     </div>
                     <h2 class="fw-bold text-white mb-0 display-6" *ngIf="!isLoadingStats">₹ {{totalFuelSaved | number:'1.0-0'}}</h2>
                     <div class="spinner-border spinner-border-sm text-white" role="status" *ngIf="isLoadingStats"></div>
@@ -83,35 +85,39 @@
         </div>
     </div>
 
-    <!-- Main Content Row: Charts -->
+    <!-- Charts Row -->
     <div class="row g-4 mb-5">
-        <!-- Performance Analytics (Combo Chart) -->
+        <!-- Performance Analytics -->
         <div class="col-lg-8 animate-slide-up" style="animation-delay: 0.1s;">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header bg-white border-0 py-4 px-4 d-flex flex-wrap justify-content-between align-items-center gap-3">
                     <div>
                         <h5 class="fw-bold mb-1 text-dark">Performance Analytics</h5>
                         <div class="d-flex align-items-center gap-3 small">
-                            <span class="d-flex align-items-center text-muted"><span class="d-inline-block rounded-circle bg-primary me-2" style="width: 8px; height: 8px;"></span> Rides (Bars)</span>
-                            <span class="d-flex align-items-center text-muted"><span class="d-inline-block rounded-circle bg-success me-2" style="width: 8px; height: 8px;"></span> CO₂ Reduction (Line)</span>
+                            <span class="d-flex align-items-center text-muted">
+                                <span class="d-inline-block rounded-circle bg-primary me-2" style="width: 8px; height: 8px;"></span> Rides (Bars)
+                            </span>
+                            <span class="d-flex align-items-center text-muted">
+                                <span class="d-inline-block rounded-circle bg-success me-2" style="width: 8px; height: 8px;"></span> CO₂ Reduction (Line)
+                            </span>
                         </div>
                     </div>
                     <!-- Time Filters -->
                     <div class="bg-light rounded-pill p-1 d-flex">
-                        <button class="btn btn-sm rounded-pill px-3 fw-bold transition-all" 
-                                [class.bg-white]="currentFilter === 'Monthly'" 
+                        <button class="btn btn-sm rounded-pill px-3 fw-bold transition-all"
+                                [class.bg-white]="currentFilter === 'Monthly'"
                                 [class.shadow-sm]="currentFilter === 'Monthly'"
                                 [class.text-primary]="currentFilter === 'Monthly'"
                                 [class.text-muted]="currentFilter !== 'Monthly'"
                                 (click)="setFilter('Monthly')">Monthly</button>
-                        <button class="btn btn-sm rounded-pill px-3 fw-bold transition-all" 
-                                [class.bg-white]="currentFilter === 'Weekly'" 
+                        <button class="btn btn-sm rounded-pill px-3 fw-bold transition-all"
+                                [class.bg-white]="currentFilter === 'Weekly'"
                                 [class.shadow-sm]="currentFilter === 'Weekly'"
                                 [class.text-primary]="currentFilter === 'Weekly'"
                                 [class.text-muted]="currentFilter !== 'Weekly'"
                                 (click)="setFilter('Weekly')">Weekly</button>
-                        <button class="btn btn-sm rounded-pill px-3 fw-bold transition-all" 
-                                [class.bg-white]="currentFilter === 'Today'" 
+                        <button class="btn btn-sm rounded-pill px-3 fw-bold transition-all"
+                                [class.bg-white]="currentFilter === 'Today'"
                                 [class.shadow-sm]="currentFilter === 'Today'"
                                 [class.text-primary]="currentFilter === 'Today'"
                                 [class.text-muted]="currentFilter !== 'Today'"
@@ -120,70 +126,59 @@
                 </div>
                 <div class="card-body px-4 pb-4 pt-2">
                     <div class="chart-container w-100 position-relative" style="height: 350px;">
-                        
-                        <!-- SVG Line Layer (Background/Overlay) -->
+                        <!-- SVG Line -->
                         <svg class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 2; pointer-events: none;" preserveAspectRatio="none" viewBox="0 0 100 100">
-                            <!-- Gradient Definition -->
                             <defs>
                                 <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                                     <stop offset="0%" style="stop-color:rgb(25, 135, 84);stop-opacity:0.2" />
                                     <stop offset="100%" style="stop-color:rgb(25, 135, 84);stop-opacity:0" />
                                 </linearGradient>
                             </defs>
-                            <!-- Line Path -->
-                            <polyline [attr.points]="getPolylinePoints()" 
-                                      fill="none" 
-                                      stroke="#198754" 
-                                      stroke-width="0.8" 
-                                      stroke-linecap="round" 
-                                      stroke-linejoin="round"
+                            <polyline [attr.points]="getPolylinePoints()"
+                                      fill="none" stroke="#198754" stroke-width="0.8"
+                                      stroke-linecap="round" stroke-linejoin="round"
                                       vector-effect="non-scaling-stroke"
                                       style="filter: drop-shadow(0px 4px 6px rgba(25, 135, 84, 0.3));"/>
                         </svg>
 
-                        <!-- Bars Layer -->
+                        <!-- Bars -->
                         <div class="d-flex h-100 align-items-end justify-content-between px-2 pt-4 position-relative" style="z-index: 1;">
                             <div class="d-flex flex-column align-items-center justify-content-end h-100" *ngFor="let stat of currentStats" style="flex: 1;">
-                                <!-- Bar Wrapper to control width based on count -->
                                 <div class="w-100 d-flex justify-content-center h-100 align-items-end px-1">
-                                    <div class="bar bg-primary rounded-top w-100 position-relative group-hover" 
-                                         [style.height]="getBarHeight(stat.rides)" 
+                                    <div class="bar bg-primary rounded-top w-100 position-relative group-hover"
+                                         [style.height]="getBarHeight(stat.rides)"
                                          [style.max-width]="'40px'"
                                          style="min-height: 4px; transition: height 0.5s ease;">
-                                        
-                                         <!-- Combo Tooltip -->
-                                        <div class="tooltip-custom position-absolute bottom-100 start-50 translate-middle-x mb-2 bg-dark text-white rounded py-2 px-3 opacity-0 text-start shadow" style="min-width: 120px;">
+                                        <div class="tooltip-custom position-absolute bottom-100 start-50 translate-middle-x mb-2 bg-dark text-white rounded-3 py-2 px-3 opacity-0 text-start shadow-lg" style="min-width: 120px;">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
-                                                <span class="text-xs opacity-75 me-3">Rides:</span>
+                                                <span class="opacity-75 me-3" style="font-size: 10px;">Rides:</span>
                                                 <span class="fw-bold">{{stat.rides}}</span>
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between text-success">
-                                                <span class="text-xs opacity-75 me-3">CO₂:</span>
+                                                <span class="opacity-75 me-3" style="font-size: 10px;">CO₂:</span>
                                                 <span class="fw-bold">{{stat.co2}} kg</span>
                                             </div>
                                             <div class="arrow-down"></div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Label -->
-                                <span class="text-muted small mt-3 fw-bold text-uppercase text-center text-truncate w-100" style="font-size: 11px;">{{stat.label}}</span>
+                                <span class="text-muted small mt-3 fw-bold text-uppercase text-center text-truncate w-100" style="font-size: 10px;">{{stat.label}}</span>
                             </div>
                         </div>
 
                         <!-- Grid Lines -->
                         <div class="position-absolute top-0 start-0 w-100 h-100 pe-none" style="z-index: 0;">
-                            <div class="border-bottom w-100 position-absolute" style="top: 0%; border-color: #f8f9fa !important; border-style: dashed !important;"></div>
-                            <div class="border-bottom w-100 position-absolute" style="top: 25%; border-color: #f8f9fa !important; border-style: dashed !important;"></div>
-                            <div class="border-bottom w-100 position-absolute" style="top: 50%; border-color: #f8f9fa !important; border-style: dashed !important;"></div>
-                            <div class="border-bottom w-100 position-absolute" style="top: 75%; border-color: #f8f9fa !important; border-style: dashed !important;"></div>
-                            <div class="border-bottom w-100 position-absolute" style="top: 100%; border-color: #f8f9fa !important; border-style: dashed !important;"></div>
+                            <div class="border-bottom w-100 position-absolute" style="top: 0%; border-color: #f0f1f3 !important; border-style: dashed !important;"></div>
+                            <div class="border-bottom w-100 position-absolute" style="top: 25%; border-color: #f0f1f3 !important; border-style: dashed !important;"></div>
+                            <div class="border-bottom w-100 position-absolute" style="top: 50%; border-color: #f0f1f3 !important; border-style: dashed !important;"></div>
+                            <div class="border-bottom w-100 position-absolute" style="top: 75%; border-color: #f0f1f3 !important; border-style: dashed !important;"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Secondary Chart: Ride Status Distribution (Donut) -->
+        <!-- Donut Chart -->
         <div class="col-lg-4 animate-slide-up" style="animation-delay: 0.2s;">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header bg-white border-0 py-4 px-4">
@@ -191,22 +186,19 @@
                     <small class="text-muted">Distribution by status</small>
                 </div>
                 <div class="card-body px-4 pb-4 d-flex flex-column align-items-center justify-content-center">
-                    <!-- CSS Conic Gradient Donut Chart -->
-                    <div class="position-relative mb-4" style="width: 220px; height: 220px;">
-                        <div class="w-100 h-100 rounded-circle" 
+                    <div class="position-relative mb-4" style="width: 200px; height: 200px;">
+                        <div class="w-100 h-100 rounded-circle shadow-sm"
                              style="background: conic-gradient(#0d6efd 0% 65%, #0dcaf0 65% 90%, #dc3545 90% 100%);">
                         </div>
-                        <!-- Inner Circle for Donut Effect -->
-                        <div class="position-absolute top-50 start-50 translate-middle bg-white rounded-circle d-flex flex-column align-items-center justify-content-center shadow-sm" 
-                             style="width: 160px; height: 160px;">
+                        <div class="position-absolute top-50 start-50 translate-middle bg-white rounded-circle d-flex flex-column align-items-center justify-content-center shadow-sm"
+                             style="width: 145px; height: 145px;">
                              <span class="display-6 fw-bold text-dark">92%</span>
-                             <span class="text-muted small text-uppercase ls-1">Completion</span>
+                             <span class="text-muted" style="font-size: 0.65rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.06em;">Completion</span>
                         </div>
                     </div>
 
-                    <!-- Custom Legend -->
                     <div class="w-100">
-                        <div class="d-flex align-items-center justify-content-between mb-2 p-2 rounded hover-bg-light" *ngFor="let item of rideStatusStats">
+                        <div class="d-flex align-items-center justify-content-between mb-2 p-2 rounded-3 hover-bg-light" *ngFor="let item of rideStatusStats">
                             <div class="d-flex align-items-center">
                                 <span class="rounded-circle me-3" [style.background-color]="item.color" style="width: 10px; height: 10px;"></span>
                                 <span class="fw-bold text-dark small">{{item.label}}</span>
@@ -219,81 +211,81 @@
         </div>
     </div>
 
-    <!-- Modern Top Employees Table -->
-    <div class="row animate-slide-up" style="animation-delay: 0.2s;">
+    <!-- Top Employees Table -->
+    <div class="row animate-slide-up" style="animation-delay: 0.25s;">
         <div class="col-12">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-light">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                 <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="fw-bold mb-1 text-dark">Top Contributors</h5>
                         <small class="text-muted">Employees making the most impact</small>
                     </div>
-                    <a routerLink="/admin/employees" class="btn btn-white border shadow-sm text-dark fw-bold btn-sm rounded-pill px-3 hover-lift">View All</a>
+                    <a routerLink="/admin/employees" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold hover-lift">View All</a>
                 </div>
-                <div class="table-responsive px-3 pb-3">
-                    <table class="table table-borderless align-middle mb-0 custom-table" style="border-spacing: 0 10px; border-collapse: separate;">
-                        <thead>
-                            <tr>
-                                <th class="text-secondary text-uppercase small ls-1 py-2 ps-4">Rank</th>
-                                <th class="text-secondary text-uppercase small ls-1 py-2">Employee</th>
-                                <th class="text-secondary text-uppercase small ls-1 py-2">Role</th>
-                                <th class="text-secondary text-uppercase small ls-1 py-2">Activity</th>
-                                <th class="text-secondary text-uppercase small ls-1 py-2">Distance</th>
-                                <th class="text-secondary text-uppercase small ls-1 py-2">CO₂ Saved</th>
-                                <th class="text-secondary text-uppercase small ls-1 py-2 text-end pe-4">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let emp of topEmployees; let i = index" class="table-row-modern">
-                                <td class="ps-4">
-                                    <div class="d-flex align-items-center">
-                                        <div class="rank-icon rounded-circle fw-bold" 
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0 custom-table" style="border-spacing: 0 8px; border-collapse: separate;">
+                            <thead>
+                                <tr>
+                                    <th class="ps-4 text-secondary text-uppercase small ls-1 py-3 border-0">Rank</th>
+                                    <th class="text-secondary text-uppercase small ls-1 py-3 border-0">Employee</th>
+                                    <th class="text-secondary text-uppercase small ls-1 py-3 border-0">Role</th>
+                                    <th class="text-secondary text-uppercase small ls-1 py-3 border-0">Activity</th>
+                                    <th class="text-secondary text-uppercase small ls-1 py-3 border-0">Distance</th>
+                                    <th class="text-secondary text-uppercase small ls-1 py-3 border-0">CO₂ Saved</th>
+                                    <th class="text-secondary text-uppercase small ls-1 py-3 border-0 text-end pe-4">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let emp of topEmployees; let i = index" class="table-row-modern">
+                                    <td class="ps-4">
+                                        <div class="rank-icon rounded-circle fw-bold"
                                              [ngClass]="{'bg-warning text-dark shadow-sm': i === 0, 'bg-secondary text-white opacity-75': i === 1, 'bg-brown text-white': i === 2, 'bg-light text-muted': i > 2}"
-                                             style="width: 28px; height: 28px;">
+                                             style="width: 30px; height: 30px;">
                                             <i class="fas fa-trophy" *ngIf="i === 0"></i>
                                             <span *ngIf="i > 0">#{{i + 1}}</span>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar-gradient rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold shadow-sm" style="width: 40px; height: 40px;">
-                                            {{emp.name ? emp.name.charAt(0) : 'U'}}
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-gradient rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold" style="width: 40px; height: 40px;">
+                                                {{emp.name ? emp.name.charAt(0) : 'U'}}
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-dark">{{emp.name || 'Unknown'}}</div>
+                                                <small class="text-muted">{{emp.dept || 'Corporate'}}</small>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div class="fw-bold text-dark">{{emp.name || 'Unknown'}}</div>
-                                            <small class="text-muted">{{emp.dept || 'Corporate'}}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill px-3 py-2 fw-bold"
+                                              [ngClass]="{'bg-soft-primary': emp.role === 'Pooler', 'bg-soft-info': emp.role === 'Seeker'}">
+                                            {{emp.role}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="fw-bold text-dark mb-1">{{emp.rides}} Rides</span>
+                                            <div class="progress-thin">
+                                                <div class="progress-bar-custom" [style.width.%]="(emp.rides / 200) * 100"></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge rounded-pill px-3 py-2 fw-bold" 
-                                          [ngClass]="{'bg-soft-primary': emp.role === 'Pooler', 'bg-soft-info': emp.role === 'Seeker'}">
-                                        {{emp.role}}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="d-flex flex-column">
-                                        <span class="fw-bold text-dark mb-1">{{emp.rides}} Rides</span>
-                                        <div class="progress-thin">
-                                            <div class="progress-bar-custom bg-primary" [style.width.%]="(emp.rides / 200) * 100"></div>
+                                    </td>
+                                    <td class="text-muted fw-bold">{{emp.distance}} km</td>
+                                    <td>
+                                        <div class="d-flex align-items-center text-success fw-bold">
+                                            <i class="fas fa-leaf me-2"></i> {{emp.co2}} kg
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="text-muted fw-bold">{{emp.distance}} km</td>
-                                <td>
-                                    <div class="d-flex align-items-center text-success fw-bold">
-                                        <i class="fas fa-leaf me-2"></i> {{emp.co2}} kg
-                                    </div>
-                                </td>
-                                <td class="text-end pe-4">
-                                    <button routerLink="/admin/employees" class="btn btn-icon btn-sm btn-light rounded-circle text-muted hover-lift">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <button routerLink="/admin/employees" class="btn btn-icon btn-sm btn-light rounded-circle text-muted hover-lift">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
