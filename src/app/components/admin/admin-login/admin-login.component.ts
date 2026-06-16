@@ -32,7 +32,7 @@ export class AdminLoginComponent {
 
     this.isLoading = true;
 
-    this.authService.login(this.username, this.password).subscribe({
+    this.authService.adminlogin(this.username, this.password).subscribe({
       next: (res: any) => {
         this.isLoading = false;
 

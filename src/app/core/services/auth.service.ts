@@ -31,9 +31,26 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  login(email: string, password: string): Observable<LoginResponse> {
+  adminlogin(email: string, password: string): Observable<LoginResponse> {
     const payload: LoginRequest = { email, password };
     const url = `${this.apiBase}/Corporate/CORP_AdminLogin`;
+
+    return this.http
+      .post<LoginResponse>(url, payload, { headers: this.defaultHeaders })
+      .pipe(
+        tap((response) => {
+          if (response?.status && response.data?.token) {
+            this.persistSession(response);
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+
+login(email: string, password: string): Observable<LoginResponse> {
+    const payload: LoginRequest = { email, password };
+    const url = `${this.apiBase}/Corporate/CORP_Login`;
 
     return this.http
       .post<LoginResponse>(url, payload, { headers: this.defaultHeaders })
