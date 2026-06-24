@@ -454,4 +454,13 @@ export class DashboardComponent implements OnInit {
   stopPropagation(event: MouseEvent): void {
     event.stopPropagation();
   }
+
+  // Switch tabs programmatically
+  switchTab(tabId: string): void {
+    const tabElement = document.getElementById(tabId);
+    if (tabElement) {
+      tabElement.click();
+    }
+  }
 }
+

@@ -37,19 +37,19 @@
         <!-- Stats Cards -->
         <div class="row g-4 stats-container">
           <div class="col-md-4">
-            <div class="stat-box bg-primary text-white shadow-sm">
+            <div class="stat-box bg-primary text-white shadow-sm hover-scale" style="cursor: pointer;" (click)="switchTab('submittedRides-tab')">
               <h5>🛣️ Posted Rides</h5>
               <h2 class="stat-number">{{ totalRidesCount }}</h2>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="stat-box bg-success text-white shadow-sm">
+            <div class="stat-box bg-success text-white shadow-sm hover-scale" style="cursor: pointer;" (click)="switchTab('myRides-tab')">
               <h5>👥 Connections</h5>
               <h2 class="stat-number">{{ connections.length || 0 }}</h2>
             </div>
           </div>
           <div class="col-md-3">
-            <div class="stat-box bg-info text-white shadow-sm">
+            <div class="stat-box bg-info text-white shadow-sm hover-scale" style="cursor: pointer;" (click)="switchTab('myConnections-tab')">
               <h5>📬 Requests Sent</h5>
               <h2 class="stat-number">{{ MySendRequests.length || 0 }}</h2>
             </div>
