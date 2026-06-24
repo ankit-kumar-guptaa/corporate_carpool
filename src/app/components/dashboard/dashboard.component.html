@@ -322,6 +322,9 @@
                   <button class="btn btn-outline-primary btn-sm" (click)="openRideModal(ride)">
                     <i class="fas fa-eye"></i> View
                   </button>
+                  <button class="btn btn-outline-danger btn-sm ms-2" (click)="deleteRide(ride)">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
                 </td>
               </tr>
               <tr *ngIf="submittedRides.length === 0">

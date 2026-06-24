@@ -12,6 +12,7 @@ export class CarpoolSearchComponent {
   fromLocation: string = '';
   carpoolResults: Array<{ type: string, name: string, from: string }> = [];
   isAddViaClicked: boolean = false;
+  selectedSeats: number = 1;
   ursrProfile: any;
   viaLocation: string = '';
   viaLocations: string[] = [];
@@ -116,7 +117,9 @@ export class CarpoolSearchComponent {
       this.isLoadingSearch = false;
 
       if (resp.status === 1) {
-        this.RideList = (resp.data || []).map((ride: any) => {
+        const acceptedSeatsMap = JSON.parse(localStorage.getItem('acceptedSeatsMap') || '{}');
+
+        let allRides = (resp.data || []).map((ride: any) => {
           // Calculate distance
           let dist = 'N/A';
           const rLat = ride.form_Latitude || ride.from_Latitude;
@@ -127,8 +130,24 @@ export class CarpoolSearchComponent {
               parseFloat(rLat), parseFloat(rLon)
             );
           }
-          return { ...ride, distanceKm: dist, isSendRequest: ride.isSendRequest || false };
+          
+          let totalSeats = 3;
+          if (ride.user_Comment && ride.user_Comment.includes('Seats:')) {
+              const match = ride.user_Comment.match(/Seats:\s*(\d+)/);
+              if (match) {
+                  totalSeats = parseInt(match[1], 10);
+              }
+          }
+          
+          const rideId = ride.rideID || ride.id;
+          const acceptedSeats = acceptedSeatsMap[rideId] || 0;
+          let availableSeats = totalSeats - acceptedSeats;
+          if (availableSeats < 0) availableSeats = 0;
+
+          return { ...ride, distanceKm: dist, isSendRequest: ride.isSendRequest || false, availableSeats: availableSeats, totalSeats: totalSeats };
         });
+        
+        this.RideList = allRides.filter((r: any) => r.availableSeats >= this.selectedSeats);
 
         this.showData = true;
 
@@ -205,7 +224,7 @@ export class CarpoolSearchComponent {
     this.postRide.IsSearch = 1;
 
     // Add the remark to postRide before sending
-    this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '');
+    this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '') + ` | Seats: ${this.selectedSeats}`;
 
     this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(
       resp => {

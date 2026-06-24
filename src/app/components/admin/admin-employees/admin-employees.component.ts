@@ -87,6 +87,12 @@ export class AdminEmployeesComponent implements OnInit {
       return;
     }
 
+    const emailExists = this.employees.some(emp => emp.email && emp.email.toLowerCase() === form.email.trim().toLowerCase());
+    if (emailExists) {
+      this._globalService.utilities.notify.warning('An employee with this email already exists.');
+      return;
+    }
+
     this.isAdding = true;
 
     const orgId = this.authService.getOrgId() ?? 0;
