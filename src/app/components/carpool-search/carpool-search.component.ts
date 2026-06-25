@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { GlobalService } from '../../services/global-service';
 import { PostRide } from '../../models/post-ride';
 
@@ -30,7 +31,7 @@ export class CarpoolSearchComponent {
   readonly OFFICE_LAT = '28.4977536';
   readonly OFFICE_LNG = '77.4350798';
 
-  constructor(private _globalService: GlobalService) {
+  constructor(private _globalService: GlobalService, private router: Router) {
     // Fetch user profile and email on component initialization
     this.loadUserProfile();
     // Initialize To Address to Office by default
@@ -294,5 +295,9 @@ export class CarpoolSearchComponent {
 
   deg2rad(deg: number) {
     return deg * (Math.PI / 180);
+  }
+
+  goToDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 }
