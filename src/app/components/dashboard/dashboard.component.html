@@ -29,6 +29,7 @@
               <small>📧 {{ loggedInUserEmail }}</small></p>
           </div>
           <div class="col-md-6 text-end">
+            <button class="btn btn-primary me-2 shadow-sm fw-bold hover-scale" (click)="goToSearch()"><i class="fas fa-search me-1"></i> Find Rides</button>
             <button class="btn btn-outline-primary me-2" (click)="openProfileUpdateModal()">✏️ Update Profile</button>
             <button class="btn btn-outline-danger" (click)="logout()">🚪 Logout</button>
           </div>

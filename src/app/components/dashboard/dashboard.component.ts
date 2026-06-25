@@ -470,5 +470,10 @@ export class DashboardComponent implements OnInit {
       tabElement.click();
     }
   }
+
+  // Navigate to carpool search
+  goToSearch(): void {
+    this.router.navigate(['/carpool-search']);
+  }
 }
 
