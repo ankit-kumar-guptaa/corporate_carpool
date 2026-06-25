@@ -4,16 +4,20 @@
   <!-- Dashboard Tabs -->
   <ul class="nav nav-tabs mb-4 justify-content-center" role="tablist">
     <li class="nav-item">
-      <a class="nav-link active fw-bold" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="true">Dashboard</a>
+      <a class="nav-link active fw-bold" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab"
+        aria-controls="dashboard" aria-selected="true">Dashboard</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link fw-bold" id="myRides-tab" data-bs-toggle="tab" href="#myRides" role="tab" aria-controls="myRides" aria-selected="false">Inbox</a>
+      <a class="nav-link fw-bold" id="myRides-tab" data-bs-toggle="tab" href="#myRides" role="tab"
+        aria-controls="myRides" aria-selected="false">Inbox</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link fw-bold" id="myConnections-tab" data-bs-toggle="tab" href="#myConnections" role="tab" aria-controls="myConnections" aria-selected="false">Send Request</a>
+      <a class="nav-link fw-bold" id="myConnections-tab" data-bs-toggle="tab" href="#myConnections" role="tab"
+        aria-controls="myConnections" aria-selected="false">Send Request</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link fw-bold" id="submittedRides-tab" data-bs-toggle="tab" href="#submittedRides" role="tab" aria-controls="submittedRides" aria-selected="false">Submitted Rides</a>
+      <a class="nav-link fw-bold" id="submittedRides-tab" data-bs-toggle="tab" href="#submittedRides" role="tab"
+        aria-controls="submittedRides" aria-selected="false">Submitted Rides</a>
     </li>
   </ul>
 
@@ -26,10 +30,12 @@
           <div class="col-md-6">
             <h4 class="text-primary fw-bold">📊 Overview</h4>
             <p class="text-muted">Hey <strong>{{ loggedInUserName }}</strong>, manage your rides here!<br>
-              <small>📧 {{ loggedInUserEmail }}</small></p>
+              <small>📧 {{ loggedInUserEmail }}</small>
+            </p>
           </div>
           <div class="col-md-6 text-end">
-            <button class="btn btn-primary me-2 shadow-sm fw-bold hover-scale" (click)="goToSearch()"><i class="fas fa-search me-1"></i> Find Rides</button>
+            <button class="btn btn-primary me-2 shadow-sm fw-bold hover-scale" (click)="goToSearch()"><i
+                class="fas fa-search me-1"></i> Carpool Search</button>
             <button class="btn btn-outline-primary me-2" (click)="openProfileUpdateModal()">✏️ Update Profile</button>
             <button class="btn btn-outline-danger" (click)="logout()">🚪 Logout</button>
           </div>
@@ -38,19 +44,22 @@
         <!-- Stats Cards -->
         <div class="row g-4 stats-container">
           <div class="col-md-4">
-            <div class="stat-box bg-primary text-white shadow-sm hover-scale" style="cursor: pointer;" (click)="switchTab('submittedRides-tab')">
+            <div class="stat-box bg-primary text-white shadow-sm hover-scale" style="cursor: pointer;"
+              (click)="switchTab('submittedRides-tab')">
               <h5>🛣️ Posted Rides</h5>
               <h2 class="stat-number">{{ totalRidesCount }}</h2>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="stat-box bg-success text-white shadow-sm hover-scale" style="cursor: pointer;" (click)="switchTab('myRides-tab')">
+            <div class="stat-box bg-success text-white shadow-sm hover-scale" style="cursor: pointer;"
+              (click)="switchTab('myRides-tab')">
               <h5>👥 Connections</h5>
               <h2 class="stat-number">{{ connections.length || 0 }}</h2>
             </div>
           </div>
           <div class="col-md-3">
-            <div class="stat-box bg-info text-white shadow-sm hover-scale" style="cursor: pointer;" (click)="switchTab('myConnections-tab')">
+            <div class="stat-box bg-info text-white shadow-sm hover-scale" style="cursor: pointer;"
+              (click)="switchTab('myConnections-tab')">
               <h5>📬 Requests Sent</h5>
               <h2 class="stat-number">{{ MySendRequests.length || 0 }}</h2>
             </div>
@@ -83,34 +92,34 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let row of monthlyData" 
-                          [ngClass]="{'table-active': isToday(row.date), 'row-carpooled': row.carpooled}">
+                      <tr *ngFor="let row of monthlyData"
+                        [ngClass]="{'table-active': isToday(row.date), 'row-carpooled': row.carpooled}">
                         <td class="fw-semibold">
                           <span [ngClass]="{'badge bg-primary': isToday(row.date)}">{{ row.dateDisplay }}</span>
                         </td>
                         <td>
                           <div class="form-check form-switch" *ngIf="isPastOrToday(row.date)">
-                            <input class="form-check-input carpool-toggle" type="checkbox" 
-                                   [(ngModel)]="row.carpooled" (change)="onCarpoolToggle(row)">
-                            <label class="form-check-label" [ngClass]="{'text-success fw-bold': row.carpooled, 'text-muted': !row.carpooled}">
+                            <input class="form-check-input carpool-toggle" type="checkbox" [(ngModel)]="row.carpooled"
+                              (change)="onCarpoolToggle(row)">
+                            <label class="form-check-label"
+                              [ngClass]="{'text-success fw-bold': row.carpooled, 'text-muted': !row.carpooled}">
                               {{ row.carpooled ? 'Yes ✅' : 'No' }}
                             </label>
                           </div>
                           <span class="text-muted" *ngIf="!isPastOrToday(row.date)">—</span>
                         </td>
                         <td>
-                          <select class="form-select form-select-sm" [(ngModel)]="row.partnerName" 
-                                  (change)="onRowChange(row)" [disabled]="!row.carpooled"
-                                  *ngIf="row.carpooled">
+                          <select class="form-select form-select-sm" [(ngModel)]="row.partnerName"
+                            (change)="onRowChange(row)" [disabled]="!row.carpooled" *ngIf="row.carpooled">
                             <option value="" disabled>-- Select --</option>
-                            <option *ngFor="let conn of getAcceptedConnections()" [value]="conn.name">{{ conn.name }}</option>
+                            <option *ngFor="let conn of getAcceptedConnections()" [value]="conn.name">{{ conn.name }}
+                            </option>
                           </select>
                           <span class="text-muted" *ngIf="!row.carpooled">—</span>
                         </td>
                         <td>
-                          <select class="form-select form-select-sm" [(ngModel)]="row.members" 
-                                  (change)="onRowChange(row)" [disabled]="!row.carpooled"
-                                  *ngIf="row.carpooled">
+                          <select class="form-select form-select-sm" [(ngModel)]="row.members"
+                            (change)="onRowChange(row)" [disabled]="!row.carpooled" *ngIf="row.carpooled">
                             <option [ngValue]="2">2</option>
                             <option [ngValue]="3">3</option>
                             <option [ngValue]="4">4</option>
@@ -121,7 +130,8 @@
                           <span class="text-danger fw-semibold">{{ row.normalCO2 | number:'1.1-1' }}</span>
                         </td>
                         <td>
-                          <span class="fw-bold" [ngClass]="{'text-success': row.co2Savings > 0, 'text-muted': row.co2Savings === 0}">
+                          <span class="fw-bold"
+                            [ngClass]="{'text-success': row.co2Savings > 0, 'text-muted': row.co2Savings === 0}">
                             {{ row.co2Savings | number:'1.2-2' }}
                           </span>
                           <span *ngIf="row.co2Savings > 0" class="ms-1">🌿</span>
@@ -138,19 +148,21 @@
         <!-- Environmental Impact Section (Dynamic) -->
         <div class="row mt-4 animate__animated animate__fadeInUp" *ngIf="impactStats">
           <div class="col-12">
-            <div class="card border-0 shadow-sm text-white" 
-                 [style.background]="impactStats.totalCarpools > 0 
+            <div class="card border-0 shadow-sm text-white" [style.background]="impactStats.totalCarpools > 0 
                    ? 'linear-gradient(135deg, #198754 0%, #20c997 100%)' 
                    : 'linear-gradient(135deg, #6c757d 0%, #adb5bd 100%)'">
               <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                   <div>
                     <h4 class="fw-bold mb-1"><i class="fas fa-leaf me-2"></i>My Environmental Impact</h4>
-                    <p class="mb-0 opacity-90" *ngIf="impactStats.totalCarpools > 0">Your contribution to a greener planet by carpooling</p>
-                    <p class="mb-0 opacity-90" *ngIf="impactStats.totalCarpools === 0">Start carpooling to see your impact here!</p>
+                    <p class="mb-0 opacity-90" *ngIf="impactStats.totalCarpools > 0">Your contribution to a greener
+                      planet by carpooling</p>
+                    <p class="mb-0 opacity-90" *ngIf="impactStats.totalCarpools === 0">Start carpooling to see your
+                      impact here!</p>
                   </div>
                   <div class="text-end">
-                    <h2 class="display-5 fw-bold mb-0">{{ impactStats.saved | number:'1.1-1' }} <span class="fs-6">kg</span></h2>
+                    <h2 class="display-5 fw-bold mb-0">{{ impactStats.saved | number:'1.1-1' }} <span
+                        class="fs-6">kg</span></h2>
                     <small class="opacity-90">CO₂ Saved (this month)</small>
                   </div>
                 </div>
@@ -181,7 +193,8 @@
         <div class="mt-5">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="text-primary fw-bold">🔔 Recent Activity</h5>
-            <button class="btn btn-outline-danger btn-sm" (click)="clearNotifications()" *ngIf="notifications.length > 0">Clear All</button>
+            <button class="btn btn-outline-danger btn-sm" (click)="clearNotifications()"
+              *ngIf="notifications.length > 0">Clear All</button>
           </div>
           <div class="activity-container">
             <div class="activity-card animate__animated animate__fadeIn" *ngFor="let notification of notifications">
@@ -240,7 +253,8 @@
                   <span *ngIf="connection.isaccept">{{ connection.mobile_no }}</span>
                 </td>
                 <td>
-                  <button class="btn btn-primary btn-sm" *ngIf="!connection.isaccept" (click)="AcceptRequest(connection)">
+                  <button class="btn btn-primary btn-sm" *ngIf="!connection.isaccept"
+                    (click)="AcceptRequest(connection)">
                     <i class="fas fa-check"></i> Accept
                   </button>
                   <button class="btn btn-success btn-sm" *ngIf="connection.isaccept">Connected</button>
@@ -379,7 +393,8 @@
 </div>
 
 <!-- Profile Update Modal -->
-<div id="profileUpdateModal" class="modal-container" [ngClass]="{'show': isProfileModalVisible}" (click)="closeProfileModal($event)">
+<div id="profileUpdateModal" class="modal-container" [ngClass]="{'show': isProfileModalVisible}"
+  (click)="closeProfileModal($event)">
   <div class="modal-content" (click)="stopPropagation($event)">
     <div class="modal-header bg-info text-white">
       <h5 class="modal-title">✏️ Update Profile</h5>
@@ -392,7 +407,8 @@
       </div>
       <div class="form-group mt-3">
         <label for="updateEmail">Email</label>
-        <input type="email" class="form-control" id="updateEmail" [(ngModel)]="updatedEmail" placeholder="Enter new email">
+        <input type="email" class="form-control" id="updateEmail" [(ngModel)]="updatedEmail"
+          placeholder="Enter new email">
       </div>
     </div>
     <div class="modal-footer">
@@ -401,4 +417,3 @@
     </div>
   </div>
 </div>
-
