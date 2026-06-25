@@ -338,17 +338,24 @@ export class DashboardComponent implements OnInit {
   deleteRide(ride: any): void {
     if (confirm('Are you sure you want to delete this ride?')) {
       const rideId = ride.id || ride.rideId;
-      alert(rideId)
-      // if (rideId) {
-      //     const deletedRides = JSON.parse(localStorage.getItem('deletedRides') || '[]');
-      //     if(!deletedRides.includes(rideId)) {
-      //         deletedRides.push(rideId);
-      //         localStorage.setItem('deletedRides', JSON.stringify(deletedRides));
-      //     }
-      //     this.submittedRides = this.submittedRides.filter((r: any) => (r.id || r.rideId) !== rideId);
-      //     this.totalRidesCount = this.submittedRides.length;
-      //     this._globalService.utilities.notify.success('Ride deleted successfully');
-      // }
+
+      const param: any = {};
+      const helperdata = new helper();
+
+      param.ride_id = rideId;
+      param.user_id = this.userId;
+      helperdata.spName = "CORP_GreenCar_DeleteRide";
+      helperdata.payload = JSON.stringify(param);
+
+      this._globalService.ServiceManager.request.post('Ride/GetDataFromServer', helperdata).subscribe(res => {
+        if (res.status == 1) {
+          this._globalService.utilities.notify.success('Ride deleted successfully');
+          this.loadData();
+        }
+      });
+
+
+      
     }
   }
 
