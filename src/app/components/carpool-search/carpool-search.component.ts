@@ -108,6 +108,7 @@ export class CarpoolSearchComponent {
     this.postRide.UserId = this.ursrProfile.userId;
     this.postRide.UserName = this.ursrProfile.name;
     this.postRide.IsSearch = 0;
+    this.postRide.Seats=this.selectedSeats;
 
     // Add the remark to postRide before sending
     this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '');
@@ -222,6 +223,7 @@ export class CarpoolSearchComponent {
     this.postRide.UserId = this.ursrProfile.userId;
     this.postRide.UserName = this.ursrProfile.name;
     this.postRide.IsSearch = 1;
+     this.postRide.Seats=this.selectedSeats;
 
     // Add the remark to postRide before sending
     this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '') + ` | Seats: ${this.selectedSeats}`;

@@ -85,11 +85,11 @@ export class DashboardComponent implements OnInit {
       if (res.status == 1) {
         this.connections = res.data.dataset.table || [];
         this.MySendRequests = res.data.dataset.table1 || [];
-        
+
         const allSubmittedRides = res.data.dataset.table2 || [];
-        const deletedRides = JSON.parse(localStorage.getItem('deletedRides') || '[]');
-        this.submittedRides = allSubmittedRides.filter((r: any) => !deletedRides.includes(r.id || r.rideId));
-        
+
+        this.submittedRides = allSubmittedRides;
+
         this.totalRidesCount = this.submittedRides.length;
         this.loadNotifications();
         this.loadNormalCO2FromProfile();
@@ -318,13 +318,13 @@ export class DashboardComponent implements OnInit {
       if (resp.status == 1) {
         item.isaccept = true;
         this._globalService.utilities.notify.success('Request Accepted Successfully');
-        
+
         // Track accepted seats to update availability in search
         const acceptedSeatsMap = JSON.parse(localStorage.getItem('acceptedSeatsMap') || '{}');
         const rideId = item.rideId || item.id;
-        if(rideId) {
-            acceptedSeatsMap[rideId] = (acceptedSeatsMap[rideId] || 0) + 1;
-            localStorage.setItem('acceptedSeatsMap', JSON.stringify(acceptedSeatsMap));
+        if (rideId) {
+          acceptedSeatsMap[rideId] = (acceptedSeatsMap[rideId] || 0) + 1;
+          localStorage.setItem('acceptedSeatsMap', JSON.stringify(acceptedSeatsMap));
         }
 
         this.loadData();
@@ -336,19 +336,20 @@ export class DashboardComponent implements OnInit {
 
   // Delete submitted ride locally
   deleteRide(ride: any): void {
-      if(confirm('Are you sure you want to delete this ride?')) {
-          const rideId = ride.id || ride.rideId;
-          if (rideId) {
-              const deletedRides = JSON.parse(localStorage.getItem('deletedRides') || '[]');
-              if(!deletedRides.includes(rideId)) {
-                  deletedRides.push(rideId);
-                  localStorage.setItem('deletedRides', JSON.stringify(deletedRides));
-              }
-              this.submittedRides = this.submittedRides.filter((r: any) => (r.id || r.rideId) !== rideId);
-              this.totalRidesCount = this.submittedRides.length;
-              this._globalService.utilities.notify.success('Ride deleted successfully');
-          }
-      }
+    if (confirm('Are you sure you want to delete this ride?')) {
+      const rideId = ride.id || ride.rideId;
+      alert(rideId)
+      // if (rideId) {
+      //     const deletedRides = JSON.parse(localStorage.getItem('deletedRides') || '[]');
+      //     if(!deletedRides.includes(rideId)) {
+      //         deletedRides.push(rideId);
+      //         localStorage.setItem('deletedRides', JSON.stringify(deletedRides));
+      //     }
+      //     this.submittedRides = this.submittedRides.filter((r: any) => (r.id || r.rideId) !== rideId);
+      //     this.totalRidesCount = this.submittedRides.length;
+      //     this._globalService.utilities.notify.success('Ride deleted successfully');
+      // }
+    }
   }
 
   // Open connection details modal

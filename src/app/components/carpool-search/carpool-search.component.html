@@ -167,7 +167,7 @@
                 <h5 class="card-title fw-bold text-dark mb-1">{{ carpool.userName }}</h5>
                 <p class="small text-muted mb-0" *ngIf="carpool.userType === 'Pooler'">Offering a ride</p>
                 <p class="small text-muted mb-0" *ngIf="carpool.userType === 'Seeker'">Looking for a ride</p>
-                <span class="badge bg-info text-white mt-2" *ngIf="carpool.userType === 'Pooler'"><i class="fas fa-chair me-1"></i>Seats Available: {{ carpool.availableSeats }} / {{ carpool.totalSeats }}</span>
+                <span class="badge bg-info text-white mt-2" *ngIf="carpool.userType === 'Pooler'"><i class="fas fa-chair me-1"></i>Seats Available: {{ carpool.availableSeat }} / {{ carpool.totalSeats }}</span>
             </div>
 
             <div class="location-timeline mb-4 position-relative z-1">
@@ -193,13 +193,13 @@
                 </div>
             </div>
 
-            <button [disabled]="carpool.isSendRequest || carpool.availableSeats === 0" 
+            <button [disabled]="carpool.isSendRequest || carpool.availableSeat === 0" 
                     class="btn w-100 rounded-pill fw-bold shadow-sm position-relative z-1 transition-all" 
-                    [ngClass]="{'btn-outline-primary': carpool.userType === 'Pooler' && !carpool.isSendRequest && carpool.availableSeats > 0, 'btn-outline-danger': carpool.userType === 'Seeker' && !carpool.isSendRequest && carpool.availableSeats > 0, 'btn-secondary text-white border-0 opacity-75': carpool.isSendRequest, 'btn-dark text-white border-0': carpool.availableSeats === 0 && !carpool.isSendRequest}"
+                    [ngClass]="{'btn-outline-primary': carpool.userType === 'Pooler' && !carpool.isSendRequest && carpool.availableSeat > 0, 'btn-outline-danger': carpool.userType === 'Seeker' && !carpool.isSendRequest && carpool.availableSeat > 0, 'btn-secondary text-white border-0 opacity-75': carpool.isSendRequest, 'btn-dark text-white border-0': carpool.availableSeat === 0 && !carpool.isSendRequest}"
                     (click)="connectCarpool(carpool)">
-              <i class="fas" [ngClass]="{'fa-link': !carpool.isSendRequest && carpool.availableSeats > 0, 'fa-check-circle text-success': carpool.isSendRequest, 'fa-times-circle': carpool.availableSeats === 0 && !carpool.isSendRequest}"></i> 
+              <i class="fas" [ngClass]="{'fa-link': !carpool.isSendRequest && carpool.availableSeat > 0, 'fa-check-circle text-success': carpool.isSendRequest, 'fa-times-circle': carpool.availableSeat === 0 && !carpool.isSendRequest}"></i> 
               <span class="ms-2">
-                 <ng-container *ngIf="carpool.availableSeats === 0 && !carpool.isSendRequest; else normalText">Seats Full</ng-container>
+                 <ng-container *ngIf="carpool.availableSeat === 0 && !carpool.isSendRequest; else normalText">Seats Full</ng-container>
                  <ng-template #normalText>{{ carpool.isSendRequest ? 'Request Sent' : 'Connect' }}</ng-template>
               </span>
             </button>

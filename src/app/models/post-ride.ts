@@ -17,6 +17,7 @@ export class PostRide {
         User_Comment: string ;
         Via: string[] = []
         IsSearch:number;
+        Seats:number;
         constructor()
         constructor(_postRide: PostRide)
         constructor(_postRide?: any) {
@@ -36,6 +37,7 @@ export class PostRide {
           this.User_Comment= _postRide && _postRide.User_Comment || 'I am looking for carpool';
           this.Via= _postRide && _postRide.Via || [];
           this.IsSearch= _postRide && _postRide.IsSearch || 0;
+           this.Seats= _postRide && _postRide.Seats || 0;
 
         }
    
