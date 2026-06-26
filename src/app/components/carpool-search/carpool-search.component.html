@@ -16,34 +16,22 @@
       </div>
 
       <div class="p-5">
-        <!-- Top Row: Role, Mode, From, To -->
-        <div class="row g-4 align-items-end">
-          
-          <!-- Role Selection -->
-          <!-- <div class="col-lg-3 col-md-6">
+        <!-- Row 1: Role Selection Centered -->
+        <div class="row g-4 mb-4 justify-content-center">
+          <div class="col-lg-4 col-md-6 text-center">
             <label class="form-label fw-bold text-primary small text-uppercase mb-2">I am a</label>
             <div class="input-group shadow-sm rounded-pill overflow-hidden border-blue">
               <span class="input-group-text bg-white border-0 ps-3"><i class="fas fa-user text-primary"></i></span>
-              <select class="form-select border-0 py-2 fw-bold text-dark" [(ngModel)]="selectedRole">
-                <option value="Either">Either (Pooler/Seeker)</option>
+              <select class="form-select border-0 py-2 fw-bold text-dark text-center" [(ngModel)]="selectedRole">
                 <option value="Pooler">Pooler (I have a vehicle)</option>
                 <option value="Seeker">Seeker (Need a ride)</option>
               </select>
             </div>
-          </div> -->
+          </div>
+        </div>
 
-          <!-- Transport Mode -->
-          <!-- <div class="col-lg-3 col-md-6">
-            <label class="form-label fw-bold text-danger small text-uppercase mb-2">Transport Mode</label>
-            <div class="input-group shadow-sm rounded-pill overflow-hidden border-red">
-              <span class="input-group-text bg-white border-0 ps-3"><i class="fas fa-car-side text-danger"></i></span>
-              <select class="form-select border-0 py-2 fw-bold text-dark" [(ngModel)]="transportMode">
-                <option value="" disabled selected>Select Mode</option>
-                <option *ngFor="let mode of transportOptions" [value]="mode">{{ mode }}</option>
-              </select>
-            </div>
-          </div> -->
-
+        <!-- Row 2: From, Swap, To Locations -->
+        <div class="row g-4 align-items-end justify-content-center mb-2">
           <!-- From Location (Autocomplete) -->
           <div class="col-lg-5 col-md-5">
              <label class="form-label fw-bold text-primary small text-uppercase mb-2">From Location</label>
@@ -53,7 +41,7 @@
           </div>
 
           <!-- Swap Button -->
-          <div class="col-lg-2 col-md-2 d-flex align-items-center justify-content-center pt-4">
+          <div class="col-lg-1 col-md-2 d-flex align-items-center justify-content-center pt-4">
              <button type="button" class="btn btn-outline-primary rounded-circle shadow-sm swap-btn" 
                      (click)="swapLocations()" title="Swap Locations">
                 <i class="fas fa-exchange-alt"></i>
@@ -67,7 +55,6 @@
                <AutocompleteComponent (setAddress)="handleToAddress($event)" [autocompleteInput]="postRide.To_Address"></AutocompleteComponent>
             </div>
           </div>
-
         </div>
 
         <!-- Middle Row: Seats Selection -->
@@ -87,17 +74,33 @@
              </div>
           </div>
 
-          <!-- Bug 1: Ride Frequency -->
+          <!-- Bug 1: Ride Type (Recurring / One-Time) -->
           <div class="col-lg-3 col-md-5">
-             <label class="form-label fw-bold text-dark small text-uppercase mb-2 text-center d-block">Ride Frequency</label>
+             <label class="form-label fw-bold text-dark small text-uppercase mb-2 text-center d-block">Ride Type</label>
              <div class="input-group shadow-sm rounded-pill overflow-hidden" style="border: 1px solid #ced4da;">
                <span class="input-group-text bg-white border-0 ps-3"><i class="fas fa-calendar-alt text-success"></i></span>
-               <select class="form-select border-0 py-2 fw-bold text-dark" [(ngModel)]="rideFrequency">
-                 <option value="Daily">Daily</option>
-                 <option value="Just Today">Just for Today</option>
-                 <option value="Weekdays">Weekdays (Mon-Fri)</option>
-                 <option value="Permanent">Permanent / Recurring</option>
+               <select class="form-select border-0 py-2 fw-bold text-dark" [(ngModel)]="rideType">
+                 <option value="Recurring">Recurring</option>
+                 <option value="One-Time">One-Time</option>
                </select>
+             </div>
+          </div>
+
+          <!-- Dynamic Input: Frequency or Date -->
+          <div class="col-lg-6 col-md-12" *ngIf="rideType === 'Recurring'">
+             <label class="form-label fw-bold text-dark small text-uppercase mb-2 text-center d-block">Select Days</label>
+             <div class="d-flex flex-wrap gap-2 justify-content-center pt-1">
+               <ng-container *ngFor="let day of daysOfWeek">
+                 <input type="checkbox" class="btn-check" [id]="'day_' + day" [(ngModel)]="selectedDays[day]">
+                 <label class="btn btn-outline-primary rounded-pill fw-bold px-3" [for]="'day_' + day">{{ day }}</label>
+               </ng-container>
+             </div>
+          </div>
+          
+          <div class="col-lg-3 col-md-5" *ngIf="rideType === 'One-Time'">
+             <label class="form-label fw-bold text-dark small text-uppercase mb-2 text-center d-block">Select Date</label>
+             <div class="input-group shadow-sm rounded-pill overflow-hidden" style="border: 1px solid #ced4da;">
+               <input type="date" class="form-control border-0 py-2 fw-bold text-dark" [(ngModel)]="rideDate">
              </div>
           </div>
         </div>
@@ -176,7 +179,7 @@
                     [ngClass]="{'bg-primary text-white': carpool.userType === 'Pooler', 'bg-danger text-white': carpool.userType === 'Seeker'}">
                 {{ carpool.userType }}
               </span>
-              <small class="text-muted fw-bold"><i class="far fa-clock me-1"></i> Today</small>
+              <small class="text-muted fw-bold"><i class="far fa-clock me-1"></i> {{ carpool.ride_Frequency || carpool.date || 'Today' }}</small>
             </div>
             
             <div class="text-center mb-4 position-relative z-1">
@@ -238,13 +241,29 @@
       <p class="text-muted mb-4">Don’t worry! Post your ride request so available poolers can connect with you.</p>
       
       <div class="d-flex flex-column align-items-center gap-3">
-        <div class="d-flex align-items-center gap-2 mb-2">
-          <label class="form-label fw-bold text-dark small text-uppercase mb-0">Request Type:</label>
-          <select class="form-select form-select-sm rounded-pill fw-bold" style="width: auto;" [(ngModel)]="rideFrequency">
-            <option value="Just Today">Just for Today</option>
-            <option value="Daily">Daily</option>
-            <option value="Permanent">Permanent / Recurring</option>
-          </select>
+        <div class="d-flex flex-wrap justify-content-center align-items-center gap-3 mb-2">
+          <div class="d-flex align-items-center gap-2">
+            <label class="form-label fw-bold text-dark small text-uppercase mb-0">Type:</label>
+            <select class="form-select form-select-sm rounded-pill fw-bold" style="width: auto;" [(ngModel)]="rideType">
+              <option value="Recurring">Recurring</option>
+              <option value="One-Time">One-Time</option>
+            </select>
+          </div>
+          
+          <div class="d-flex align-items-center gap-2" *ngIf="rideType === 'Recurring'">
+            <label class="form-label fw-bold text-dark small text-uppercase mb-0 me-2">Days:</label>
+            <div class="d-flex flex-wrap gap-2">
+              <ng-container *ngFor="let day of daysOfWeek">
+                <input class="btn-check" type="checkbox" [id]="'empty_day_' + day" [(ngModel)]="selectedDays[day]">
+                <label class="btn btn-outline-primary rounded-pill small fw-bold px-3 py-1" [for]="'empty_day_' + day">{{ day }}</label>
+              </ng-container>
+            </div>
+          </div>
+          
+          <div class="d-flex align-items-center gap-2" *ngIf="rideType === 'One-Time'">
+            <label class="form-label fw-bold text-dark small text-uppercase mb-0">Date:</label>
+            <input type="date" class="form-control form-control-sm rounded-pill fw-bold" style="width: auto;" [(ngModel)]="rideDate">
+          </div>
         </div>
         <button type="button" class="btn btn-danger btn-lg px-5 rounded-pill shadow-lg hover-scale fw-bold"
                 (click)="submitRequest()" [disabled]="isLoadingSubmit">

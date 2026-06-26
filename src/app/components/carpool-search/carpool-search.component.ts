@@ -9,7 +9,7 @@ import { PostRide } from '../../models/post-ride';
   styleUrls: ['./carpool-search.component.scss']
 })
 export class CarpoolSearchComponent implements OnInit {
-  selectedRole: string = 'Either';
+  selectedRole: string = 'Pooler'; // Removed 'Either'
   fromLocation: string = '';
   carpoolResults: Array<{ type: string, name: string, from: string }> = [];
   isAddViaClicked: boolean = false;
@@ -26,7 +26,14 @@ export class CarpoolSearchComponent implements OnInit {
   userRemark: string = '';
   transportMode: string = '';
   transportOptions: string[] = ['Cab', 'Bus', 'Own Car', 'Own Bike'];
-  rideFrequency: string = 'Daily'; // Bug 1: ride frequency for seeker request
+  
+  // Bug fix: Ride Type & Date & Days Selection
+  rideType: string = 'Recurring'; // 'Recurring' or 'One-Time'
+  rideDate: string = ''; // For one-time rides
+  daysOfWeek: string[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  selectedDays: { [key: string]: boolean } = {
+    'Mon': true, 'Tue': true, 'Wed': true, 'Thu': true, 'Fri': true, 'Sat': false, 'Sun': false
+  };
 
   readonly OFFICE_ADDRESS = 'OXYGEN BUSINESS PARK, Sector 144, Noida, Uttar Pradesh 201304';
   readonly OFFICE_LAT = '28.4977536';
@@ -176,7 +183,8 @@ export class CarpoolSearchComponent implements OnInit {
 
         if (this.RideList.length === 0) {
           this.noRidesAvailable = true;
-          this.showData = false;
+          // Fix: Keep showData = true so the empty state CTA triggers
+          this.showData = true; 
           this._globalService.utilities.notify.warning('No ride found on this route');
         }
       } else {
@@ -258,19 +266,24 @@ export class CarpoolSearchComponent implements OnInit {
     this.postRide.UserName = this.ursrProfile.name;
     this.postRide.IsSearch = 1;
     this.postRide.Seats = this.selectedSeats;
-    this.postRide.Ride_Frequency = this.rideFrequency; // Bug 1: Include frequency
+    
+    let frequencyText = '';
+    if (this.rideType === 'Recurring') {
+      const activeDays = this.daysOfWeek.filter(day => this.selectedDays[day]).join(', ');
+      frequencyText = 'Recurring: ' + (activeDays || 'None');
+    } else {
+      frequencyText = 'One-Time: ' + this.rideDate;
+    }
+    this.postRide.Ride_Frequency = frequencyText;
 
     // Add the remark to postRide before sending
-    this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '') + ` | Seats: ${this.selectedSeats}` + ` | Frequency: ${this.rideFrequency}`;
+    this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '') + ` | Seats: ${this.selectedSeats}` + ` | Type: ${frequencyText}`;
 
     this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(
       resp => {
         this.isLoadingSubmit = false;
 
         if (resp.status === 1) {
-          this.RideList = resp.data;
-          this.showData = true;
-
           this._globalService.utilities.notify.success('Ride submitted successfully!');
 
           // Bug 9: Track active ride for this user
@@ -280,8 +293,10 @@ export class CarpoolSearchComponent implements OnInit {
             date: new Date().toISOString().slice(0, 10),
             seats: this.selectedSeats
           }));
+
+          // Fix: Navigate to dashboard after successful post instead of showing empty search state
+          this.router.navigate(['/dashboard']);
         } else {
-          this.showData = false;
           this._globalService.utilities.notify.error('Error while submitting the ride.');
         }
       },
