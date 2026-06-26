@@ -1,4 +1,4 @@
-﻿import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { GlobalService } from '../../services/global-service';
@@ -16,6 +16,7 @@ export class LoginSignupComponent implements OnInit {
   @Output() loginEvent = new EventEmitter<string>();
   showImpactScreen: boolean = false;
   isSubmitting: boolean = false;
+  showPassword: boolean = false;
 
   constructor(
     private router: Router,
@@ -73,6 +74,10 @@ export class LoginSignupComponent implements OnInit {
         this._globalService.utilities.notify.error(message);
       }
     });
+  }
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 
   forgotPassword(): void {

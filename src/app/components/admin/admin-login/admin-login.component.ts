@@ -42,6 +42,12 @@ export class AdminLoginComponent {
         if (isSuccess && token) {
           // AuthService already persisted token/userId/name/email/orgId.
           // Keep legacy adminUser entry so existing admin guard/layout works.
+
+          // Bug 2 Fix: Generate unique session ID to prevent multiple admin logins
+          const adminSessionId = 'admin_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
+          localStorage.setItem('adminSessionId', adminSessionId);
+          sessionStorage.setItem('adminSessionId', adminSessionId);
+
           localStorage.setItem(
             'adminUser',
             JSON.stringify({

@@ -19,7 +19,7 @@ export class AdminAuthGuard implements CanActivate {
     _route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean | UrlTree {
-    if (this.authService.isLoggedIn() && this.hasAdminRole()) {
+    if (this.authService.isLoggedIn() && this.hasAdminRole() && this.isValidSession()) {
       return true;
     }
 
@@ -40,4 +40,24 @@ export class AdminAuthGuard implements CanActivate {
       return false;
     }
   }
+
+  // Bug 2 Fix: Validate that this tab's session matches the latest admin login
+  private isValidSession(): boolean {
+    const globalSessionId = localStorage.getItem('adminSessionId');
+    const tabSessionId = sessionStorage.getItem('adminSessionId');
+
+    // If no session IDs exist (legacy), allow access
+    if (!globalSessionId) {
+      return true;
+    }
+
+    // If this tab doesn't have a session ID, it's a stale tab
+    if (!tabSessionId) {
+      return false;
+    }
+
+    // If session IDs don't match, another tab logged in — invalidate this one
+    return globalSessionId === tabSessionId;
+  }
 }
+

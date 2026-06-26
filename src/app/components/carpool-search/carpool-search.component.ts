@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { GlobalService } from '../../services/global-service';
 import { PostRide } from '../../models/post-ride';
 
@@ -8,7 +8,7 @@ import { PostRide } from '../../models/post-ride';
   templateUrl: './carpool-search.component.html',
   styleUrls: ['./carpool-search.component.scss']
 })
-export class CarpoolSearchComponent {
+export class CarpoolSearchComponent implements OnInit {
   selectedRole: string = 'Either';
   fromLocation: string = '';
   carpoolResults: Array<{ type: string, name: string, from: string }> = [];
@@ -26,18 +26,39 @@ export class CarpoolSearchComponent {
   userRemark: string = '';
   transportMode: string = '';
   transportOptions: string[] = ['Cab', 'Bus', 'Own Car', 'Own Bike'];
+  rideFrequency: string = 'Daily'; // Bug 1: ride frequency for seeker request
 
   readonly OFFICE_ADDRESS = 'OXYGEN BUSINESS PARK, Sector 144, Noida, Uttar Pradesh 201304';
   readonly OFFICE_LAT = '28.4977536';
   readonly OFFICE_LNG = '77.4350798';
 
-  constructor(private _globalService: GlobalService, private router: Router) {
+  constructor(private _globalService: GlobalService, private router: Router, private route: ActivatedRoute) {
     // Fetch user profile and email on component initialization
     this.loadUserProfile();
     // Initialize To Address to Office by default
     this.postRide.To_Address = this.OFFICE_ADDRESS;
     this.postRide.To_Latitude = this.OFFICE_LAT;
     this.postRide.To_Longitude = this.OFFICE_LNG;
+  }
+
+  // Bug 9: Load edit data if coming from dashboard edit action
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['edit'] === 'true') {
+        const editData = localStorage.getItem('editRideData');
+        if (editData) {
+          try {
+            const data = JSON.parse(editData);
+            this.postRide.From_Address = data.from || '';
+            this.postRide.To_Address = data.to || '';
+            this.selectedSeats = data.seats || 1;
+            this.userRemark = data.comment || '';
+            localStorage.removeItem('editRideData');
+            this._globalService.utilities.notify.info('Edit your ride details and resubmit.');
+          } catch {}
+        }
+      }
+    });
   }
 
   // Method to swap From and To locations
@@ -184,15 +205,21 @@ export class CarpoolSearchComponent {
         if (resp.status === 1 || resp.status === 'ok' || resp.status === 'Success' || resp.status === true || resp.message === 'success') {
           this._globalService.utilities.notify.success('Request sent successfully.');
         } else {
-          // If the backend returns a clear error status
+          // Bug 6: If the backend returns a clear error, revert the optimistic update
+          item.isSendRequest = false;
           this._globalService.utilities.notify.warning(resp.message || 'Request might have failed. Please check.');
         }
       },
       error: (err) => {
-        // Many times backend succeeds but returns text, causing JSON parse error in Angular
+        // Bug 6: Don't blindly treat errors as success — check response text
         console.warn('API error or parse error on SendRideRequest:', err);
-        // We leave isSendRequest = true because the request often actually succeeds as user reported
-        this._globalService.utilities.notify.success('Request sent successfully.');
+        // Only keep optimistic state if it's a JSON parse error (which typically means success with text response)
+        if (err?.status === 200 || err?.status === 201) {
+          this._globalService.utilities.notify.success('Request sent successfully.');
+        } else {
+          item.isSendRequest = false;
+          this._globalService.utilities.notify.error('Failed to send request. Please try again.');
+        }
       }
     });
   }
@@ -208,15 +235,21 @@ export class CarpoolSearchComponent {
       return;
     }
 
-    // Check if a ride has already been submitted today for the same "From" and "To" address
-    const today = new Date().toISOString().slice(0, 10);
-    const lastSubmittedDate = localStorage.getItem('lastSubmittedDate') || '';
-    const lastSubmittedFrom = localStorage.getItem('lastSubmittedFrom') || '';
-    const lastSubmittedTo = localStorage.getItem('lastSubmittedTo') || '';
-
-    if (lastSubmittedDate === today && lastSubmittedFrom === this.postRide.From_Address && lastSubmittedTo === this.postRide.To_Address) {
-      this._globalService.utilities.notify.warning('You have already submitted a ride for today on this route.');
-      return;
+    // Bug 9: Check if user already has an active ride (same route or any active ride)
+    const activeRideKey = `activeRide_${this.ursrProfile.userId}`;
+    const existingRide = localStorage.getItem(activeRideKey);
+    if (existingRide) {
+      try {
+        const existing = JSON.parse(existingRide);
+        // Allow if editing (different ride) or same-day resubmission
+        const isEditing = this.route.snapshot.queryParams['edit'] === 'true';
+        if (!isEditing) {
+          this._globalService.utilities.notify.warning(
+            `You already have an active ride posted (${existing.from} → ${existing.to}). Please edit or delete it first from the Dashboard.`
+          );
+          return;
+        }
+      } catch {}
     }
 
     this.isLoadingSubmit = true;
@@ -224,10 +257,11 @@ export class CarpoolSearchComponent {
     this.postRide.UserId = this.ursrProfile.userId;
     this.postRide.UserName = this.ursrProfile.name;
     this.postRide.IsSearch = 1;
-     this.postRide.Seats=this.selectedSeats;
+    this.postRide.Seats = this.selectedSeats;
+    this.postRide.Ride_Frequency = this.rideFrequency; // Bug 1: Include frequency
 
     // Add the remark to postRide before sending
-    this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '') + ` | Seats: ${this.selectedSeats}`;
+    this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '') + ` | Seats: ${this.selectedSeats}` + ` | Frequency: ${this.rideFrequency}`;
 
     this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(
       resp => {
@@ -239,9 +273,13 @@ export class CarpoolSearchComponent {
 
           this._globalService.utilities.notify.success('Ride submitted successfully!');
 
-          localStorage.setItem('lastSubmittedDate', today);
-          localStorage.setItem('lastSubmittedFrom', this.postRide.From_Address);
-          localStorage.setItem('lastSubmittedTo', this.postRide.To_Address);
+          // Bug 9: Track active ride for this user
+          localStorage.setItem(activeRideKey, JSON.stringify({
+            from: this.postRide.From_Address,
+            to: this.postRide.To_Address,
+            date: new Date().toISOString().slice(0, 10),
+            seats: this.selectedSeats
+          }));
         } else {
           this.showData = false;
           this._globalService.utilities.notify.error('Error while submitting the ride.');

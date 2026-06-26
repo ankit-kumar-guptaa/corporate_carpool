@@ -86,6 +86,20 @@
                </select>
              </div>
           </div>
+
+          <!-- Bug 1: Ride Frequency -->
+          <div class="col-lg-3 col-md-5">
+             <label class="form-label fw-bold text-dark small text-uppercase mb-2 text-center d-block">Ride Frequency</label>
+             <div class="input-group shadow-sm rounded-pill overflow-hidden" style="border: 1px solid #ced4da;">
+               <span class="input-group-text bg-white border-0 ps-3"><i class="fas fa-calendar-alt text-success"></i></span>
+               <select class="form-select border-0 py-2 fw-bold text-dark" [(ngModel)]="rideFrequency">
+                 <option value="Daily">Daily</option>
+                 <option value="Just Today">Just for Today</option>
+                 <option value="Weekdays">Weekdays (Mon-Fri)</option>
+                 <option value="Permanent">Permanent / Recurring</option>
+               </select>
+             </div>
+          </div>
         </div>
 
         <!-- Middle Row: Add Via Button & Via Points -->
@@ -214,11 +228,31 @@
     </div>
   </div>
 
+  <!-- Bug 1: Enhanced empty state with Post Ride CTA when no rides found -->
   <div *ngIf="RideList.length < 1 && showData" class="text-center mt-5 animate-fade-in">
-    <div class="empty-state-icon mb-3 text-muted opacity-50">
+    <div class="card border-0 shadow-lg p-5 mx-auto" style="max-width: 600px;">
+      <div class="empty-state-icon mb-3 text-warning">
         <i class="fas fa-road fa-4x"></i>
+      </div>
+      <h4 class="fw-bold text-dark mb-2">No rides found matching your criteria</h4>
+      <p class="text-muted mb-4">Don’t worry! Post your ride request so available poolers can connect with you.</p>
+      
+      <div class="d-flex flex-column align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <label class="form-label fw-bold text-dark small text-uppercase mb-0">Request Type:</label>
+          <select class="form-select form-select-sm rounded-pill fw-bold" style="width: auto;" [(ngModel)]="rideFrequency">
+            <option value="Just Today">Just for Today</option>
+            <option value="Daily">Daily</option>
+            <option value="Permanent">Permanent / Recurring</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-danger btn-lg px-5 rounded-pill shadow-lg hover-scale fw-bold"
+                (click)="submitRequest()" [disabled]="isLoadingSubmit">
+          <span *ngIf="!isLoadingSubmit"><i class="fas fa-paper-plane me-2"></i> Post Your Ride Request</span>
+          <span *ngIf="isLoadingSubmit"><i class="fas fa-spinner fa-spin me-2"></i> Posting...</span>
+        </button>
+        <small class="text-muted">When a suitable pooler becomes available, they’ll be able to connect with you.</small>
+      </div>
     </div>
-    <h4 class="text-muted fw-bold">No rides found matching your criteria.</h4>
-    <p class="text-muted">Be the first to post a ride request!</p>
   </div>
 </div>

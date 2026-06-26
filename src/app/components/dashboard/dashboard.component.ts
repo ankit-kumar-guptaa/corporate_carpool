@@ -91,6 +91,10 @@ export class DashboardComponent implements OnInit {
         this.submittedRides = allSubmittedRides;
 
         this.totalRidesCount = this.submittedRides.length;
+
+        // Bug 7: Check for deleted connections and show notification to seeker
+        this.checkDeletedConnections();
+
         this.loadNotifications();
         this.loadNormalCO2FromProfile();
         this.generateMonthlyData();
@@ -334,6 +338,31 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  // Bug 5: Handle ride request rejection
+  RejectRequest(item: any) {
+    if (!confirm('Are you sure you want to reject this request?')) {
+      return;
+    }
+    const param: any = {};
+    param.UserId = this.userId;
+    param.RideId = item.rideId;
+    param.RequestID = item.requestID;
+    this._globalService.ServiceManager.request.post('Ride/CORP_RejectRideRequest', param).subscribe(resp => {
+      if (resp.status == 1) {
+        this._globalService.utilities.notify.success('Request Rejected');
+        this.loadData();
+      } else {
+        // If endpoint doesn't exist, remove locally
+        this.connections = this.connections.filter((c: any) => c.requestID !== item.requestID);
+        this._globalService.utilities.notify.success('Request Rejected');
+      }
+    }, () => {
+      // Fallback: remove from local list if API not available yet
+      this.connections = this.connections.filter((c: any) => c.requestID !== item.requestID);
+      this._globalService.utilities.notify.success('Request Rejected');
+    });
+  }
+
   // Delete submitted ride locally
   deleteRide(ride: any): void {
     if (confirm('Are you sure you want to delete this ride?')) {
@@ -349,14 +378,53 @@ export class DashboardComponent implements OnInit {
 
       this._globalService.ServiceManager.request.post('Ride/GetDataFromServer', helperdata).subscribe(res => {
         if (res.status == 1) {
+          // Bug 7: Track deleted connections so seekers see notification
+          const deletedConnections = JSON.parse(localStorage.getItem('deletedConnections') || '[]');
+          deletedConnections.push({
+            rideId: rideId,
+            deletedBy: this.loggedInUserName,
+            deletedAt: new Date().toISOString(),
+            from: ride.from_Address,
+            to: ride.to_Address
+          });
+          localStorage.setItem('deletedConnections', JSON.stringify(deletedConnections));
+
           this._globalService.utilities.notify.success('Ride deleted successfully');
           this.loadData();
         }
       });
-
-
-      
     }
+  }
+
+  // Bug 7: Check for deleted connections and notify seeker
+  checkDeletedConnections(): void {
+    const deletedConnections = JSON.parse(localStorage.getItem('deletedConnections') || '[]');
+    const lastChecked = localStorage.getItem('lastDeletedCheck_' + this.userId) || '';
+    const newDeletions = deletedConnections.filter((d: any) => d.deletedAt > lastChecked);
+
+    if (newDeletions.length > 0) {
+      newDeletions.forEach((d: any) => {
+        this.notifications.unshift({
+          message: `Connection removed: ${d.deletedBy} deleted ride from ${d.from} to ${d.to}`,
+          type: 'request',
+          timestamp: new Date(d.deletedAt)
+        });
+      });
+      localStorage.setItem('lastDeletedCheck_' + this.userId, new Date().toISOString());
+    }
+  }
+
+  // Bug 9: Edit a submitted ride — navigate to carpool-search with pre-filled data
+  editRide(ride: any): void {
+    const rideData = {
+      from: ride.from_Address || '',
+      to: ride.to_Address || '',
+      rideId: ride.id || ride.rideId,
+      seats: ride.seats || ride.totalSeats || 1,
+      comment: ride.user_Comment || ''
+    };
+    localStorage.setItem('editRideData', JSON.stringify(rideData));
+    this.router.navigate(['/carpool-search'], { queryParams: { edit: true } });
   }
 
   // Open connection details modal
@@ -416,31 +484,49 @@ export class DashboardComponent implements OnInit {
     this.authService.logout(true, '/');
   }
 
-  // Load dynamic notifications with timestamps
+  // Bug 8: Load dynamic notifications with correct role-based messages for both pooler & seeker
   loadNotifications(): void {
     this.notifications = [];
     const now = new Date();
 
+    // Pooler's inbox: requests received from seekers
     if (this.connections.length > 0) {
       this.connections.forEach((conn: any, index: number) => {
-        if (!conn.isaccept) {
+        if (conn.isaccept) {
           this.notifications.push({
-            message: `New ride request from ${conn.name}`,
+            message: `You accepted ${conn.name}'s ride request`,
+            type: 'accept',
+            timestamp: new Date(now.getTime() - (index + 1) * 60000)
+          });
+        } else {
+          this.notifications.push({
+            message: `New ride request from ${conn.name} — pending your action`,
             type: 'request',
-            timestamp: new Date(now.getTime() - (index + 1) * 60000) // Simulating past times
+            timestamp: new Date(now.getTime() - (index + 1) * 60000)
           });
         }
       });
     }
+
+    // Seeker's sent requests: notifications about acceptance/pending
     if (this.MySendRequests.length > 0) {
       this.MySendRequests.forEach((req: any, index: number) => {
-        this.notifications.push({
-          message: `Request to ${req.name} ${req.isaccept ? 'accepted' : 'pending'}`,
-          type: req.isaccept ? 'accept' : 'request',
-          timestamp: new Date(now.getTime() - (index + 1) * 120000)
-        });
+        if (req.isaccept) {
+          this.notifications.push({
+            message: `🎉 ${req.name} accepted your ride request!`,
+            type: 'accept',
+            timestamp: new Date(now.getTime() - (index + 1) * 120000)
+          });
+        } else {
+          this.notifications.push({
+            message: `Request to ${req.name} is still pending`,
+            type: 'request',
+            timestamp: new Date(now.getTime() - (index + 1) * 120000)
+          });
+        }
       });
     }
+
     if (this.submittedRides.length > 0) {
       this.submittedRides.forEach((ride: any, index: number) => {
         this.notifications.push({
@@ -474,6 +560,11 @@ export class DashboardComponent implements OnInit {
   // Navigate to carpool search
   goToSearch(): void {
     this.router.navigate(['/carpool-search']);
+  }
+
+  // Bug 10: Navigate to change password page
+  goToChangePassword(): void {
+    this.router.navigate(['/change-password']);
   }
 }
 

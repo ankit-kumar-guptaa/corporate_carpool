@@ -201,7 +201,7 @@ h6 {
   }
 
   .form-input {
-    padding: 12px 16px 12px 45px;
+    padding: 12px 45px 12px 45px;
     border-radius: 10px;
     border: 1px solid #e0e0e0;
     background: #fcfcfc;
@@ -223,6 +223,24 @@ h6 {
   /* Fix for icon color on focus if icon is before input */
   &:focus-within .input-icon {
     color: $accent-color;
+  }
+
+  /* Bug 3: Password visibility toggle button */
+  .password-toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-muted;
+    padding: 4px 10px;
+    text-decoration: none;
+    z-index: 2;
+
+    &:hover,
+    &:focus {
+      color: $accent-color;
+      text-decoration: none;
+    }
   }
 }
 

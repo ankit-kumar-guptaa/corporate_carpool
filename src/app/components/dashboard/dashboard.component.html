@@ -37,6 +37,7 @@
             <button class="btn btn-primary me-2 shadow-sm fw-bold hover-scale" (click)="goToSearch()"><i
                 class="fas fa-search me-1"></i> Carpool Search</button>
             <button class="btn btn-outline-primary me-2" (click)="openProfileUpdateModal()">✏️ Update Profile</button>
+            <button class="btn btn-outline-success me-2" (click)="goToChangePassword()"><i class="fas fa-key me-1"></i> Change Password</button>
             <button class="btn btn-outline-danger" (click)="logout()">🚪 Logout</button>
           </div>
         </div>
@@ -253,9 +254,13 @@
                   <span *ngIf="connection.isaccept">{{ connection.mobile_no }}</span>
                 </td>
                 <td>
-                  <button class="btn btn-primary btn-sm" *ngIf="!connection.isaccept"
+                  <button class="btn btn-primary btn-sm me-1" *ngIf="!connection.isaccept"
                     (click)="AcceptRequest(connection)">
                     <i class="fas fa-check"></i> Accept
+                  </button>
+                  <button class="btn btn-danger btn-sm" *ngIf="!connection.isaccept"
+                    (click)="RejectRequest(connection)">
+                    <i class="fas fa-times"></i> Reject
                   </button>
                   <button class="btn btn-success btn-sm" *ngIf="connection.isaccept">Connected</button>
                 </td>
@@ -323,8 +328,9 @@
                 <th>From</th>
                 <th>To</th>
                 <th>Date</th>
+                <th>Seats</th>
                 <th>Status</th>
-                <th>Info</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -332,10 +338,14 @@
                 <td>{{ ride.from_Address }}</td>
                 <td>{{ ride.to_Address }}</td>
                 <td>{{ ride.date || 'N/A' }}</td>
-                <td>{{ ride.status || 'Completed' }}</td>
+                <td>{{ ride.seats || ride.totalSeats || 'N/A' }}</td>
+                <td>{{ ride.status || 'Active' }}</td>
                 <td>
                   <button class="btn btn-outline-primary btn-sm" (click)="openRideModal(ride)">
                     <i class="fas fa-eye"></i> View
+                  </button>
+                  <button class="btn btn-outline-warning btn-sm ms-2" (click)="editRide(ride)">
+                    <i class="fas fa-edit"></i> Edit
                   </button>
                   <button class="btn btn-outline-danger btn-sm ms-2" (click)="deleteRide(ride)">
                     <i class="fas fa-trash"></i> Delete
@@ -343,7 +353,7 @@
                 </td>
               </tr>
               <tr *ngIf="submittedRides.length === 0">
-                <td colspan="5" class="text-center text-muted">No submitted rides yet</td>
+                <td colspan="6" class="text-center text-muted">No submitted rides yet</td>
               </tr>
             </tbody>
           </table>
@@ -366,6 +376,10 @@
       <p><strong>Email:</strong> {{ selectedUser?.email || 'N/A' }}</p>
       <p><strong>From:</strong> {{ selectedUser?.from_Address || 'N/A' }}</p>
       <p><strong>To:</strong> {{ selectedUser?.to_Address || 'N/A' }}</p>
+      <p><strong>Contact:</strong> {{ selectedUser?.isaccept ? (selectedUser?.mobile_no || 'N/A') : 'Accept request to view' }}</p>
+      <p><strong>Date:</strong> {{ selectedUser?.date || selectedUser?.ride_Date || 'N/A' }}</p>
+      <p><strong>Seats:</strong> {{ selectedUser?.seats || selectedUser?.totalSeats || 'N/A' }}</p>
+      <p><strong>Remarks:</strong> {{ selectedUser?.user_Comment || selectedUser?.remark || 'No remarks' }}</p>
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" (click)="closeModal()">Close</button>
@@ -383,8 +397,10 @@
     <div class="modal-body">
       <p><strong>From:</strong> {{ selectedRide?.from_Address || 'N/A' }}</p>
       <p><strong>To:</strong> {{ selectedRide?.to_Address || 'N/A' }}</p>
-      <p><strong>Date:</strong> {{ selectedRide?.date || 'N/A' }}</p>
-      <p><strong>Status:</strong> {{ selectedRide?.status || 'Completed' }}</p>
+      <p><strong>Date:</strong> {{ selectedRide?.date || selectedRide?.ride_Date || 'N/A' }}</p>
+      <p><strong>Seats:</strong> {{ selectedRide?.seats || selectedRide?.totalSeats || 'N/A' }}</p>
+      <p><strong>Status:</strong> {{ selectedRide?.status || 'Active' }}</p>
+      <p><strong>Remarks:</strong> {{ selectedRide?.user_Comment || selectedRide?.remark || 'No remarks' }}</p>
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" (click)="closeRideModal()">Close</button>
