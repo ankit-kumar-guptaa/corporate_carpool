@@ -350,7 +350,7 @@
                   <span *ngIf="ride.ride_Type === 'One-Time'">{{ ride.ride_Date || ride.ride_Frequency || 'N/A' }}</span>
                   <span *ngIf="!ride.ride_Type">{{ ride.ride_Date || ride.ride_Frequency || 'N/A' }}</span>
                 </td>
-                <td>{{ ride.seats || ride.totalSeats || 'N/A' }}</td>
+                <td>{{ getSeatsDisplay(ride) }}</td>
                 <td>
                   <span class="badge rounded-pill" [ngClass]="{'bg-primary': ride.userType === 'Pooler', 'bg-danger': ride.userType === 'Seeker', 'bg-secondary': !ride.userType}">
                     {{ ride.userType || 'N/A' }}
@@ -380,7 +380,6 @@
   </div>
 </div>
 
-<!-- Modals remain unchanged -->
 <!-- View Modal for Connections -->
 <div id="customModal" class="modal-container" [ngClass]="{'show': isModalVisible}" (click)="closeModal($event)">
   <div class="modal-content" (click)="stopPropagation($event)">
@@ -391,11 +390,23 @@
     <div class="modal-body">
       <p><strong>Name:</strong> {{ selectedUser?.name || 'N/A' }}</p>
       <p><strong>Email:</strong> {{ selectedUser?.email || 'N/A' }}</p>
+      <p><strong>Role:</strong>
+        <span class="badge rounded-pill ms-1" [ngClass]="{'bg-primary': selectedUser?.userType === 'Pooler', 'bg-danger': selectedUser?.userType === 'Seeker', 'bg-secondary': !selectedUser?.userType}">
+          {{ selectedUser?.userType || 'N/A' }}
+        </span>
+      </p>
       <p><strong>From:</strong> {{ selectedUser?.from_Address || 'N/A' }}</p>
       <p><strong>To:</strong> {{ selectedUser?.to_Address || 'N/A' }}</p>
       <p><strong>Contact:</strong> {{ selectedUser?.isaccept ? (selectedUser?.mobile_no || 'N/A') : 'Accept request to view' }}</p>
-      <p><strong>Date:</strong> {{ selectedUser?.date || selectedUser?.ride_Date || 'N/A' }}</p>
-      <p><strong>Seats:</strong> {{ selectedUser?.seats || selectedUser?.totalSeats || 'N/A' }}</p>
+      <p><strong>Ride Type:</strong>
+        <span class="badge rounded-pill ms-1" [ngClass]="{'bg-success': selectedUser?.ride_Type === 'Recurring', 'bg-info': selectedUser?.ride_Type === 'One-Time', 'bg-secondary': !selectedUser?.ride_Type}">
+          {{ selectedUser?.ride_Type || 'N/A' }}
+        </span>
+      </p>
+      <p *ngIf="selectedUser?.ride_Type === 'Recurring'"><strong>Weekdays:</strong> {{ selectedUser?.ride_Frequency || 'N/A' }}</p>
+      <p *ngIf="selectedUser?.ride_Type === 'One-Time'"><strong>Date:</strong> {{ selectedUser?.ride_Date || selectedUser?.ride_Frequency || 'N/A' }}</p>
+      <p *ngIf="!selectedUser?.ride_Type"><strong>Date:</strong> {{ selectedUser?.ride_Date || selectedUser?.date || 'N/A' }}</p>
+      <p><strong>Seats:</strong> {{ getSeatsDisplay(selectedUser) }}</p>
       <p><strong>Remarks:</strong> {{ selectedUser?.user_Comment || selectedUser?.remark || 'No remarks' }}</p>
     </div>
     <div class="modal-footer">
@@ -427,7 +438,7 @@
       <p *ngIf="selectedRide?.ride_Type === 'Recurring'"><strong>Weekdays:</strong> {{ selectedRide?.ride_Frequency || 'N/A' }}</p>
       <p *ngIf="selectedRide?.ride_Type === 'One-Time'"><strong>Date:</strong> {{ selectedRide?.ride_Date || selectedRide?.ride_Frequency || 'N/A' }}</p>
       <p *ngIf="!selectedRide?.ride_Type"><strong>Frequency / Date:</strong> {{ selectedRide?.ride_Date || selectedRide?.ride_Frequency || 'N/A' }}</p>
-      <p><strong>Seats:</strong> {{ selectedRide?.seats || selectedRide?.totalSeats || 'N/A' }}</p>
+      <p><strong>Seats:</strong> {{ getSeatsDisplay(selectedRide) }}</p>
       <p><strong>Status:</strong> {{ selectedRide?.status || 'Active' }}</p>
       <p><strong>Remarks:</strong> {{ selectedRide?.user_Comment || selectedRide?.remark || 'No remarks' }}</p>
     </div>

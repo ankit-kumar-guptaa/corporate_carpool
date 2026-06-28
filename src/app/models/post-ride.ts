@@ -18,6 +18,7 @@ export class PostRide {
         Via: string[] = []
         IsSearch:number;
         Seats:number;
+        RideId:number;
         constructor()
         constructor(_postRide: PostRide)
         constructor(_postRide?: any) {
@@ -38,6 +39,7 @@ export class PostRide {
           this.Via= _postRide && _postRide.Via || [];
           this.IsSearch= _postRide && _postRide.IsSearch || 0;
            this.Seats= _postRide && _postRide.Seats || 0;
+           this.RideId= _postRide && _postRide.RideId || 0;
 
         }
    

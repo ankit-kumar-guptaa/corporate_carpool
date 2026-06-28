@@ -417,11 +417,19 @@ export class DashboardComponent implements OnInit {
 
   // Bug 9: Edit a submitted ride — navigate to carpool-search with pre-filled data
   editRide(ride: any): void {
+    // Extract seats properly — check direct fields, then parse from user_Comment
+    let seats = ride.seats || ride.totalSeats || 0;
+    if (!seats && ride.user_Comment) {
+      const match = ride.user_Comment.match(/Seats:\s*(\d+)/);
+      if (match) seats = parseInt(match[1], 10);
+    }
+    if (!seats) seats = 1;
+
     const rideData = {
       from: ride.from_Address || '',
       to: ride.to_Address || '',
-      rideId: ride.id || ride.rideId,
-      seats: ride.seats || ride.totalSeats || 1,
+      rideId: ride.id || ride.rideId || ride.rideID,
+      seats: seats,
       comment: ride.user_Comment || '',
       rideType: ride.ride_Type || 'Recurring',
       rideFrequency: ride.ride_Frequency || '',
@@ -430,6 +438,24 @@ export class DashboardComponent implements OnInit {
     };
     localStorage.setItem('editRideData', JSON.stringify(rideData));
     this.router.navigate(['/carpool-search'], { queryParams: { edit: true } });
+  }
+
+  // Helper to extract seats from ride/connection data
+  // Checks direct fields first, then parses from user_Comment as fallback
+  getSeatsDisplay(item: any): string {
+    if (!item) return 'N/A';
+    if (item.seats) return item.seats.toString();
+    if (item.totalSeats) return item.totalSeats.toString();
+    // Parse from user_Comment: "... | Seats: 3 | ..."
+    if (item.user_Comment) {
+      const match = item.user_Comment.match(/Seats:\s*(\d+)/);
+      if (match) return match[1];
+    }
+    if (item.remark) {
+      const match = item.remark.match(/Seats:\s*(\d+)/);
+      if (match) return match[1];
+    }
+    return 'N/A';
   }
 
   // Open connection details modal

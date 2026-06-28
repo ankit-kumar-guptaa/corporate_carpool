@@ -295,9 +295,17 @@ export class CarpoolSearchComponent implements OnInit {
 
     this.postRide.UserId = this.ursrProfile.userId;
     this.postRide.UserName = this.ursrProfile.name;
-    this.postRide.IsSearch = 1;
     this.postRide.Seats = this.selectedSeats;
     this.postRide.userType = this.selectedRole
+
+    // When editing, pass RideId and set IsSearch=2 for update; IsSearch=1 for new post
+    if (this.isEditMode && this.editRideId) {
+      this.postRide.RideId = this.editRideId;
+      this.postRide.IsSearch = 2;
+    } else {
+      this.postRide.RideId = 0;
+      this.postRide.IsSearch = 1;
+    }
 
     let frequencyText = '';
     if (this.rideType === 'Recurring') {
