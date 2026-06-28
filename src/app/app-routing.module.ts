@@ -29,11 +29,11 @@ const routes: Routes = [
     component: AdminLayoutComponent, 
     canActivate: [AdminAuthGuard],
     children: [
-      { path: 'dashboard', component: AdminDashboardComponent },
-      { path: 'employees', component: AdminEmployeesComponent },
-      { path: 'rides', component: AdminRidesComponent },
-      { path: 'reports', component: AdminReportsComponent },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+      { path: 'dashboard', component: AdminDashboardComponent,canActivate: [AdminAuthGuard], },
+      { path: 'employees', component: AdminEmployeesComponent,canActivate: [AdminAuthGuard] },
+      { path: 'rides', component: AdminRidesComponent,canActivate: [AdminAuthGuard] },
+      { path: 'reports', component: AdminReportsComponent,canActivate: [AdminAuthGuard] }
+      
     ]
   },
 

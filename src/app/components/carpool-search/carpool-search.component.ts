@@ -26,7 +26,7 @@ export class CarpoolSearchComponent implements OnInit {
   userRemark: string = '';
   transportMode: string = '';
   transportOptions: string[] = ['Cab', 'Bus', 'Own Car', 'Own Bike'];
-  
+
   // Bug fix: Ride Type & Date & Days Selection
   rideType: string = 'Recurring'; // 'Recurring' or 'One-Time'
   rideDate: string = ''; // For one-time rides
@@ -62,7 +62,7 @@ export class CarpoolSearchComponent implements OnInit {
             this.userRemark = data.comment || '';
             localStorage.removeItem('editRideData');
             this._globalService.utilities.notify.info('Edit your ride details and resubmit.');
-          } catch {}
+          } catch { }
         }
       }
     });
@@ -137,7 +137,7 @@ export class CarpoolSearchComponent implements OnInit {
     this.postRide.UserId = this.ursrProfile.userId;
     this.postRide.UserName = this.ursrProfile.name;
     this.postRide.IsSearch = 0;
-    this.postRide.Seats=this.selectedSeats;
+    this.postRide.Seats = this.selectedSeats;
 
     // Add the remark to postRide before sending
     this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '');
@@ -160,15 +160,15 @@ export class CarpoolSearchComponent implements OnInit {
               parseFloat(rLat), parseFloat(rLon)
             );
           }
-          
+
           let totalSeats = 3;
           if (ride.user_Comment && ride.user_Comment.includes('Seats:')) {
-              const match = ride.user_Comment.match(/Seats:\s*(\d+)/);
-              if (match) {
-                  totalSeats = parseInt(match[1], 10);
-              }
+            const match = ride.user_Comment.match(/Seats:\s*(\d+)/);
+            if (match) {
+              totalSeats = parseInt(match[1], 10);
+            }
           }
-          
+
           const rideId = ride.rideID || ride.id;
           const acceptedSeats = acceptedSeatsMap[rideId] || 0;
           let availableSeats = totalSeats - acceptedSeats;
@@ -176,7 +176,7 @@ export class CarpoolSearchComponent implements OnInit {
 
           return { ...ride, distanceKm: dist, isSendRequest: ride.isSendRequest || false, availableSeats: availableSeats, totalSeats: totalSeats };
         });
-        
+
         this.RideList = allRides.filter((r: any) => r.availableSeats >= this.selectedSeats);
 
         this.showData = true;
@@ -184,7 +184,7 @@ export class CarpoolSearchComponent implements OnInit {
         if (this.RideList.length === 0) {
           this.noRidesAvailable = true;
           // Fix: Keep showData = true so the empty state CTA triggers
-          this.showData = true; 
+          this.showData = true;
           this._globalService.utilities.notify.warning('No ride found on this route');
         }
       } else {
@@ -243,22 +243,22 @@ export class CarpoolSearchComponent implements OnInit {
       return;
     }
 
-    // Bug 9: Check if user already has an active ride (same route or any active ride)
-    const activeRideKey = `activeRide_${this.ursrProfile.userId}`;
-    const existingRide = localStorage.getItem(activeRideKey);
-    if (existingRide) {
-      try {
-        const existing = JSON.parse(existingRide);
-        // Allow if editing (different ride) or same-day resubmission
-        const isEditing = this.route.snapshot.queryParams['edit'] === 'true';
-        if (!isEditing) {
-          this._globalService.utilities.notify.warning(
-            `You already have an active ride posted (${existing.from} → ${existing.to}). Please edit or delete it first from the Dashboard.`
-          );
-          return;
-        }
-      } catch {}
-    }
+    // // Bug 9: Check if user already has an active ride (same route or any active ride)
+    // const activeRideKey = `activeRide_${this.ursrProfile.userId}`;
+    // const existingRide = localStorage.getItem(activeRideKey);
+    // if (existingRide) {
+    //   try {
+    //     const existing = JSON.parse(existingRide);
+    //     // Allow if editing (different ride) or same-day resubmission
+    //     const isEditing = this.route.snapshot.queryParams['edit'] === 'true';
+    //     if (!isEditing) {
+    //       this._globalService.utilities.notify.warning(
+    //         `You already have an active ride posted (${existing.from} → ${existing.to}). Please edit or delete it first from the Dashboard.`
+    //       );
+    //       return;
+    //     }
+    //   } catch {}
+    // }
 
     this.isLoadingSubmit = true;
 
@@ -266,15 +266,17 @@ export class CarpoolSearchComponent implements OnInit {
     this.postRide.UserName = this.ursrProfile.name;
     this.postRide.IsSearch = 1;
     this.postRide.Seats = this.selectedSeats;
-    
+
     let frequencyText = '';
     if (this.rideType === 'Recurring') {
       const activeDays = this.daysOfWeek.filter(day => this.selectedDays[day]).join(', ');
-      frequencyText = 'Recurring: ' + (activeDays || 'None');
+      frequencyText = (activeDays || 'None');
     } else {
-      frequencyText = 'One-Time: ' + this.rideDate;
+      frequencyText = this.rideDate;
     }
+    this.postRide.Ride_Type = this.rideType;
     this.postRide.Ride_Frequency = frequencyText;
+    this.postRide.Ride_Date = this.rideDate;
 
     // Add the remark to postRide before sending
     this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '') + ` | Seats: ${this.selectedSeats}` + ` | Type: ${frequencyText}`;
@@ -284,18 +286,27 @@ export class CarpoolSearchComponent implements OnInit {
         this.isLoadingSubmit = false;
 
         if (resp.status === 1) {
-          this._globalService.utilities.notify.success('Ride submitted successfully!');
+
+          if (parseInt(resp.trackingNumber) > 0) {
+            this._globalService.utilities.notify.error(resp.message || `You already have an active ride posted (${this.postRide.From_Address} → ${this.postRide.To_Address}). Please edit or delete it first from the Dashboard.`);
+          }
+          else {
+            this._globalService.utilities.notify.success(resp.message || 'Ride submitted successfully!');
+            this.router.navigate(['/dashboard']);
+          }
+
+          // this._globalService.utilities.notify.success('Ride submitted successfully!');
 
           // Bug 9: Track active ride for this user
-          localStorage.setItem(activeRideKey, JSON.stringify({
-            from: this.postRide.From_Address,
-            to: this.postRide.To_Address,
-            date: new Date().toISOString().slice(0, 10),
-            seats: this.selectedSeats
-          }));
+          // localStorage.setItem(activeRideKey, JSON.stringify({
+          //   from: this.postRide.From_Address,
+          //   to: this.postRide.To_Address,
+          //   date: new Date().toISOString().slice(0, 10),
+          //   seats: this.selectedSeats
+          // }));
 
           // Fix: Navigate to dashboard after successful post instead of showing empty search state
-          this.router.navigate(['/dashboard']);
+
         } else {
           this._globalService.utilities.notify.error('Error while submitting the ride.');
         }

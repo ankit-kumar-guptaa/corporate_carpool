@@ -254,15 +254,16 @@
                   <span *ngIf="connection.isaccept">{{ connection.mobile_no }}</span>
                 </td>
                 <td>
-                  <button class="btn btn-primary btn-sm me-1" *ngIf="!connection.isaccept"
+                  <button class="btn btn-primary btn-sm me-1" *ngIf="!connection.isaccept && !connection.isRejected"
                     (click)="AcceptRequest(connection)">
                     <i class="fas fa-check"></i> Accept
                   </button>
-                  <button class="btn btn-danger btn-sm" *ngIf="!connection.isaccept"
+                  <button class="btn btn-danger btn-sm" *ngIf="!connection.isaccept && !connection.isRejected"
                     (click)="RejectRequest(connection)">
                     <i class="fas fa-times"></i> Reject
                   </button>
                   <button class="btn btn-success btn-sm" *ngIf="connection.isaccept">Connected</button>
+                   <button class="btn btn-danger btn-sm" *ngIf="connection.isRejected">Rejected</button>
                 </td>
                 <td>
                   <button class="btn btn-outline-primary btn-sm" (click)="openModal(connection)">

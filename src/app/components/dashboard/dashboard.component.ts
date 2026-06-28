@@ -352,8 +352,9 @@ export class DashboardComponent implements OnInit {
         this._globalService.utilities.notify.success('Request Rejected');
         this.loadData();
       } else {
+        item.isRejected=true;
         // If endpoint doesn't exist, remove locally
-        this.connections = this.connections.filter((c: any) => c.requestID !== item.requestID);
+       // this.connections = this.connections.filter((c: any) => c.requestID !== item.requestID);
         this._globalService.utilities.notify.success('Request Rejected');
       }
     }, () => {
