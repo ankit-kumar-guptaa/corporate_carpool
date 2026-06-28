@@ -22,6 +22,8 @@ export class CarpoolSearchComponent implements OnInit {
   isLoadingSubmit: boolean = false;
   postRide: PostRide = new PostRide();
   noRidesAvailable: boolean = false;
+  isEditMode: boolean = false;
+  editRideId: any = null;
   RideList: any[] = [];
   showData: boolean = false;
   userRemark: string = '';
@@ -60,12 +62,30 @@ export class CarpoolSearchComponent implements OnInit {
         if (editData) {
           try {
             const data = JSON.parse(editData);
+            this.isEditMode = true;
+            this.editRideId = data.rideId || null;
             this.postRide.From_Address = data.from || '';
             this.postRide.To_Address = data.to || '';
             this.selectedSeats = data.seats || 1;
             this.userRemark = data.comment || '';
+            this.selectedRole = data.role || 'Pooler';
+            this.rideType = data.rideType || 'Recurring';
+            this.rideDate = data.rideDate || '';
+
+            // Restore selected weekdays from frequency string (e.g. "Mon, Tue, Wed")
+            if (data.rideType === 'Recurring' && data.rideFrequency) {
+              // Reset all days to false first
+              this.daysOfWeek.forEach(day => this.selectedDays[day] = false);
+              const days = data.rideFrequency.split(',').map((d: string) => d.trim());
+              days.forEach((day: string) => {
+                if (this.selectedDays.hasOwnProperty(day)) {
+                  this.selectedDays[day] = true;
+                }
+              });
+            }
+
             localStorage.removeItem('editRideData');
-            this._globalService.utilities.notify.info('Edit your ride details and resubmit.');
+            this._globalService.utilities.notify.info('Edit your ride details and click Update Ride.');
           } catch { }
         }
       }
@@ -307,7 +327,10 @@ export class CarpoolSearchComponent implements OnInit {
             this._globalService.utilities.notify.error(resp.message || `You already have an active ride posted (${this.postRide.From_Address} → ${this.postRide.To_Address}). Please edit or delete it first from the Dashboard.`);
           }
           else {
-            this._globalService.utilities.notify.success(resp.message || 'Ride submitted successfully!');
+            const successMsg = this.isEditMode 
+              ? (resp.message || 'Ride updated successfully!') 
+              : (resp.message || 'Ride submitted successfully!');
+            this._globalService.utilities.notify.success(successMsg);
             this.router.navigate(['/dashboard']);
           }
 

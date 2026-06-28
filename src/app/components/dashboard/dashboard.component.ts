@@ -422,7 +422,11 @@ export class DashboardComponent implements OnInit {
       to: ride.to_Address || '',
       rideId: ride.id || ride.rideId,
       seats: ride.seats || ride.totalSeats || 1,
-      comment: ride.user_Comment || ''
+      comment: ride.user_Comment || '',
+      rideType: ride.ride_Type || 'Recurring',
+      rideFrequency: ride.ride_Frequency || '',
+      rideDate: ride.ride_Date || '',
+      role: ride.userType || 'Pooler'
     };
     localStorage.setItem('editRideData', JSON.stringify(rideData));
     this.router.navigate(['/carpool-search'], { queryParams: { edit: true } });

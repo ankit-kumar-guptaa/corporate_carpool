@@ -328,8 +328,10 @@
               <tr>
                 <th>From</th>
                 <th>To</th>
-                <th>Date</th>
+                <th>Ride Type</th>
+                <th>Frequency / Date</th>
                 <th>Seats</th>
+                <th>Role</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -338,8 +340,22 @@
               <tr *ngFor="let ride of submittedRides">
                 <td>{{ ride.from_Address }}</td>
                 <td>{{ ride.to_Address }}</td>
-                <td>{{ ride.date || 'N/A' }}</td>
+                <td>
+                  <span class="badge rounded-pill" [ngClass]="{'bg-success': ride.ride_Type === 'Recurring', 'bg-info': ride.ride_Type === 'One-Time', 'bg-secondary': !ride.ride_Type}">
+                    {{ ride.ride_Type || 'N/A' }}
+                  </span>
+                </td>
+                <td>
+                  <span *ngIf="ride.ride_Type === 'Recurring'">{{ ride.ride_Frequency || 'N/A' }}</span>
+                  <span *ngIf="ride.ride_Type === 'One-Time'">{{ ride.ride_Date || ride.ride_Frequency || 'N/A' }}</span>
+                  <span *ngIf="!ride.ride_Type">{{ ride.ride_Date || ride.ride_Frequency || 'N/A' }}</span>
+                </td>
                 <td>{{ ride.seats || ride.totalSeats || 'N/A' }}</td>
+                <td>
+                  <span class="badge rounded-pill" [ngClass]="{'bg-primary': ride.userType === 'Pooler', 'bg-danger': ride.userType === 'Seeker', 'bg-secondary': !ride.userType}">
+                    {{ ride.userType || 'N/A' }}
+                  </span>
+                </td>
                 <td>{{ ride.status || 'Active' }}</td>
                 <td>
                   <button class="btn btn-outline-primary btn-sm" (click)="openRideModal(ride)">
@@ -354,7 +370,7 @@
                 </td>
               </tr>
               <tr *ngIf="submittedRides.length === 0">
-                <td colspan="6" class="text-center text-muted">No submitted rides yet</td>
+                <td colspan="8" class="text-center text-muted">No submitted rides yet</td>
               </tr>
             </tbody>
           </table>
@@ -396,9 +412,21 @@
       <button class="close-btn" (click)="closeRideModal()">✖</button>
     </div>
     <div class="modal-body">
+      <p><strong>Role:</strong>
+        <span class="badge rounded-pill ms-1" [ngClass]="{'bg-primary': selectedRide?.userType === 'Pooler', 'bg-danger': selectedRide?.userType === 'Seeker', 'bg-secondary': !selectedRide?.userType}">
+          {{ selectedRide?.userType || 'N/A' }}
+        </span>
+      </p>
       <p><strong>From:</strong> {{ selectedRide?.from_Address || 'N/A' }}</p>
       <p><strong>To:</strong> {{ selectedRide?.to_Address || 'N/A' }}</p>
-      <p><strong>Date:</strong> {{ selectedRide?.date || selectedRide?.ride_Date || 'N/A' }}</p>
+      <p><strong>Ride Type:</strong>
+        <span class="badge rounded-pill ms-1" [ngClass]="{'bg-success': selectedRide?.ride_Type === 'Recurring', 'bg-info': selectedRide?.ride_Type === 'One-Time', 'bg-secondary': !selectedRide?.ride_Type}">
+          {{ selectedRide?.ride_Type || 'N/A' }}
+        </span>
+      </p>
+      <p *ngIf="selectedRide?.ride_Type === 'Recurring'"><strong>Weekdays:</strong> {{ selectedRide?.ride_Frequency || 'N/A' }}</p>
+      <p *ngIf="selectedRide?.ride_Type === 'One-Time'"><strong>Date:</strong> {{ selectedRide?.ride_Date || selectedRide?.ride_Frequency || 'N/A' }}</p>
+      <p *ngIf="!selectedRide?.ride_Type"><strong>Frequency / Date:</strong> {{ selectedRide?.ride_Date || selectedRide?.ride_Frequency || 'N/A' }}</p>
       <p><strong>Seats:</strong> {{ selectedRide?.seats || selectedRide?.totalSeats || 'N/A' }}</p>
       <p><strong>Status:</strong> {{ selectedRide?.status || 'Active' }}</p>
       <p><strong>Remarks:</strong> {{ selectedRide?.user_Comment || selectedRide?.remark || 'No remarks' }}</p>
