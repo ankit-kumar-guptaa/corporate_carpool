@@ -23,6 +23,11 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
+    // Clear stale/expired token so login page starts clean
+    if (this.authService.getToken()) {
+      this.authService.logout(false);
+    }
+
     return this.router.createUrlTree(['/'], {
       queryParams: { returnUrl: state.url }
     });

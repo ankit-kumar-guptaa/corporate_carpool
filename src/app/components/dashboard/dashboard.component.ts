@@ -320,16 +320,16 @@ export class DashboardComponent implements OnInit {
     param.RequestID = item.requestID;
     this._globalService.ServiceManager.request.post('Ride/CORP_AcceptRideRequest', param).subscribe(resp => {
       if (resp.status == 1) {
-        item.isaccept = true;
-        this._globalService.utilities.notify.success('Request Accepted Successfully');
+        // item.isaccept = true;
 
-        // Track accepted seats to update availability in search
-        const acceptedSeatsMap = JSON.parse(localStorage.getItem('acceptedSeatsMap') || '{}');
-        const rideId = item.rideId || item.id;
-        if (rideId) {
-          acceptedSeatsMap[rideId] = (acceptedSeatsMap[rideId] || 0) + 1;
-          localStorage.setItem('acceptedSeatsMap', JSON.stringify(acceptedSeatsMap));
+        if (parseInt(resp.TrackingNumber) > 0) {
+          this._globalService.utilities.notify.success(resp.message);
         }
+        else {
+          this._globalService.utilities.notify.warning(resp.message);
+        }
+        // Track accepted seats to update availability in search
+       
 
         this.loadData();
       } else {
@@ -352,9 +352,9 @@ export class DashboardComponent implements OnInit {
         this._globalService.utilities.notify.success('Request Rejected');
         this.loadData();
       } else {
-        item.isRejected=true;
+        item.isRejected = true;
         // If endpoint doesn't exist, remove locally
-       // this.connections = this.connections.filter((c: any) => c.requestID !== item.requestID);
+        // this.connections = this.connections.filter((c: any) => c.requestID !== item.requestID);
         this._globalService.utilities.notify.success('Request Rejected');
       }
     }, () => {

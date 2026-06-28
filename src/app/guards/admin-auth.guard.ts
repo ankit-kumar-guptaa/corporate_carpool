@@ -23,6 +23,11 @@ export class AdminAuthGuard implements CanActivate {
       return true;
     }
 
+    // Clear stale/expired token so admin login page starts clean
+    if (this.authService.getToken()) {
+      this.authService.logout(false);
+    }
+
     return this.router.createUrlTree(['/admin/login'], {
       queryParams: { returnUrl: state.url }
     });

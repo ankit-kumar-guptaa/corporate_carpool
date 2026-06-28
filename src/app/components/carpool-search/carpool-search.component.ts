@@ -9,6 +9,7 @@ import { PostRide } from '../../models/post-ride';
   styleUrls: ['./carpool-search.component.scss']
 })
 export class CarpoolSearchComponent implements OnInit {
+  minDate: string = new Date().toISOString().split('T')[0]; // Minimum date for one-time rides
   selectedRole: string = 'Pooler'; // Removed 'Either'
   fromLocation: string = '';
   carpoolResults: Array<{ type: string, name: string, from: string }> = [];
@@ -46,6 +47,9 @@ export class CarpoolSearchComponent implements OnInit {
     this.postRide.To_Address = this.OFFICE_ADDRESS;
     this.postRide.To_Latitude = this.OFFICE_LAT;
     this.postRide.To_Longitude = this.OFFICE_LNG;
+    const today = new Date();
+    // Format to YYYY-MM-DD for HTML date input
+    this.minDate = today.toISOString().split('T')[0];
   }
 
   // Bug 9: Load edit data if coming from dashboard edit action
@@ -243,6 +247,13 @@ export class CarpoolSearchComponent implements OnInit {
       return;
     }
 
+    if (this.rideType === 'One-Time' && (this.rideDate === undefined || this.rideDate === null || this.rideDate.trim() === '')  ) {
+      this._globalService.utilities.notify.error('Please Enter "Select Date".');
+      return;
+
+    }
+
+
     // // Bug 9: Check if user already has an active ride (same route or any active ride)
     // const activeRideKey = `activeRide_${this.ursrProfile.userId}`;
     // const existingRide = localStorage.getItem(activeRideKey);
@@ -266,6 +277,7 @@ export class CarpoolSearchComponent implements OnInit {
     this.postRide.UserName = this.ursrProfile.name;
     this.postRide.IsSearch = 1;
     this.postRide.Seats = this.selectedSeats;
+    this.postRide.userType = this.selectedRole
 
     let frequencyText = '';
     if (this.rideType === 'Recurring') {
@@ -274,6 +286,10 @@ export class CarpoolSearchComponent implements OnInit {
     } else {
       frequencyText = this.rideDate;
     }
+
+
+
+
     this.postRide.Ride_Type = this.rideType;
     this.postRide.Ride_Frequency = frequencyText;
     this.postRide.Ride_Date = this.rideDate;

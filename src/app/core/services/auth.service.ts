@@ -143,9 +143,24 @@ login(email: string, password: string): Observable<LoginResponse> {
     return localStorage.getItem(AUTH_STORAGE_KEYS.token);
   }
 
+  isTokenExpired(): boolean {
+    const token = this.getToken();
+    if (!token) return true;
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(atob(base64));
+      if (!payload.exp) return false;
+      return Date.now() >= payload.exp * 1000;
+    } catch {
+      return true;
+    }
+  }
+
   isLoggedIn(): boolean {
     const token = this.getToken();
-    return !!token && token.trim().length > 0;
+    if (!token || token.trim().length === 0) return false;
+    return !this.isTokenExpired();
   }
 
   getUserId(): number | null {
