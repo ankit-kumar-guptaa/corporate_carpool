@@ -298,14 +298,9 @@ export class CarpoolSearchComponent implements OnInit {
     this.postRide.Seats = this.selectedSeats;
     this.postRide.userType = this.selectedRole
 
-    // When editing, pass RideId and set IsSearch=2 for update; IsSearch=1 for new post
-    if (this.isEditMode && this.editRideId) {
-      this.postRide.RideId = this.editRideId;
-      this.postRide.IsSearch = 2;
-    } else {
-      this.postRide.RideId = 0;
-      this.postRide.IsSearch = 1;
-    }
+    // Set IsSearch=1 to always submit a new ride. If editing, we will delete the old ride first.
+    this.postRide.RideId = 0;
+    this.postRide.IsSearch = 1;
 
     let frequencyText = '';
     if (this.rideType === 'Recurring') {
@@ -315,9 +310,6 @@ export class CarpoolSearchComponent implements OnInit {
       frequencyText = this.rideDate;
     }
 
-
-
-
     this.postRide.Ride_Type = this.rideType;
     this.postRide.Ride_Frequency = frequencyText;
     this.postRide.Ride_Date = this.rideDate;
@@ -325,44 +317,49 @@ export class CarpoolSearchComponent implements OnInit {
     // Add the remark to postRide before sending
     this.postRide.User_Comment = this.userRemark + (this.transportMode ? ` [Mode: ${this.transportMode}]` : '') + ` | Seats: ${this.selectedSeats}` + ` | Type: ${frequencyText}`;
 
-    this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(
-      resp => {
-        this.isLoadingSubmit = false;
+    const performSubmit = () => {
+      this._globalService.ServiceManager.request.post('Ride/CORP_PostRide', this.postRide).subscribe(
+        resp => {
+          this.isLoadingSubmit = false;
 
-        if (resp.status === 1) {
-
-          if (parseInt(resp.trackingNumber) > 0) {
-            this._globalService.utilities.notify.error(resp.message || `You already have an active ride posted (${this.postRide.From_Address} → ${this.postRide.To_Address}). Please edit or delete it first from the Dashboard.`);
+          if (resp.status === 1) {
+            if (parseInt(resp.trackingNumber) > 0) {
+              this._globalService.utilities.notify.error(resp.message || `You already have an active ride posted (${this.postRide.From_Address} → ${this.postRide.To_Address}). Please edit or delete it first from the Dashboard.`);
+            } else {
+              const successMsg = this.isEditMode 
+                ? (resp.message || 'Ride updated successfully!') 
+                : (resp.message || 'Ride submitted successfully!');
+              this._globalService.utilities.notify.success(successMsg);
+              this.router.navigate(['/dashboard']);
+            }
+          } else {
+            this._globalService.utilities.notify.error('Error while submitting the ride.');
           }
-          else {
-            const successMsg = this.isEditMode 
-              ? (resp.message || 'Ride updated successfully!') 
-              : (resp.message || 'Ride submitted successfully!');
-            this._globalService.utilities.notify.success(successMsg);
-            this.router.navigate(['/dashboard']);
-          }
-
-          // this._globalService.utilities.notify.success('Ride submitted successfully!');
-
-          // Bug 9: Track active ride for this user
-          // localStorage.setItem(activeRideKey, JSON.stringify({
-          //   from: this.postRide.From_Address,
-          //   to: this.postRide.To_Address,
-          //   date: new Date().toISOString().slice(0, 10),
-          //   seats: this.selectedSeats
-          // }));
-
-          // Fix: Navigate to dashboard after successful post instead of showing empty search state
-
-        } else {
-          this._globalService.utilities.notify.error('Error while submitting the ride.');
+        },
+        error => {
+          this.isLoadingSubmit = false;
+          this._globalService.utilities.notify.error('Failed to submit the ride. Please try again.');
         }
-      },
-      error => {
-        this.isLoadingSubmit = false;
-        this._globalService.utilities.notify.error('Failed to submit the ride. Please try again.');
-      }
-    );
+      );
+    };
+
+    if (this.isEditMode && this.editRideId) {
+      // Since the backend doesn't support updating via CORP_PostRide, 
+      // we delete the old ride and then submit the new one.
+      const param: any = {};
+      param.ride_id = this.editRideId;
+      param.user_id = this.ursrProfile.userId;
+      const helperdata = {
+        spName: "CORP_GreenCar_DeleteRide",
+        payload: JSON.stringify(param)
+      };
+      this._globalService.ServiceManager.request.post('Ride/GetDataFromServer', helperdata).subscribe({
+        next: (res) => { performSubmit(); },
+        error: (err) => { performSubmit(); } // Try to submit anyway if delete fails
+      });
+    } else {
+      performSubmit();
+    }
   }
 
   handleDropAddress(place: any, Control: string) {

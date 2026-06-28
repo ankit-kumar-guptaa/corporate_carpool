@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit {
   isRideModalVisible: boolean = false;
   isProfileModalVisible: boolean = false;
   selectedUser: any = null;
+  connectionModalType: string = '';
   selectedRide: any = null;
   updatedName: string = '';
   updatedEmail: string = '';
@@ -459,8 +460,9 @@ export class DashboardComponent implements OnInit {
   }
 
   // Open connection details modal
-  openModal(user: any): void {
+  openModal(user: any, modalType: string = ''): void {
     this.selectedUser = user;
+    this.connectionModalType = modalType;
     this.isModalVisible = true;
   }
 

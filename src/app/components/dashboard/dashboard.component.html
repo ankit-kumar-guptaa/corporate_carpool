@@ -266,7 +266,7 @@
                    <button class="btn btn-danger btn-sm" *ngIf="connection.isRejected">Rejected</button>
                 </td>
                 <td>
-                  <button class="btn btn-outline-primary btn-sm" (click)="openModal(connection)">
+                  <button class="btn btn-outline-primary btn-sm" (click)="openModal(connection, 'inbox')">
                     <i class="fas fa-eye"></i> View
                   </button>
                 </td>
@@ -307,7 +307,7 @@
                   <button class="btn btn-success btn-sm" *ngIf="connection.isaccept">Accepted</button>
                 </td>
                 <td>
-                  <button class="btn btn-outline-primary btn-sm" (click)="openModal(connection)">
+                  <button class="btn btn-outline-primary btn-sm" (click)="openModal(connection, 'sendRequest')">
                     <i class="fas fa-eye"></i> View
                   </button>
                 </td>
@@ -390,7 +390,7 @@
     <div class="modal-body">
       <p><strong>Name:</strong> {{ selectedUser?.name || 'N/A' }}</p>
       <p><strong>Email:</strong> {{ selectedUser?.email || 'N/A' }}</p>
-      <p><strong>Role:</strong>
+      <p *ngIf="connectionModalType === 'sendRequest'"><strong>Role:</strong>
         <span class="badge rounded-pill ms-1" [ngClass]="{'bg-primary': selectedUser?.userType === 'Pooler', 'bg-danger': selectedUser?.userType === 'Seeker', 'bg-secondary': !selectedUser?.userType}">
           {{ selectedUser?.userType || 'N/A' }}
         </span>
@@ -398,16 +398,19 @@
       <p><strong>From:</strong> {{ selectedUser?.from_Address || 'N/A' }}</p>
       <p><strong>To:</strong> {{ selectedUser?.to_Address || 'N/A' }}</p>
       <p><strong>Contact:</strong> {{ selectedUser?.isaccept ? (selectedUser?.mobile_no || 'N/A') : 'Accept request to view' }}</p>
-      <p><strong>Ride Type:</strong>
-        <span class="badge rounded-pill ms-1" [ngClass]="{'bg-success': selectedUser?.ride_Type === 'Recurring', 'bg-info': selectedUser?.ride_Type === 'One-Time', 'bg-secondary': !selectedUser?.ride_Type}">
-          {{ selectedUser?.ride_Type || 'N/A' }}
-        </span>
-      </p>
-      <p *ngIf="selectedUser?.ride_Type === 'Recurring'"><strong>Weekdays:</strong> {{ selectedUser?.ride_Frequency || 'N/A' }}</p>
-      <p *ngIf="selectedUser?.ride_Type === 'One-Time'"><strong>Date:</strong> {{ selectedUser?.ride_Date || selectedUser?.ride_Frequency || 'N/A' }}</p>
-      <p *ngIf="!selectedUser?.ride_Type"><strong>Date:</strong> {{ selectedUser?.ride_Date || selectedUser?.date || 'N/A' }}</p>
-      <p><strong>Seats:</strong> {{ getSeatsDisplay(selectedUser) }}</p>
-      <p><strong>Remarks:</strong> {{ selectedUser?.user_Comment || selectedUser?.remark || 'No remarks' }}</p>
+      
+      <ng-container *ngIf="connectionModalType === 'sendRequest'">
+        <p><strong>Ride Type:</strong>
+          <span class="badge rounded-pill ms-1" [ngClass]="{'bg-success': selectedUser?.ride_Type === 'Recurring', 'bg-info': selectedUser?.ride_Type === 'One-Time', 'bg-secondary': !selectedUser?.ride_Type}">
+            {{ selectedUser?.ride_Type || 'N/A' }}
+          </span>
+        </p>
+        <p *ngIf="selectedUser?.ride_Type === 'Recurring'"><strong>Weekdays:</strong> {{ selectedUser?.ride_Frequency || 'N/A' }}</p>
+        <p *ngIf="selectedUser?.ride_Type === 'One-Time'"><strong>Date:</strong> {{ selectedUser?.ride_Date || selectedUser?.ride_Frequency || 'N/A' }}</p>
+        <p *ngIf="!selectedUser?.ride_Type"><strong>Date:</strong> {{ selectedUser?.ride_Date || selectedUser?.date || 'N/A' }}</p>
+        <p><strong>Seats:</strong> {{ getSeatsDisplay(selectedUser) }}</p>
+        <p><strong>Remarks:</strong> {{ selectedUser?.user_Comment || selectedUser?.remark || 'No remarks' }}</p>
+      </ng-container>
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" (click)="closeModal()">Close</button>
