@@ -327,7 +327,7 @@ export class DashboardComponent implements OnInit {
           this._globalService.utilities.notify.success(resp.message);
         }
         else {
-          this._globalService.utilities.notify.warning(resp.message);
+          this._globalService.utilities.notify.success(resp.message || 'Request accepted successfully!');
         }
         // Track accepted seats to update availability in search
        

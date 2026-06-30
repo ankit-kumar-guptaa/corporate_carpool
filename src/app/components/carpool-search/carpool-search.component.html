@@ -150,10 +150,8 @@
 
           <button type="button" class="btn btn-danger btn-lg px-5 rounded-pill shadow-lg hover-scale btn-wide" 
                   (click)="submitRequest()" [disabled]="isLoadingSubmit">
-            <span *ngIf="!isLoadingSubmit && !isEditMode"><i class="fas fa-paper-plane me-2"></i> Post Ride</span>
-            <span *ngIf="!isLoadingSubmit && isEditMode"><i class="fas fa-sync-alt me-2"></i> Update Ride</span>
-            <span *ngIf="isLoadingSubmit && !isEditMode"><i class="fas fa-spinner fa-spin me-2"></i> Posting...</span>
-            <span *ngIf="isLoadingSubmit && isEditMode"><i class="fas fa-spinner fa-spin me-2"></i> Updating...</span>
+            <span *ngIf="!isLoadingSubmit"><i class="fas fa-paper-plane me-2"></i> Post Ride</span>
+            <span *ngIf="isLoadingSubmit"><i class="fas fa-spinner fa-spin me-2"></i> Posting...</span>
           </button>
         </div>
 

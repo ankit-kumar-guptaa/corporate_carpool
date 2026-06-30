@@ -22,8 +22,7 @@ export class CarpoolSearchComponent implements OnInit {
   isLoadingSubmit: boolean = false;
   postRide: PostRide = new PostRide();
   noRidesAvailable: boolean = false;
-  isEditMode: boolean = false;
-  editRideId: any = null;
+
   RideList: any[] = [];
   showData: boolean = false;
   userRemark: string = '';
@@ -54,42 +53,7 @@ export class CarpoolSearchComponent implements OnInit {
     this.minDate = today.toISOString().split('T')[0];
   }
 
-  // Bug 9: Load edit data if coming from dashboard edit action
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      if (params['edit'] === 'true') {
-        const editData = localStorage.getItem('editRideData');
-        if (editData) {
-          try {
-            const data = JSON.parse(editData);
-            this.isEditMode = true;
-            this.editRideId = data.rideId || null;
-            this.postRide.From_Address = data.from || '';
-            this.postRide.To_Address = data.to || '';
-            this.selectedSeats = data.seats || 1;
-            this.userRemark = data.comment || '';
-            this.selectedRole = data.role || 'Pooler';
-            this.rideType = data.rideType || 'Recurring';
-            this.rideDate = data.rideDate || '';
-
-            // Restore selected weekdays from frequency string (e.g. "Mon, Tue, Wed")
-            if (data.rideType === 'Recurring' && data.rideFrequency) {
-              // Reset all days to false first
-              this.daysOfWeek.forEach(day => this.selectedDays[day] = false);
-              const days = data.rideFrequency.split(',').map((d: string) => d.trim());
-              days.forEach((day: string) => {
-                if (this.selectedDays.hasOwnProperty(day)) {
-                  this.selectedDays[day] = true;
-                }
-              });
-            }
-
-            localStorage.removeItem('editRideData');
-            this._globalService.utilities.notify.info('Edit your ride details and click Update Ride.');
-          } catch { }
-        }
-      }
-    });
   }
 
   // Method to swap From and To locations
@@ -112,7 +76,7 @@ export class CarpoolSearchComponent implements OnInit {
   // Helper to update remark
   updateRemarkAuto() {
     if (this.postRide.From_Address && this.postRide.To_Address) {
-      this.userRemark = `I am looking for a ride from ${this.postRide.From_Address} to ${this.postRide.To_Address}. My email is ${this.ursrProfile?.email || 'not available'}`;
+      this.userRemark = `I am looking for a ride from ${this.postRide.From_Address} to ${this.postRide.To_Address}.`;
     }
   }
 
@@ -267,7 +231,7 @@ export class CarpoolSearchComponent implements OnInit {
       return;
     }
 
-    if (this.rideType === 'One-Time' && (this.rideDate === undefined || this.rideDate === null || this.rideDate.trim() === '')  ) {
+    if (this.rideType === 'One-Time' && (this.rideDate === undefined || this.rideDate === null || this.rideDate.trim() === '')) {
       this._globalService.utilities.notify.error('Please Enter "Select Date".');
       return;
 
@@ -324,12 +288,9 @@ export class CarpoolSearchComponent implements OnInit {
 
           if (resp.status === 1) {
             if (parseInt(resp.trackingNumber) > 0) {
-              this._globalService.utilities.notify.error(resp.message || `You already have an active ride posted (${this.postRide.From_Address} → ${this.postRide.To_Address}). Please edit or delete it first from the Dashboard.`);
+              this._globalService.utilities.notify.error(`You already have an active ride posted. Please delete it first from the Dashboard.`);
             } else {
-              const successMsg = this.isEditMode 
-                ? (resp.message || 'Ride updated successfully!') 
-                : (resp.message || 'Ride submitted successfully!');
-              this._globalService.utilities.notify.success(successMsg);
+              this._globalService.utilities.notify.success(resp.message || 'Ride submitted successfully!');
               this.router.navigate(['/dashboard']);
             }
           } else {
@@ -343,23 +304,7 @@ export class CarpoolSearchComponent implements OnInit {
       );
     };
 
-    if (this.isEditMode && this.editRideId) {
-      // Since the backend doesn't support updating via CORP_PostRide, 
-      // we delete the old ride and then submit the new one.
-      const param: any = {};
-      param.ride_id = this.editRideId;
-      param.user_id = this.ursrProfile.userId;
-      const helperdata = {
-        spName: "CORP_GreenCar_DeleteRide",
-        payload: JSON.stringify(param)
-      };
-      this._globalService.ServiceManager.request.post('Ride/GetDataFromServer', helperdata).subscribe({
-        next: (res) => { performSubmit(); },
-        error: (err) => { performSubmit(); } // Try to submit anyway if delete fails
-      });
-    } else {
-      performSubmit();
-    }
+    performSubmit();
   }
 
   handleDropAddress(place: any, Control: string) {
